@@ -1,6 +1,6 @@
 {
-  "name": "electron-forge-react-typescript-boilerplate",
-  "productname": "electron-forge-react-typescript-boilerplate",
+  "name": "platter-app",
+  "productname": "platter",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -12,12 +12,6 @@
     "lint": "echo \"No linting configured\""
   },
   "keywords": [],
-  "author": {
-    "name": "CanRau",
-    "email": "cansrau@gmail.com",
-    "url": "https://www.canrau.com"
-  },
-  "license": "MIT",
   "config": {
     "forge": {
       "packagerConfig": {},
