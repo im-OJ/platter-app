@@ -16,6 +16,10 @@
     "name": "im-OJ",
     "email": "ollie2997@gmail.com"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/im-OJ/platter-app.git"
+  },
   "license": "MIT",
   "config": {
     "forge": {
@@ -80,11 +84,13 @@
     "electron-prebuilt-compile": "8.2.0"
   },
   "dependencies": {
+    "@electron-forge/publisher-github": "^6.0.0-beta.50",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "update-electron-app": "^1.5.0"
   }
 }
