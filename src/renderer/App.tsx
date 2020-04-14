@@ -3,15 +3,9 @@ import { Button } from "antd";
 import styled from "styled-components";
 
 import "antd/dist/antd.css";
+import { Home } from "../Home";
 export const App = () => {
-  return (
-    <p>
-      <Shadow>
-        Hello world <Button>Test</Button>
-        {process.env.NODE_ENV}
-      </Shadow>
-    </p>
-  );
+  return <Home />;
 };
 
 const Shadow = styled.div`
