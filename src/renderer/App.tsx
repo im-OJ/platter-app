@@ -1,5 +1,11 @@
-import * as React from 'react'
+import * as React from "react";
+import { Button } from "antd";
 
+import "antd/dist/antd.css";
 export const App = () => {
-  return <h1>Hello React!</h1>
-}
+  return (
+    <p>
+      Hello world <Button>Test</Button>
+    </p>
+  );
+};
