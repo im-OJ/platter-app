@@ -8,6 +8,7 @@ export const App = () => {
     <p>
       <Shadow>
         Hello world <Button>Test</Button>
+        {process.env.NODE_ENV}
       </Shadow>
     </p>
   );
