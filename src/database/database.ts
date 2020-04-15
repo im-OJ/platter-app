@@ -15,12 +15,12 @@ export const getSampleById = (id: string): Promise<Sample> => {
 };
 
 export const reSyncDBs = () => {
-  console.log("Re syncing databases");
+  database.samples.local.removeAllListeners();
+  database.samples.remote.removeAllListeners();
   database.samples.local.replicate.from(database.samples.remote);
 };
 export const getSamples = async (): Promise<Array<Sample>> => {
   reSyncDBs();
-  console.log("getting sample docs", config.dbUrl + "samples");
   const all = await database.samples.local.allDocs({ include_docs: true });
   const samples: Array<any> = [];
   all.rows.map((s) => {

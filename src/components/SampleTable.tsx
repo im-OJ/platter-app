@@ -1,26 +1,16 @@
 import * as React from "react";
-import { useGetSamples } from "../database/hooks";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import { Sample } from "@/generated/graphql";
-
-// export type Sample = {
-//     __typename?: 'Sample';
-//    _id: Scalars['String'];
-//    name: Scalars['String'];
-//    user_id: Scalars['String'];
-//    url?: Maybe<Scalars['String']>;
-//    tags?: Maybe<Array<Scalars['String']>>;
-//  };
+import styled from "styled-components";
 
 export const SampleTable = (props: { samples: Array<Sample> }) => {
   const samples = props.samples;
-
+  const playAudio = useAudioPlayer();
   if (!samples || samples.length < 1) {
-    console.log("no samples");
     return null;
   }
-  console.log(samples);
+
   const columns: ColumnsType<any> = [
     {
       title: "Name",
@@ -35,14 +25,45 @@ export const SampleTable = (props: { samples: Array<Sample> }) => {
       width: 150,
       render: (tags) =>
         tags.map((text: string, record: any, next: any) => {
-          return text + ", ";
+          return (
+            <TagWrap>
+              <Tag>{text}</Tag>
+            </TagWrap>
+          );
           // next.map((t: string) => t + ", ");
         }),
     },
   ];
+
   return (
     <>
-      <Table columns={columns} dataSource={samples} />
+      <Table
+        columns={columns}
+        dataSource={samples}
+        onRow={(record, rowIndex) => {
+          const audio = new Audio(record.url);
+          audio.load();
+          return {
+            style: { cursor: "pointer" },
+            onClick: () => {
+              playAudio(record.url);
+              // console.log("playing");
+              // audio.play();
+            }, // click row
+          };
+        }}
+      />
     </>
   );
 };
+
+const useAudioPlayer = () => {
+  return (url: string) => {
+    const audio = new Audio(url);
+    audio.load();
+    audio.play();
+  };
+};
+const TagWrap = styled.span`
+  padding: 4;
+`;

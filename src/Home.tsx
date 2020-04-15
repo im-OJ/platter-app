@@ -8,6 +8,7 @@ export const Home = () => {
   if (!samples) {
     return <Spin />;
   }
+  console.log("home");
   return (
     <>
       <SampleTable samples={samples} />
