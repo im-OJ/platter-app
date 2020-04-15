@@ -22,8 +22,10 @@ export const Navigator = () => {
 
   return screens[location];
 };
-export const useNavigateTo = (destination: Location) => {
-  location = destination;
+export const useNavigateTo = () => {
+  return (destination: Location) => {
+    location = destination;
+  };
 };
 
 export const useGetLocation = () => {};
