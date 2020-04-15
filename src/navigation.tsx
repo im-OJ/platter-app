@@ -17,6 +17,7 @@ const screens: Record<Location, JSX.Element> = {
 export const Navigator = () => {
   useEffect(() => {
     console.log("location change");
+    // Todo - history
   }, [location]);
 
   return screens[location];
