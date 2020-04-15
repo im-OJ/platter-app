@@ -17,10 +17,16 @@ export const getSampleById = (id: string): Promise<Sample> => {
 export const reSyncDBs = () => {
   database.samples.local.removeAllListeners();
   database.samples.remote.removeAllListeners();
-  database.samples.local.replicate.from(database.samples.remote);
+  database.samples.local.replicate
+    .from(database.samples.remote)
+    .then(() => {
+      console.log("Sync complete");
+    })
+    .catch(console.error);
 };
 export const getSamples = async (): Promise<Array<Sample>> => {
   reSyncDBs();
+  console.log("getting samples", config.dbUrl + "samples");
   const all = await database.samples.local.allDocs({ include_docs: true });
   const samples: Array<any> = [];
   all.rows.map((s) => {

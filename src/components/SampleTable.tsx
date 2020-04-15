@@ -7,9 +7,6 @@ import styled from "styled-components";
 export const SampleTable = (props: { samples: Array<Sample> }) => {
   const samples = props.samples;
   const playAudio = useAudioPlayer();
-  if (!samples || samples.length < 1) {
-    return null;
-  }
 
   const columns: ColumnsType<any> = [
     {
