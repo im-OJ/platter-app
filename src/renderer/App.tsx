@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button } from "antd";
 import styled from "styled-components";
+import { Titlebar, Color } from "custom-electron-titlebar";
 
 import "antd/dist/antd.css";
 import { Home } from "../Home";
