@@ -12,7 +12,7 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
-import { config } from "@/config";
+import { config } from "../config";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
