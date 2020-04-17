@@ -1,10 +1,11 @@
-const isProd = process.env.NODE_ENV === "production";
+export const isDev = require("electron-is-dev");
+
 export const config = {
-  isProd,
-  dbUrl: isProd
+  isDev,
+  dbUrl: !isDev
     ? "https://platter-db.herokuapp.com/"
     : "https://platter-db-dev.herokuapp.com/",
-  apiUrl: isProd
+  apiUrl: !isDev
     ? "https://platter-api.herokuapp.com/graphql"
     : "https://platter-api-dev.herokuapp.com/graphql",
 };

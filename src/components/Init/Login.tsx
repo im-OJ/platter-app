@@ -24,6 +24,7 @@ const LoginWrap = styled.div`
   bottom: 0;
   right: 0;
   border: solid black;
+  text-align: center;
 `;
 
 export const LogIn = () => {
@@ -40,7 +41,7 @@ export const LogIn = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={() => {
-          console.log("failed to finish ");
+          console.log("failed to finish login form ");
         }}
       >
         <Form.Item
