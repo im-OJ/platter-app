@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Home } from "./Home";
 type Location = "home" | "upload" | "signup";
-import { useGlobal } from "reactn";
-import { useEffect } from "react";
+import { useGlobalState } from "./renderer/App";
 
 const defaultLocation = "home";
 
@@ -10,22 +9,35 @@ let location: Location = defaultLocation;
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
-  upload: <></>,
-  signup: <></>,
+  upload: <p>upload</p>,
+  signup: <p>signup</p>,
 };
 
 export const Navigator = () => {
-  useEffect(() => {
-    console.log("location change");
-    // Todo - history
-  }, [location]);
+  const [gLocation] = useGlobalState("location");
 
-  return screens[location];
+  // @ts-ignore
+  return screens[gLocation];
 };
+
 export const useNavigateTo = () => {
+  const [gLocation, setGLocation] = useGlobalState("location");
+  console.log("at ", gLocation);
   return (destination: Location) => {
     location = destination;
+    setGLocation(destination);
   };
+};
+
+export const Link = (props: {
+  destination: Location;
+  children: JSX.Element;
+}) => {
+  const navigateTo = useNavigateTo();
+
+  return (
+    <div onClick={() => navigateTo(props.destination)}>{props.children}</div>
+  );
 };
 
 export const useGetLocation = () => {};
