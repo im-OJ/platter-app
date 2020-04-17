@@ -1,6 +1,8 @@
 import { app, BrowserWindow } from "electron";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
 
+export const isProd = false;
+
 // require("update-electron-app")();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -16,7 +18,7 @@ let mainWindow: any;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: isProd ? 800 : 1100,
     height: 600,
     frame: false,
     webPreferences: {

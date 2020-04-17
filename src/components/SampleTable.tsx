@@ -33,24 +33,23 @@ export const SampleTable = (props: { samples: Array<Sample> }) => {
   ];
 
   return (
-    <>
-      <Table
-        columns={columns}
-        dataSource={samples}
-        onRow={(record, rowIndex) => {
-          const audio = new Audio(record.url);
-          audio.load();
-          return {
-            style: { cursor: "pointer" },
-            onClick: () => {
-              playAudio(record.url);
-              // console.log("playing");
-              // audio.play();
-            }, // click row
-          };
-        }}
-      />
-    </>
+    <Table
+      style={{ width: "100%" }}
+      columns={columns}
+      dataSource={samples}
+      onRow={(record, rowIndex) => {
+        const audio = new Audio(record.url);
+        audio.load();
+        return {
+          style: { cursor: "pointer" },
+          onClick: () => {
+            playAudio(record.url);
+            // console.log("playing");
+            // audio.play();
+          }, // click row
+        };
+      }}
+    />
   );
 };
 

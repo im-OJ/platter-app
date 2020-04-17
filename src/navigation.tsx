@@ -2,6 +2,7 @@ import * as React from "react";
 import { Home } from "./Home";
 type Location = "home" | "upload" | "signup";
 import { useGlobalState } from "./renderer/App";
+import { Page } from "./components/Page";
 
 const defaultLocation = "home";
 
@@ -9,7 +10,20 @@ let location: Location = defaultLocation;
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
-  upload: <p>upload</p>,
+  upload: (
+    <Page>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          flex: 1,
+          backgroundColor: "red",
+        }}
+      >
+        hi
+      </div>
+    </Page>
+  ),
   signup: <p>signup</p>,
 };
 
