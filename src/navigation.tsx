@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Home } from "./Home";
-type Location = "home" | "upload" | "signup";
 import { useGlobalState } from "./renderer/App";
 import { Page } from "./components/Page";
+import { Init } from "./components/Init";
 
-const defaultLocation = "home";
+type Location = "home" | "upload" | "signup" | "init";
+const defaultLocation = "init";
 
 let location: Location = defaultLocation;
 
@@ -25,6 +26,7 @@ const screens: Record<Location, JSX.Element> = {
     </Page>
   ),
   signup: <p>signup</p>,
+  init: <Init />,
 };
 
 export const Navigator = () => {

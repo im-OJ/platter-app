@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { Sample } from "@/generated/graphql";
+import { Sample } from "../generated/graphql";
 import styled from "styled-components";
 
 export const SampleTable = (props: { samples: Array<Sample> }) => {
@@ -33,23 +33,25 @@ export const SampleTable = (props: { samples: Array<Sample> }) => {
   ];
 
   return (
-    <Table
-      style={{ width: "100%" }}
-      columns={columns}
-      dataSource={samples}
-      onRow={(record, rowIndex) => {
-        const audio = new Audio(record.url);
-        audio.load();
-        return {
-          style: { cursor: "pointer" },
-          onClick: () => {
-            playAudio(record.url);
-            // console.log("playing");
-            // audio.play();
-          }, // click row
-        };
-      }}
-    />
+    <>
+      <Table
+        style={{ overflow: "hidden" }}
+        columns={columns}
+        dataSource={samples}
+        onRow={(record, rowIndex) => {
+          const audio = new Audio(record.url);
+          audio.load();
+          return {
+            style: { cursor: "pointer" },
+            onClick: () => {
+              playAudio(record.url);
+              // console.log("playing");
+              // audio.play();
+            }, // click row
+          };
+        }}
+      />
+    </>
   );
 };
 

@@ -5,12 +5,12 @@ import { Layout, Menu } from "antd";
 import { useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { HomeOutlined, UploadOutlined } from "@ant-design/icons";
-export const { useGlobalState } = createGlobalState({ location: "home" });
+export const { useGlobalState } = createGlobalState({ location: "init" });
 
 export const App = () => {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const navigateTo = useNavigateTo();
-  const { Sider, Content, Header } = Layout;
+  const { Sider, Content } = Layout;
   return (
     <Layout>
       <Sider
@@ -24,7 +24,7 @@ export const App = () => {
         collapsed={siderCollapsed}
         onCollapse={setSiderCollapsed}
       >
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
           <Menu.Item
             onClick={() => {
               navigateTo("home");
@@ -50,10 +50,10 @@ export const App = () => {
         className="site-layout"
         style={{ marginLeft: siderCollapsed ? 50 : 200, height: "100%" }}
       >
-        <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+        <Content style={{ margin: "4px 4px 4px 4px", overflow: "initial" }}>
           <div
             className="site-layout-background"
-            style={{ padding: 24, textAlign: "center" }}
+            style={{ padding: 0, textAlign: "center" }}
           >
             <Navigator />
           </div>
