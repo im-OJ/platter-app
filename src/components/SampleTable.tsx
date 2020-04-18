@@ -4,7 +4,7 @@ import { ColumnsType } from "antd/lib/table";
 import { Sample } from "../generated/graphql";
 import styled from "styled-components";
 
-export const SampleTable = (props: { samples: Array<Sample> }) => {
+export const SampleTable = (props: { samples: Array<Sample> | null }) => {
   const samples = props.samples;
   const playAudio = useAudioPlayer();
 
@@ -37,7 +37,7 @@ export const SampleTable = (props: { samples: Array<Sample> }) => {
       <Table
         style={{ overflow: "hidden" }}
         columns={columns}
-        dataSource={samples}
+        dataSource={samples || []}
         onRow={(record, rowIndex) => {
           const audio = new Audio(record.url);
           audio.load();

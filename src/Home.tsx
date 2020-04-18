@@ -6,9 +6,7 @@ import { Page } from "./components/Page";
 
 export const Home = () => {
   const samples = useGetSamples();
-  if (!samples) {
-    return <Spin />;
-  }
+
   console.log("home");
   return (
     <Page>

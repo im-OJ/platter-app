@@ -3,7 +3,7 @@ import { Home } from "./Home";
 import { useGlobalState } from "./renderer/App";
 import { Init } from "./components/Init";
 import { Upload } from "./components/Upload";
-
+import _ from "lodash";
 type Location = "home" | "upload" | "signup" | "init";
 const defaultLocation = "init";
 
@@ -16,11 +16,21 @@ const screens: Record<Location, JSX.Element> = {
   init: <Init />,
 };
 
+const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
+  return <div hidden={!props.visible}>{props.children}</div>;
+};
+
 export const Navigator = () => {
   const [gLocation] = useGlobalState("location");
 
   // @ts-ignore
-  return screens[gLocation];
+  return (
+    <>
+      {_.map(screens, (component, key) => {
+        return <Toggle visible={gLocation === key}>{component}</Toggle>;
+      })}
+    </>
+  );
 };
 
 export const useNavigateTo = () => {
