@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Home } from "./Home";
 import { useGlobalState } from "./renderer/App";
-import { Page } from "./components/Page";
 import { Init } from "./components/Init";
+import { Upload } from "./components/Upload";
 
 type Location = "home" | "upload" | "signup" | "init";
 const defaultLocation = "init";
@@ -11,20 +11,7 @@ let location: Location = defaultLocation;
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
-  upload: (
-    <Page>
-      <div
-        style={{
-          width: "100%",
-          height: "100%",
-          flex: 1,
-          backgroundColor: "red",
-        }}
-      >
-        hi
-      </div>
-    </Page>
-  ),
+  upload: <Upload />,
   signup: <p>signup</p>,
   init: <Init />,
 };
