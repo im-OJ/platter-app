@@ -35,7 +35,6 @@ export const Navigator = () => {
 
 export const useNavigateTo = () => {
   const [gLocation, setGLocation] = useGlobalState("location");
-  console.log("at ", gLocation);
   return (destination: Location) => {
     location = destination;
     setGLocation(destination);

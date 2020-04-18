@@ -3,6 +3,8 @@ import * as React from "react";
 import { Input, Checkbox, Button, Form } from "antd";
 import { useNavigateTo } from "../../navigation";
 import styled from "styled-components";
+import { firebaseApp, useGlobalState } from "../../renderer/App";
+import { useState } from "react";
 
 const layout = {
   labelCol: { span: 8 },
@@ -27,12 +29,87 @@ const LoginWrap = styled.div`
   text-align: center;
 `;
 
-export const LogIn = () => {
-  const navigateTo = useNavigateTo();
-  const onFinish = () => {
-    navigateTo("home");
+type SingInParams =
+  | {
+      email: string;
+      pass: string;
+    }
+  | {
+      token: string;
+    };
+const useSignIn = () => {
+  const [userToken, setUserToken] = useGlobalState("token");
+
+  const mySetUserToken = (token: string) => {
+    console.log("setting token ", token);
+    setUserToken(token);
   };
-  console.log("login");
+  const navigateTo = useNavigateTo();
+
+  return (params: SingInParams) => {
+    if ("email" in params) {
+      firebaseApp
+        .auth()
+        .signInWithEmailAndPassword(params.email, params.pass)
+        .then((t) => {
+          console.log("sign in complete ", t);
+          if (
+            firebaseApp &&
+            firebaseApp.auth &&
+            firebaseApp.auth().currentUser
+          ) {
+            // @ts-ignore
+            firebaseApp
+              .auth()
+              .currentUser.getIdToken(/* forceRefresh */ true)
+              .then(function (idToken) {
+                // Send token to your backend via HTTPS
+                // ...
+                mySetUserToken(idToken);
+              })
+              .catch(function (error) {
+                console.error;
+              });
+          } else {
+            console.log("error getting user");
+          }
+
+          navigateTo("home");
+        })
+        .catch(console.error);
+    } else {
+      firebaseApp
+        .auth()
+        .signInWithCustomToken(userToken)
+        .then(() => {
+          console.log("sign in complete");
+          navigateTo("home");
+        })
+        .catch(console.error);
+    }
+  };
+};
+
+export const LogIn = () => {
+  const [emailValue, setEmailValue] = useState("");
+  const [passValue, setPassValue] = useState("");
+  const navigateTo = useNavigateTo();
+  const signIn = useSignIn();
+  const onFinish = () => {
+    // navigateTo("home");
+  };
+
+  const signUp = () => {
+    firebaseApp
+      .auth()
+      .createUserWithEmailAndPassword(emailValue, passValue)
+      .then(() => {
+        console.log("signup complete");
+        navigateTo("home");
+      })
+      .catch(console.error);
+  };
+
   return (
     <LoginWrap>
       <Form
@@ -45,19 +122,31 @@ export const LogIn = () => {
         }}
       >
         <Form.Item
-          label="Username"
-          name="username"
+          label="Email"
+          name="email"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
-          <Input />
+          <Input
+            value={emailValue}
+            onChange={(e) => {
+              setEmailValue(e.target.value);
+            }}
+          />
         </Form.Item>
 
         <Form.Item
           label="Password"
           name="password"
-          rules={[{ required: true, message: "Please input your password!" }]}
+          rules={[
+            { required: true, message: "Please input your password!", min: 6 },
+          ]}
         >
-          <Input.Password />
+          <Input.Password
+            value={passValue}
+            onChange={(e) => {
+              setPassValue(e.target.value);
+            }}
+          />
         </Form.Item>
 
         <Form.Item {...tailLayout} name="remember" valuePropName="checked">
@@ -65,8 +154,28 @@ export const LogIn = () => {
         </Form.Item>
 
         <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            Submit
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => {
+              signUp();
+            }}
+          >
+            Sign Up
+          </Button>
+        </Form.Item>
+        <Form.Item {...tailLayout}>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => {
+              signIn({
+                email: emailValue,
+                pass: passValue,
+              });
+            }}
+          >
+            Sign In
           </Button>
         </Form.Item>
       </Form>
