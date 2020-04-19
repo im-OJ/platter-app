@@ -81,7 +81,11 @@ export const App = () => {
 
   return (
     <ApolloProvider client={client}>
-      <Layout>
+      <Layout
+        style={{
+          userSelect: "none",
+        }}
+      >
         <Sider
           collapsible
           style={{

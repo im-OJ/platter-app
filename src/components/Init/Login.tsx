@@ -104,6 +104,10 @@ export const LogIn = () => {
       .createUserWithEmailAndPassword(emailValue, passValue)
       .then(() => {
         console.log("signup complete");
+        signIn({
+          email: emailValue,
+          pass: passValue,
+        });
         navigateTo("home");
       })
       .catch(console.error);
