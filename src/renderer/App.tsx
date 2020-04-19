@@ -55,7 +55,6 @@ export const App = () => {
   const { Sider, Content } = Layout;
 
   console.log("API URL: ", config.apiUrl);
-  console.log("User token: ", userToken);
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists

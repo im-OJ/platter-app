@@ -7,5 +7,5 @@ export const config = {
     : "https://platter-db-dev.herokuapp.com/",
   apiUrl: isProd
     ? "https://platter-api.herokuapp.com/graphql"
-    : "http://localhost:3001/graphql",
+    : "https://platter-api-dev.herokuapp.com/graphql",
 };

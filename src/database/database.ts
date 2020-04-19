@@ -26,7 +26,6 @@ export const reSyncDBs = () => {
 };
 export const getSamples = async (): Promise<Array<Sample>> => {
   reSyncDBs();
-  console.log("getting samples", config.dbUrl + "samples");
   const all = await database.samples.local.allDocs({ include_docs: true });
   const samples: Array<any> = [];
   all.rows.map((s) => {
