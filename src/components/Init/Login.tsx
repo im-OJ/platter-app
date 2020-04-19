@@ -41,7 +41,6 @@ const useSignIn = () => {
   const [userToken, setUserToken] = useGlobalState("token");
 
   const mySetUserToken = (token: string) => {
-    console.log("setting token ", token);
     setUserToken(token);
   };
   const navigateTo = useNavigateTo();

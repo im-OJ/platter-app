@@ -7,7 +7,6 @@ import { Page } from "./components/Page";
 export const Home = () => {
   const samples = useGetSamples();
 
-  console.log("home");
   return (
     <Page>
       <SampleTable samples={samples} />
