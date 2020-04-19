@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Navigator, useNavigateTo } from "../navigation";
-import "antd/dist/antd.css";
 import { Layout, Menu, Typography } from "antd";
 import { useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
@@ -8,18 +7,15 @@ import { HomeOutlined, UploadOutlined } from "@ant-design/icons";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 export const { useGlobalState } = createGlobalState({
-  location: "init",
+  location: "start",
   token: "token-not-set",
 });
-import {
-  ApolloClient,
-  HttpLink,
-  InMemoryCache,
-  ApolloProvider,
-  NormalizedCacheObject,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
+
+import "antd/dist/antd.css";
+import "ant-design-pro/dist/ant-design-pro.css";
 
 const isProd = !require("electron-is-dev");
 
@@ -53,8 +49,6 @@ export const App = () => {
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const navigateTo = useNavigateTo();
   const { Sider, Content } = Layout;
-
-  console.log("API URL: ", config.apiUrl);
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists

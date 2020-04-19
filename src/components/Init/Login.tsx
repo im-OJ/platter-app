@@ -15,19 +15,7 @@ const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
 };
 
-const LoginWrap = styled.div`
-  width: 50%;
-  height: 50%;
-  overflow: auto;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  border: solid black;
-  text-align: center;
-`;
+const LoginWrap = styled.div``;
 
 type SingInParams =
   | {

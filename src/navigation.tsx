@@ -4,7 +4,8 @@ import { useGlobalState } from "./renderer/App";
 import { Init } from "./components/Init";
 import { Upload } from "./components/Upload";
 import _ from "lodash";
-type Location = "home" | "upload" | "signup" | "init";
+import { Start } from "./components/Start/index";
+type Location = "home" | "upload" | "signup" | "init" | "start";
 const defaultLocation = "init";
 
 let location: Location = defaultLocation;
@@ -14,6 +15,7 @@ const screens: Record<Location, JSX.Element> = {
   upload: <Upload />,
   signup: <p>signup</p>,
   init: <Init />,
+  start: <Start />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {

@@ -13,7 +13,9 @@ export const Upload = () => {
   const { data, error, refetch } = useQuery(testQuery, {
     fetchPolicy: "network-only",
   });
-  console.log(data, error);
+  if (error) {
+    console.log(error);
+  }
   return (
     <Page>
       <>
