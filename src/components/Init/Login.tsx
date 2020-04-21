@@ -5,6 +5,7 @@ import { useNavigateTo } from "../../navigation";
 import styled from "styled-components";
 import { firebaseApp, useGlobalState } from "../../renderer/App";
 import { useState } from "react";
+import { LockOutlined, MailOutlined } from "@ant-design/icons";
 
 const layout = {
   labelCol: { span: 8 },
@@ -102,57 +103,65 @@ export const LogIn = (props: { onSignInComplete: () => void }) => {
   return (
     <LoginWrap>
       <Form
-        {...layout}
-        name="basic"
-        initialValues={{ remember: true }}
-        onFinishFailed={() => {
-          console.log("failed to finish login form ");
+        name="normal_login"
+        initialValues={{
+          remember: true,
         }}
       >
         <Form.Item
-          label="Email"
           name="email"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[
+            {
+              required: true,
+              message: "Please input your email!",
+            },
+          ]}
         >
           <Input
+            prefix={<MailOutlined />}
+            placeholder="Email"
             value={emailValue}
             onChange={(e) => {
               setEmailValue(e.target.value);
             }}
           />
         </Form.Item>
-
         <Form.Item
-          label="Password"
           name="password"
           rules={[
-            { required: true, message: "Please input your password!", min: 6 },
+            {
+              required: true,
+              message: "Please input your Password!",
+            },
           ]}
         >
-          <Input.Password
+          <Input
+            prefix={<LockOutlined />}
+            type="password"
+            placeholder="Password"
             value={passValue}
             onChange={(e) => {
               setPassValue(e.target.value);
             }}
           />
         </Form.Item>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
 
-        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <Form.Item {...tailLayout}>
-          <Button
-            type="primary"
-            htmlType="submit"
-            onClick={() => {
-              signUp();
+          <a
+            className="login-form-forgot"
+            href=""
+            style={{
+              float: "right",
             }}
           >
-            Sign Up
-          </Button>
+            Forgot password
+          </a>
         </Form.Item>
-        <Form.Item {...tailLayout}>
+
+        <Form.Item>
           <Button
             type="primary"
             htmlType="submit"
@@ -162,8 +171,26 @@ export const LogIn = (props: { onSignInComplete: () => void }) => {
                 pass: passValue,
               });
             }}
+            style={{
+              width: "100%",
+            }}
           >
-            Sign In
+            Log in
+          </Button>
+        </Form.Item>
+        <p style={{ width: "100%", textAlign: "center" }}>or</p>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            onClick={() => {
+              signUp();
+            }}
+            style={{
+              width: "100%",
+            }}
+          >
+            Sign Up
           </Button>
         </Form.Item>
       </Form>
