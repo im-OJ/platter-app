@@ -16,6 +16,7 @@ import firebase from "firebase";
 
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
+import { reSyncDBs } from "../database/database";
 
 const isProd = !require("electron-is-dev");
 
@@ -44,11 +45,20 @@ export const firebaseApp = firebase.initializeApp(
       }
 );
 
+const onStart = () => {
+  console.log("started");
+  reSyncDBs();
+};
+
 export const App = () => {
   const [userToken, setUserToken] = useGlobalState("token");
   const [siderCollapsed, setSiderCollapsed] = useState(false);
   const navigateTo = useNavigateTo();
   const { Sider, Content } = Layout;
+
+  React.useEffect(() => {
+    onStart();
+  }, []);
 
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists

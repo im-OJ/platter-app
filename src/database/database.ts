@@ -15,30 +15,13 @@ export const getSampleById = (id: string): Promise<Sample> => {
   return database.samples.local.get(id);
 };
 
+// TODO: This currently doesnt seem to work ??
 export const reSyncDBs = async () => {
-  console.log("syncing ");
-  const db = database.samples.remote;
-  // await db
-  //   .allDocs()
-  //   .then(function (result) {
-  //     // Promise isn't supported by all browsers; you may want to use bluebird
-  //     return Promise.all(
-  //       result.rows.map(function (row) {
-  //         return db.remove(row.id, row.value.rev);
-  //       })
-  //     );
-  //   })
-  //   .then(function () {
-  //     return true;
-  //   })
-  //   .catch(function (err: any) {
-  //     console.error(err);
-  //     return false;
-  //   });
-
+  console.log("enabling sync ");
   database.samples.local.replicate
     .from(database.samples.remote, {
       live: true,
+      retry: true,
     })
     .then(() => {
       console.log("Sync complete");
@@ -48,8 +31,8 @@ export const reSyncDBs = async () => {
 export const useGetSamples = (): { data: Array<Sample> | null } => {
   const [data, setData] = useState<any>(null);
   console.log("refreshing samples");
-  const readSamples = (local: "remote" | "local") => {
-    database.samples[local]
+  const readSamples = (locale: "remote" | "local") => {
+    database.samples[locale]
       .allDocs({ include_docs: true })
       .then((all) => {
         const samples: Array<any> = [];
@@ -61,19 +44,17 @@ export const useGetSamples = (): { data: Array<Sample> | null } => {
       })
       .catch(console.error);
   };
-  if (data) {
-    database.samples.remote
-      .changes({
-        since: "now",
-      })
-      .on("change", () => {
-        console.log("change in remote");
-        readSamples("remote");
-      })
-      .on("error", console.log);
-  } else {
+  if (!data) {
     readSamples("remote");
   }
+  database.samples.remote
+    .changes({
+      since: "now",
+    })
+    .on("change", () => {
+      console.log("change in remote");
+      readSamples("remote");
+    });
 
   return { data };
 };
