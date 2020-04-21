@@ -19,7 +19,7 @@ export const SampleTable = (props: { samples: Array<Sample> | null }) => {
       title: "Tags",
       dataIndex: "tags",
       key: "tags",
-      width: 150,
+
       render: (tags) =>
         tags.map((text: string, record: any, next: any) => {
           return (

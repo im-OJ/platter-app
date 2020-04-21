@@ -3,11 +3,7 @@ import styled from "styled-components";
 import { Card } from "antd";
 import { LogIn } from "./Login";
 export const Init = () => {
-  return (
-    <AbsoluteFull>
-      <LogIn />
-    </AbsoluteFull>
-  );
+  return <AbsoluteFull></AbsoluteFull>;
 };
 
 export const AbsoluteFull = styled(Card)`

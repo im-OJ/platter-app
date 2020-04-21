@@ -25,7 +25,7 @@ type SingInParams =
   | {
       token: string;
     };
-const useSignIn = () => {
+const useSignIn = (settings: { onComplete: () => void }) => {
   const [userToken, setUserToken] = useGlobalState("token");
 
   const mySetUserToken = (token: string) => {
@@ -53,6 +53,7 @@ const useSignIn = () => {
                 // Send token to your backend via HTTPS
                 // ...
                 mySetUserToken(idToken);
+                settings.onComplete();
               })
               .catch(function (error) {
                 console.error;
@@ -77,14 +78,11 @@ const useSignIn = () => {
   };
 };
 
-export const LogIn = () => {
+export const LogIn = (props: { onSignInComplete: () => void }) => {
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
   const navigateTo = useNavigateTo();
-  const signIn = useSignIn();
-  const onFinish = () => {
-    // navigateTo("home");
-  };
+  const signIn = useSignIn({ onComplete: props.onSignInComplete });
 
   const signUp = () => {
     firebaseApp
@@ -107,7 +105,6 @@ export const LogIn = () => {
         {...layout}
         name="basic"
         initialValues={{ remember: true }}
-        onFinish={onFinish}
         onFinishFailed={() => {
           console.log("failed to finish login form ");
         }}
