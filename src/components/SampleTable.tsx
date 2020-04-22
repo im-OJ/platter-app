@@ -35,7 +35,7 @@ export const SampleTable = (props: { samples: Array<Sample> | null }) => {
   return (
     <>
       <Table
-        style={{ overflow: "hidden" }}
+        style={{ overflow: "hidden", width: "100%", left: 20 }}
         columns={columns}
         dataSource={samples || []}
         onRow={(record, rowIndex) => {

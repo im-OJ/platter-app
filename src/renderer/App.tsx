@@ -52,7 +52,7 @@ const onStart = () => {
 
 export const App = () => {
   const [userToken, setUserToken] = useGlobalState("token");
-  const [siderCollapsed, setSiderCollapsed] = useState(false);
+  const [siderCollapsed, setSiderCollapsed] = useState(true);
   const navigateTo = useNavigateTo();
   const { Sider, Content } = Layout;
 
@@ -125,7 +125,11 @@ export const App = () => {
         </Sider>
         <Layout
           className="site-layout"
-          style={{ marginLeft: siderCollapsed ? 64 : 200, height: "100%" }}
+          style={{
+            marginLeft: siderCollapsed ? 80 : 200,
+
+            height: "100%",
+          }}
         >
           <Content style={{ margin: "4px 4px 4px 4px", overflow: "initial" }}>
             <div
