@@ -178,7 +178,7 @@ export const LogIn = (props: { onSignInComplete: () => void }) => {
             Log in
           </Button>
         </Form.Item>
-        <p style={{ width: "100%", textAlign: "center" }}>or</p>
+
         <Form.Item>
           <Button
             type="primary"
