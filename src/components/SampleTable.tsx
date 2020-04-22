@@ -13,7 +13,7 @@ export const SampleTable = (props: { samples: Array<Sample> | null }) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: 150,
+      width: 250,
     },
     {
       title: "Tags",
@@ -35,7 +35,8 @@ export const SampleTable = (props: { samples: Array<Sample> | null }) => {
   return (
     <>
       <Table
-        style={{ overflow: "hidden", width: "100%", left: 20 }}
+        size="small"
+        style={{ overflow: "hidden", width: "100%", left: 20, height: "100%" }}
         columns={columns}
         dataSource={samples || []}
         onRow={(record, rowIndex) => {
