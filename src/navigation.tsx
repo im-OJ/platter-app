@@ -5,7 +5,8 @@ import { Init } from "./components/Init";
 import { Upload } from "./components/Upload";
 import _ from "lodash";
 import { Start } from "./components/Start/index";
-type Location = "home" | "upload" | "signup" | "init" | "start";
+import Test from "./components/Test";
+type Location = "home" | "upload" | "signup" | "init" | "start" | "test";
 const defaultLocation = "init";
 
 let location: Location = defaultLocation;
@@ -16,6 +17,7 @@ const screens: Record<Location, JSX.Element> = {
   signup: <p>signup</p>,
   init: <Init />,
   start: <Start />,
+  test: <Test />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {

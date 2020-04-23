@@ -3,7 +3,7 @@ import { Navigator, useNavigateTo } from "../navigation";
 import { Layout, Menu, Typography } from "antd";
 import { useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
-import { HomeOutlined, UploadOutlined } from "@ant-design/icons";
+
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 export const { useGlobalState } = createGlobalState({
@@ -17,6 +17,7 @@ import firebase from "firebase";
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { reSyncDBs } from "../database/database";
+import { Sidebar } from "../components/Layout/Sidebar";
 
 const isProd = !require("electron-is-dev");
 
@@ -105,27 +106,7 @@ export const App = () => {
           collapsed={siderCollapsed}
           onCollapse={setSiderCollapsed}
         >
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-            <Menu.Item
-              onClick={() => {
-                navigateTo("home");
-              }}
-              key="1"
-            >
-              <HomeOutlined />
-              <span className="nav-text">Home</span>
-            </Menu.Item>
-            <Menu.Item
-              onClick={() => {
-                console.log("navigating to upload");
-                navigateTo("upload");
-              }}
-              key="2"
-            >
-              <UploadOutlined />
-              <span className="nav-text">Upload</span>
-            </Menu.Item>
-          </Menu>
+          <Sidebar />
         </Sider>
         <Layout
           className="site-layout"
