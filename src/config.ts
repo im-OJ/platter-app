@@ -1,12 +1,12 @@
 const isProd = !require("electron-is-dev");
-const useLocalDb = true;
+const useLocalApi = true;
 
 export const config = {
   isProd,
-  dbUrl: isProdF
+  dbUrl: isProd
     ? "https://platter-db.herokuapp.com/"
     : "https://platter-db-dev.herokuapp.com/",
-  apiUrl: useLocalDb
+  apiUrl: useLocalApi
     ? "http://localhost:3001/graphql"
     : isProd
     ? "https://platter-api.herokuapp.com/graphql"
