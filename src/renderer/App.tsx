@@ -60,6 +60,7 @@ export const App = () => {
     onStart();
   }, []);
 
+  // todo extract all this out, store token with keytar NOT global hook
   const authLink = setContext((_, { headers }) => {
     // get the authentication token from local storage if it exists
     const token = userToken;
@@ -71,9 +72,11 @@ export const App = () => {
       },
     };
   });
+  console.log("api: ", config.apiUrl);
   const httpLink = createHttpLink({
     uri: config.apiUrl,
   });
+
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     // @ts-ignore
@@ -81,6 +84,7 @@ export const App = () => {
     headers: {
       authorization: userToken || "no-token",
     },
+    body: {},
   });
 
   return (
