@@ -18,6 +18,8 @@ export type Mutation = {
   sampleUpload?: Maybe<Scalars['Boolean']>;
   createTestSampleData?: Maybe<Array<Maybe<Sample>>>;
   clearDevSamplesDB?: Maybe<Scalars['Boolean']>;
+  signIn?: Maybe<User>;
+  signUp?: Maybe<User>;
 };
 
 
@@ -48,6 +50,14 @@ export type Sample = {
   user_id: Scalars['String'];
   url?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Scalars['String']>>;
+};
+
+export type User = {
+   __typename?: 'User';
+  _id: Scalars['String'];
+  hasFullAccount: Scalars['Boolean'];
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
 };
 
 
@@ -130,6 +140,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Query: ResolverTypeWrapper<{}>,
   Sample: ResolverTypeWrapper<Sample>,
+  User: ResolverTypeWrapper<User>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -141,6 +152,7 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'],
   Query: {},
   Sample: Sample,
+  User: User,
 };
 
 export interface FileUploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['FileUpload'], any> {
@@ -151,6 +163,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   sampleUpload?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSampleUploadArgs, 'sample'>>,
   createTestSampleData?: Resolver<Maybe<Array<Maybe<ResolversTypes['Sample']>>>, ParentType, ContextType, RequireFields<MutationCreateTestSampleDataArgs, 'amount'>>,
   clearDevSamplesDB?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  signIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  signUp?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -167,11 +181,20 @@ export type SampleResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  _id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  hasFullAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type Resolvers<ContextType = any> = {
   FileUpload?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Sample?: SampleResolvers<ContextType>,
+  User?: UserResolvers<ContextType>,
 };
 
 

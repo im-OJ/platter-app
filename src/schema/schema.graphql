@@ -4,6 +4,8 @@ type Mutation {
   sampleUpload(sample: FileUpload!): Boolean
   createTestSampleData(amount: Int!): [Sample]
   clearDevSamplesDB: Boolean
+  signIn: User
+  signUp: User
 }
 
 type Query {
@@ -17,5 +19,12 @@ type Sample {
   user_id: String!
   url: String
   tags: [String!]
+}
+
+type User {
+  _id: String!
+  hasFullAccount: Boolean!
+  username: String
+  email: String
 }
 

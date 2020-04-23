@@ -6,6 +6,8 @@ import styled from "styled-components";
 import { firebaseApp, useGlobalState } from "../../renderer/App";
 import { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
+import { useMutation, gql } from "@apollo/client";
+import { Mutation } from "@/generated/graphql";
 
 const layout = {
   labelCol: { span: 8 },
@@ -27,9 +29,10 @@ type SingInParams =
       token: string;
     };
 const useSignIn = (settings: { onComplete: () => void }) => {
-  const [userToken, setUserToken] = useGlobalState("token");
+  const [userToken, setUserToken] = useGlobalState("token"); // TODO: Change this to keytar
 
   const mySetUserToken = (token: string) => {
+    console.log("user token" + token);
     setUserToken(token);
   };
   const navigateTo = useNavigateTo();
@@ -79,26 +82,42 @@ const useSignIn = (settings: { onComplete: () => void }) => {
   };
 };
 
-export const LogIn = (props: { onSignInComplete: () => void }) => {
-  const [emailValue, setEmailValue] = useState("");
-  const [passValue, setPassValue] = useState("");
-  const navigateTo = useNavigateTo();
-  const signIn = useSignIn({ onComplete: props.onSignInComplete });
-
-  const signUp = () => {
+export const useSignUp = () => {
+  const [signUpMutation, response] = useMutation<Mutation["signUp"]>(gql`
+    mutation userSignUp {
+      signUp
+    }
+  `);
+  console.log("sign in data: ", response);
+  console.log(response);
+  const signIn = useSignIn({
+    onComplete: () => {
+      console.log("signed in");
+    },
+  });
+  return (email: string, pass: string) => {
     firebaseApp
       .auth()
-      .createUserWithEmailAndPassword(emailValue, passValue)
+      .createUserWithEmailAndPassword(email, pass)
       .then(() => {
         console.log("signup complete");
+        signUpMutation();
         signIn({
-          email: emailValue,
-          pass: passValue,
+          email: email,
+          pass: pass,
         });
-        navigateTo("home");
       })
       .catch(console.error);
   };
+};
+
+export const LogIn = (props: { onSignInComplete: () => void }) => {
+  const [emailValue, setEmailValue] = useState("");
+  const [passValue, setPassValue] = useState("");
+
+  const signIn = useSignIn({ onComplete: props.onSignInComplete });
+
+  const signUp = useSignUp();
 
   return (
     <LoginWrap>
@@ -184,7 +203,7 @@ export const LogIn = (props: { onSignInComplete: () => void }) => {
             type="primary"
             htmlType="submit"
             onClick={() => {
-              signUp();
+              signUp(emailValue, passValue);
             }}
             style={{
               width: "100%",
