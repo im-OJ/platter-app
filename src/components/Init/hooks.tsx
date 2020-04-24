@@ -65,17 +65,26 @@ export const useSignIn = (settings: { onComplete: () => void }) => {
   };
 };
 
-export const useSignUp = () => {
-  const [signUpMutation, response] = useMutation<Mutation["signUp"]>(gql`
-    mutation userSignUp {
-      signUp
+const signUpAPI = gql`
+  mutation userSignUp {
+    signUp {
+      _id
+      email
     }
-  `);
-  console.log("sign in data: ", response);
-  console.log(response);
+  }
+`;
+export const useSignUp = () => {
+  const [signUpMutation, response] = useMutation<Mutation["signUp"]>(signUpAPI);
+  if (response.data) {
+    console.log(response.data, response.error);
+  }
   const signIn = useSignIn({
     onComplete: () => {
-      console.log("signed in");
+      signUpMutation()
+        .then(() => {
+          console.log("API Sign up complete, signing in");
+        })
+        .catch(console.error);
     },
   });
   return (email: string, pass: string) => {
@@ -83,8 +92,7 @@ export const useSignUp = () => {
       .auth()
       .createUserWithEmailAndPassword(email, pass)
       .then(() => {
-        console.log("signup complete");
-        signUpMutation();
+        console.log("Firebase sign up complete, signing in");
         signIn({
           email: email,
           pass: pass,
