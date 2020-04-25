@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { Card } from "antd";
-import { LogIn } from "./Login";
+import { LogIn } from "../Start/Login";
 export const Init = () => {
   return <AbsoluteFull></AbsoluteFull>;
 };

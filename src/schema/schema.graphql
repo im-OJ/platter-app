@@ -11,6 +11,7 @@ type Mutation {
 type Query {
   helloWorld: String!
   sample(id: String!): Sample
+  me: User
 }
 
 type Sample {

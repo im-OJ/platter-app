@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { Card, Modal } from "antd";
 import { AbsoluteFull } from "../Init";
-import { LogIn } from "../Init/Login";
+import { LogIn } from "./Login";
 import { useState } from "react";
 import { useNavigateTo } from "../../navigation";
 
@@ -18,12 +18,11 @@ export const Start = () => {
         centered
         width={350}
         closable={false}
-        afterClose={() => {
-          navigateTo("home");
-        }}
+        afterClose={() => {}}
       >
         <LogIn
           onSignInComplete={() => {
+            navigateTo("home");
             setModalVisible(false);
           }}
         />

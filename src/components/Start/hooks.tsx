@@ -1,7 +1,8 @@
 import { useGlobalState, firebaseApp } from "../../renderer/App";
 import { useNavigateTo } from "../../navigation";
-import { useMutation, gql } from "@apollo/client";
-import { Mutation } from "../../generated/graphql";
+import { useMutation, gql, useQuery } from "@apollo/client";
+import { Mutation, Query, User } from "../../generated/graphql";
+import { useState } from "react";
 export type SingInParams =
   | {
       email: string;
@@ -10,7 +11,30 @@ export type SingInParams =
   | {
       token: string;
     };
-export const useSignIn = (settings: { onComplete: () => void }) => {
+
+const signInMutation = gql`
+  mutation signIn {
+    me {
+      _id
+      username
+      email
+      hasFullAccount
+    }
+  }
+`;
+
+export const useSignInApi = (): [(p?: any) => Promise<any>, User | null] => {
+  const [user, setUser] = useState<User | null>(null);
+  const [signInApi, { data, error }] = useMutation<Mutation>(signInMutation);
+  if (error) {
+    console.error(error);
+  }
+
+  setUser(data ? data.signIn ?? null : null);
+  return [signInApi, user];
+};
+
+export const useSignInFirebase = (p: { onComplete: () => void }) => {
   const [userToken, setUserToken] = useGlobalState("token"); // TODO: Change this to keytar
 
   const mySetUserToken = (token: string) => {
@@ -22,11 +46,12 @@ export const useSignIn = (settings: { onComplete: () => void }) => {
   return (params: SingInParams) => {
     if ("email" in params) {
       console.log("signing in with email/pass");
+
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(params.email, params.pass)
         .then((t) => {
-          console.log("sign in complete ", t);
+          console.log("firebase sign in complete ", t);
           if (
             firebaseApp &&
             firebaseApp.auth &&
@@ -37,10 +62,8 @@ export const useSignIn = (settings: { onComplete: () => void }) => {
               .auth()
               .currentUser.getIdToken(/* forceRefresh */ true)
               .then(function (idToken) {
-                // Send token to your backend via HTTPS
-                // ...
                 mySetUserToken(idToken);
-                settings.onComplete();
+                p.onComplete();
               })
               .catch(function (error) {
                 console.error;
@@ -57,8 +80,8 @@ export const useSignIn = (settings: { onComplete: () => void }) => {
         .auth()
         .signInWithCustomToken(userToken)
         .then(() => {
-          console.log("sign in complete");
-          navigateTo("home");
+          console.log("firebase sign in complete");
+          p.onComplete();
         })
         .catch(console.error);
     }
@@ -73,30 +96,19 @@ const signUpAPI = gql`
     }
   }
 `;
-export const useSignUp = () => {
+export const useSignUp = (p: { onComplete: () => void }) => {
   const [signUpMutation, response] = useMutation<Mutation["signUp"]>(signUpAPI);
   if (response.data) {
     console.log(response.data, response.error);
   }
-  const signIn = useSignIn({
-    onComplete: () => {
-      signUpMutation()
-        .then(() => {
-          console.log("API Sign up complete, signing in");
-        })
-        .catch(console.error);
-    },
-  });
+
   return (email: string, pass: string) => {
     firebaseApp
       .auth()
       .createUserWithEmailAndPassword(email, pass)
       .then(() => {
         console.log("Firebase sign up complete, signing in");
-        signIn({
-          email: email,
-          pass: pass,
-        });
+        p.onComplete();
       })
       .catch(console.error);
   };

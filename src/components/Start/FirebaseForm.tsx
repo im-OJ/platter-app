@@ -2,15 +2,21 @@ import * as React from "react";
 import { Form, Input, Checkbox, Button } from "antd";
 import { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { useSignIn, useSignUp } from "./hooks";
+import { useSignInFirebase, useSignUp } from "./hooks";
 
-export const FirebaseForm = (props: { onSignInComplete: () => void }) => {
+export const FirebaseForm = (props: { onComplete: () => void }) => {
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
 
-  const signIn = useSignIn({ onComplete: props.onSignInComplete });
+  const signIn = useSignInFirebase({ onComplete: props.onComplete });
 
-  const signUp = useSignUp();
+  const signUp = useSignUp({
+    onComplete: () =>
+      signIn({
+        email: emailValue,
+        pass: passValue,
+      }),
+  });
   return (
     <Form
       name="normal_login"

@@ -36,6 +36,7 @@ export type Query = {
    __typename?: 'Query';
   helloWorld: Scalars['String'];
   sample?: Maybe<Sample>;
+  me?: Maybe<User>;
 };
 
 
@@ -170,6 +171,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   helloWorld?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   sample?: Resolver<Maybe<ResolversTypes['Sample']>, ParentType, ContextType, RequireFields<QuerySampleArgs, 'id'>>,
+  me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 };
 
 export type SampleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sample'] = ResolversParentTypes['Sample']> = {
