@@ -1,5 +1,5 @@
 const isProd = !require("electron-is-dev");
-const useLocalApi = true;
+const useLocalApi = !isProd && true;
 
 export const config = {
   isProd,

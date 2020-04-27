@@ -9,6 +9,7 @@ const LoginWrap = styled.div``;
 
 export const LogIn = (props: { onSignInComplete: () => void }) => {
   const [form, setForm] = useState<"firebase" | "completeAccpunt">("firebase");
+
   return (
     <LoginWrap>
       {form === "firebase" && (

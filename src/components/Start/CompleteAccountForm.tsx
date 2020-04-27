@@ -1,26 +1,31 @@
 import * as React from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSignInApi } from "./hooks";
 
 export const CompleteAccountForm = (props: { onComplete: () => void }) => {
-  console.log("here");
-  const [usernameValue, setUsernameValue] = useState("");
-  const [signIn, user] = useSignInApi();
-  useEffect(() => {
-    signIn(); // attempt to sign in on load
-  }, []);
+  // const [usernameValue, setUsernameValue] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const { user } = useSignInApi();
+
+  // if (!mounted) {
+  //   console.log("Attempting sign in");
+  //   setMounted(true);
+  //   return null;
+  // }
   if (!user) {
     console.log("no user returning null");
     return null;
   }
+
   if (user.hasFullAccount) {
     console.log("user has full account, signing in");
     // close
     props.onComplete();
     return null;
   }
+  console.log("user does not have full account showing form");
   return (
     <Form
       name="normal_login"
@@ -40,9 +45,9 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
         <Input
           prefix={<UserOutlined />}
           placeholder="Username"
-          value={usernameValue}
+          value={"usernameValue"}
           onChange={(e) => {
-            setUsernameValue(e.target.value);
+            // setUsernameValue(e.target.value);
           }}
         />
       </Form.Item>
@@ -52,7 +57,7 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
           type="primary"
           htmlType="submit"
           onClick={() => {
-            signIn();
+            // signIn();
           }}
           style={{
             width: "100%",

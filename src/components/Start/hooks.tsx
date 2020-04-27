@@ -12,8 +12,8 @@ export type SingInParams =
       token: string;
     };
 
-const signInMutation = gql`
-  mutation signIn {
+const signInQuery = gql`
+  query signInData {
     me {
       _id
       username
@@ -23,15 +23,17 @@ const signInMutation = gql`
   }
 `;
 
-export const useSignInApi = (): [(p?: any) => Promise<any>, User | null] => {
+export const useSignInApi = (): { user: User | null } => {
   const [user, setUser] = useState<User | null>(null);
-  const [signInApi, { data, error }] = useMutation<Mutation>(signInMutation);
+  const { data, error, loading } = useQuery<Query>(signInQuery);
+  console.log(data, loading, error);
   if (error) {
     console.error(error);
   }
-
-  setUser(data ? data.signIn ?? null : null);
-  return [signInApi, user];
+  if (data && data.me && !user) {
+    setUser(data.me);
+  }
+  return { user: user ?? null };
 };
 
 export const useSignInFirebase = (p: { onComplete: () => void }) => {
@@ -96,12 +98,7 @@ const signUpAPI = gql`
     }
   }
 `;
-export const useSignUp = (p: { onComplete: () => void }) => {
-  const [signUpMutation, response] = useMutation<Mutation["signUp"]>(signUpAPI);
-  if (response.data) {
-    console.log(response.data, response.error);
-  }
-
+export const useSignUpFirebase = (p: { onComplete: () => void }) => {
   return (email: string, pass: string) => {
     firebaseApp
       .auth()
