@@ -3,10 +3,13 @@ import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import { useState } from "react";
 import { useSignInApi } from "./hooks";
+import { useMutation } from "@apollo/client";
 
 export const CompleteAccountForm = (props: { onComplete: () => void }) => {
   // const [usernameValue, setUsernameValue] = useState("");
   const [mounted, setMounted] = useState(false);
+  // const [setUsername] = useMutation<Mutation["setUsername"]
+  //  todo next: finish above
   const { user } = useSignInApi();
 
   // if (!mounted) {
