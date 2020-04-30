@@ -1,21 +1,18 @@
 import * as React from "react";
 import { Home } from "./Home";
 import { useGlobalState } from "./renderer/App";
-import { Init } from "./components/Init";
 import { Upload } from "./components/Upload";
 import _ from "lodash";
 import { Start } from "./components/Start/index";
 import Test from "./components/Test";
-type Location = "home" | "upload" | "signup" | "init" | "start" | "test";
-const defaultLocation = "init";
+type Location = "home" | "upload" | "start" | "test";
+const defaultLocation = "start";
 
 let location: Location = defaultLocation;
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
   upload: <Upload />,
-  signup: <p>signup</p>,
-  init: <Init />,
   start: <Start />,
   test: <Test />,
 };
@@ -26,7 +23,6 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
 
 export const Navigator = () => {
   const [gLocation] = useGlobalState("location");
-
   // @ts-ignore
   return (
     <>
