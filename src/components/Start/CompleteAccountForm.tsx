@@ -25,13 +25,9 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
   const { user } = useSignInApi();
 
   if (user?.hasFullAccount || hasSetUsername) {
-    console.log("user has full account, signing in");
-    console.log(user?.hasFullAccount, hasSetUsername);
-    // close
     props.onComplete();
     return null;
   }
-  console.log("user does not have full account showing form");
   return (
     <Form
       name="normal_login"

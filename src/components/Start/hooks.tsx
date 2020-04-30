@@ -26,7 +26,6 @@ const signInQuery = gql`
 export const useSignInApi = (): { user: User | null } => {
   const [user, setUser] = useState<User | null>(null);
   const { data, error, loading } = useQuery<Query>(signInQuery);
-  console.log(data, loading, error);
   if (error) {
     console.error(error);
   }
@@ -41,20 +40,16 @@ export const useSignInFirebase = (p: { onComplete: () => void }) => {
   const [userToken, setUserToken] = useGlobalState("token"); // TODO: Change this to keytar
 
   const mySetUserToken = (token: string) => {
-    console.log("user token" + token);
     setUserToken(token);
   };
   const navigateTo = useNavigateTo();
 
   return (params: SingInParams) => {
     if ("email" in params) {
-      console.log("signing in with email/pass");
-
       firebaseApp
         .auth()
         .signInWithEmailAndPassword(params.email, params.pass)
         .then((t) => {
-          console.log("firebase sign in complete ", t);
           if (
             firebaseApp &&
             firebaseApp.auth &&
@@ -71,10 +66,7 @@ export const useSignInFirebase = (p: { onComplete: () => void }) => {
               .catch(function (error) {
                 console.error;
               });
-          } else {
-            console.log("error getting user");
           }
-
           navigateTo("home");
         })
         .catch(console.error);
@@ -83,7 +75,6 @@ export const useSignInFirebase = (p: { onComplete: () => void }) => {
         .auth()
         .signInWithCustomToken(userToken)
         .then(() => {
-          console.log("firebase sign in complete");
           p.onComplete();
         })
         .catch(console.error);
@@ -105,7 +96,6 @@ export const useSignUpFirebase = (p: { onComplete: () => void }) => {
       .auth()
       .createUserWithEmailAndPassword(email, pass)
       .then(() => {
-        console.log("Firebase sign up complete, signing in");
         p.onComplete();
       })
       .catch(console.error);
