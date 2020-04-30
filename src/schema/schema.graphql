@@ -5,7 +5,7 @@ type Mutation {
   createTestSampleData(amount: Int!): [Sample]
   clearDevSamplesDB: Boolean
   signIn: User
-  signUp: User
+  setUsername(name: String!): Boolean
 }
 
 type Query {

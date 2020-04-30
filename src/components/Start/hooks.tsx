@@ -33,6 +33,7 @@ export const useSignInApi = (): { user: User | null } => {
   if (data && data.me && !user) {
     setUser(data.me);
   }
+
   return { user: user ?? null };
 };
 

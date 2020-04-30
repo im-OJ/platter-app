@@ -19,7 +19,7 @@ export type Mutation = {
   createTestSampleData?: Maybe<Array<Maybe<Sample>>>;
   clearDevSamplesDB?: Maybe<Scalars['Boolean']>;
   signIn?: Maybe<User>;
-  signUp?: Maybe<User>;
+  setUsername?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -30,6 +30,11 @@ export type MutationSampleUploadArgs = {
 
 export type MutationCreateTestSampleDataArgs = {
   amount: Scalars['Int'];
+};
+
+
+export type MutationSetUsernameArgs = {
+  name: Scalars['String'];
 };
 
 export type Query = {
@@ -165,7 +170,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createTestSampleData?: Resolver<Maybe<Array<Maybe<ResolversTypes['Sample']>>>, ParentType, ContextType, RequireFields<MutationCreateTestSampleDataArgs, 'amount'>>,
   clearDevSamplesDB?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   signIn?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  signUp?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  setUsername?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetUsernameArgs, 'name'>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {

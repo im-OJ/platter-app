@@ -3,27 +3,30 @@ import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import { useState } from "react";
 import { useSignInApi } from "./hooks";
-import { useMutation } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
+import { Mutation, MutationSetUsernameArgs } from "../../generated/graphql";
+
+const setUsernameMutation = gql`
+  mutation setUsername($name: String!) {
+    setUsername(name: $name)
+  }
+`;
 
 export const CompleteAccountForm = (props: { onComplete: () => void }) => {
-  // const [usernameValue, setUsernameValue] = useState("");
-  const [mounted, setMounted] = useState(false);
-  // const [setUsername] = useMutation<Mutation["setUsername"]
-  //  todo next: finish above
+  const [usernameValue, setUsernameValue] = useState("");
+
+  const [setUsername, { data: hasSetUsername }] = useMutation<
+    Mutation["setUsername"],
+    MutationSetUsernameArgs
+  >(setUsernameMutation, {
+    variables: { name: usernameValue ?? "" },
+  });
+
   const { user } = useSignInApi();
 
-  // if (!mounted) {
-  //   console.log("Attempting sign in");
-  //   setMounted(true);
-  //   return null;
-  // }
-  if (!user) {
-    console.log("no user returning null");
-    return null;
-  }
-
-  if (user.hasFullAccount) {
+  if (user?.hasFullAccount || hasSetUsername) {
     console.log("user has full account, signing in");
+    console.log(user?.hasFullAccount, hasSetUsername);
     // close
     props.onComplete();
     return null;
@@ -50,7 +53,7 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
           placeholder="Username"
           value={"usernameValue"}
           onChange={(e) => {
-            // setUsernameValue(e.target.value);
+            setUsernameValue(e.target.value);
           }}
         />
       </Form.Item>
@@ -60,7 +63,7 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
           type="primary"
           htmlType="submit"
           onClick={() => {
-            // signIn();
+            setUsername();
           }}
           style={{
             width: "100%",

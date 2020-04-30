@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "fetch-schema": "npx get-graphql-schema https://platter-api-dev.herokuapp.com/graphql > src/schema/schema.graphql",
+    "fetch-schema": "npx get-graphql-schema http://localhost:3001/graphql > src/schema/schema.graphql",
     "generate-types": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
