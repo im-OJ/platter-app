@@ -5,21 +5,27 @@ import { FirebaseForm } from "./FirebaseForm";
 import { CompleteAccountForm } from "./CompleteAccountForm";
 import { useState } from "react";
 
+import { useGetKeytar, useSignInFirebase } from "./hooks";
 const LoginWrap = styled.div``;
 
 export const LogIn = (props: { onSignInComplete: () => void }) => {
-  const [form, setForm] = useState<"firebase" | "completeAccpunt">("firebase");
-
+  const { email: savedEmail, pass: savedPass } = useGetSavedLogin();
+  const [form, setForm] = useState<"firebase" | "completeAccount">("firebase");
+  const token = useGetKeytar("token");
+  console.log("token: ", token);
+  if (savedEmail && savedPass && form !== "completeAccount") {
+    setForm("completeAccount");
+  }
   return (
     <LoginWrap>
       {form === "firebase" && (
         <FirebaseForm
           onComplete={() => {
-            setForm("completeAccpunt");
+            setForm("completeAccount");
           }}
         />
       )}
-      {form === "completeAccpunt" && (
+      {form === "completeAccount" && (
         <CompleteAccountForm
           onComplete={() => {
             props.onSignInComplete();
@@ -28,4 +34,10 @@ export const LogIn = (props: { onSignInComplete: () => void }) => {
       )}
     </LoginWrap>
   );
+};
+
+export const useGetSavedLogin = () => {
+  const email = useGetKeytar("email");
+  const pass = useGetKeytar("pass");
+  return { email, pass };
 };

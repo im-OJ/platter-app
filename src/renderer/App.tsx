@@ -18,6 +18,7 @@ import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { reSyncDBs } from "../database/database";
 import { Sidebar } from "../components/Layout/Sidebar";
+import { useGetKeytar } from "../components/start/hooks";
 
 const isProd = !require("electron-is-dev");
 
@@ -30,7 +31,7 @@ const onStart = () => {
 };
 
 export const App = () => {
-  const [userToken, setUserToken] = useGlobalState("token");
+  const userToken = useGetKeytar("token");
   const [siderCollapsed, setSiderCollapsed] = useState(true);
   const navigateTo = useNavigateTo();
   const { Sider, Content } = Layout;

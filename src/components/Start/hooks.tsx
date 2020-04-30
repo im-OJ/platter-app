@@ -3,6 +3,7 @@ import { useNavigateTo } from "../../navigation";
 import { useMutation, gql, useQuery } from "@apollo/client";
 import { Mutation, Query, User } from "../../generated/graphql";
 import { useState } from "react";
+import keytar from "keytar";
 export type SingInParams =
   | {
       email: string;
@@ -23,6 +24,19 @@ const signInQuery = gql`
   }
 `;
 
+export const setKeytar = (name: string, value: string) => {
+  console.log("setting keytar", value);
+  keytar.setPassword("main", name, value).catch(console.error);
+};
+
+export const useGetKeytar = (name: string) => {
+  const [value, setValue] = useState<string | null>(null);
+  keytar
+    .getPassword("main", name)
+    .then((v) => setValue(v))
+    .catch(console.error);
+  return value;
+};
 export const useSignInApi = (): { user: User | null } => {
   const [user, setUser] = useState<User | null>(null);
   const { data, error, loading } = useQuery<Query>(signInQuery);
@@ -37,10 +51,9 @@ export const useSignInApi = (): { user: User | null } => {
 };
 
 export const useSignInFirebase = (p: { onComplete: () => void }) => {
-  const [userToken, setUserToken] = useGlobalState("token"); // TODO: Change this to keytar
-
+  const userToken = useGetKeytar("token");
   const mySetUserToken = (token: string) => {
-    setUserToken(token);
+    setKeytar("token", token);
   };
   const navigateTo = useNavigateTo();
 
@@ -71,13 +84,22 @@ export const useSignInFirebase = (p: { onComplete: () => void }) => {
         })
         .catch(console.error);
     } else {
-      firebaseApp
-        .auth()
-        .signInWithCustomToken(userToken)
-        .then(() => {
-          p.onComplete();
-        })
-        .catch(console.error);
+      if (userToken) {
+        firebaseApp
+          .auth()
+          .signInWithCustomToken(userToken)
+          .then((e) => {
+            if (e.user?.email) {
+              p.onComplete();
+            } else {
+              console.log("Error firebase sign in failed");
+              throw new Error("couldnt sign in");
+            }
+          })
+          .catch(console.error);
+      } else {
+        console.log("tried to sign in with no user token");
+      }
     }
   };
 };

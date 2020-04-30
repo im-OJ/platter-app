@@ -3,12 +3,15 @@ import { Form, Input, Checkbox, Button } from "antd";
 import { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useSignInFirebase, useSignUpFirebase } from "./hooks";
+import keytar from "keytar";
 
 export const FirebaseForm = (props: { onComplete: () => void }) => {
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
 
-  const signIn = useSignInFirebase({ onComplete: props.onComplete });
+  const signIn = useSignInFirebase({
+    onComplete: () => props.onComplete(),
+  });
 
   const signUp = useSignUpFirebase({
     onComplete: () =>
