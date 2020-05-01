@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Table, Tag } from "antd";
 import { ColumnsType } from "antd/lib/table";
-import { Sample } from "../generated/graphql";
 import styled from "styled-components";
 
-export const SampleTable = (props: { samples: Array<Sample> | null }) => {
+export const SampleTable = (props: { samples: any }) => {
   const samples = props.samples;
   const playAudio = useAudioPlayer();
 

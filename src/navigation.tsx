@@ -6,9 +6,6 @@ import _ from "lodash";
 import { Start } from "./components/Start/index";
 import Test from "./components/Test";
 type Location = "home" | "upload" | "start" | "test";
-const defaultLocation = "start";
-
-let location: Location = defaultLocation;
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
@@ -34,9 +31,9 @@ export const Navigator = () => {
 };
 
 export const useNavigateTo = () => {
-  const [gLocation, setGLocation] = useGlobalState("location");
+  const [_, setGLocation] = useGlobalState("location");
+  _;
   return (destination: Location) => {
-    location = destination;
     setGLocation(destination);
   };
 };

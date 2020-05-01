@@ -11,7 +11,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
-    "fetch-schema": "npx get-graphql-schema http://localhost:3001/graphql > src/schema/schema.graphql",
+    "fetch-schema": "npx get-graphql-schema http://localhost:5001/platter-app-dev/us-central1/api > src/schema/schema.graphql",
     "generate-types": "graphql-codegen --config codegen.yml",
     "generate-types-2": "apollo-codegen generate **/*.ts --target typescript --tagName=gql --output src/generated/types.ts --schema src/schema/schema.graphql"
   },
@@ -93,16 +93,10 @@
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-hooks-global-state": "^1.0.0",
-    "react-howler": "^3.7.4",
-    "react-player": "^1.15.3",
-    "react-use-audio-player": "^0.0.15",
-    "reactn": "^2.2.7",
     "styled-components": "^5.1.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
-    "update-electron-app": "^1.5.0",
-    "use-global-hook-ts": "^1.0.0",
-    "use-sound": "^1.0.1"
+    "update-electron-app": "^1.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.0.0-beta.45",

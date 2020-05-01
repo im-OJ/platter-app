@@ -1,7 +1,7 @@
-import { useGlobalState, firebaseApp } from "../../renderer/App";
+import { firebaseApp } from "../../renderer/App";
 import { useNavigateTo } from "../../navigation";
-import { useMutation, gql, useQuery } from "@apollo/client";
-import { Mutation, Query, User } from "../../generated/graphql";
+import { gql, useQuery } from "@apollo/client";
+import { Query, User } from "../../generated/graphql";
 import { useState } from "react";
 import keytar from "keytar";
 export type SingInParams =
@@ -16,9 +16,8 @@ export type SingInParams =
 const signInQuery = gql`
   query signInData {
     me {
-      _id
+      id
       username
-      email
       hasFullAccount
     }
   }
@@ -39,7 +38,7 @@ export const useGetKeytar = (name: string) => {
 };
 export const useSignInApi = (): { user: User | null } => {
   const [user, setUser] = useState<User | null>(null);
-  const { data, error, loading } = useQuery<Query>(signInQuery);
+  const { data, error } = useQuery<Query>(signInQuery);
   if (error) {
     console.error(error);
   }
@@ -104,14 +103,6 @@ export const useSignInFirebase = (p: { onComplete: () => void }) => {
   };
 };
 
-const signUpAPI = gql`
-  mutation userSignUp {
-    signUp {
-      _id
-      email
-    }
-  }
-`;
 export const useSignUpFirebase = (p: { onComplete: () => void }) => {
   return (email: string, pass: string) => {
     firebaseApp

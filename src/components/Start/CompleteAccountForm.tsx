@@ -2,32 +2,12 @@ import * as React from "react";
 import { UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import { useState } from "react";
-import { useSignInApi } from "./hooks";
-import { useMutation, gql } from "@apollo/client";
-import { Mutation, MutationSetUsernameArgs } from "../../generated/graphql";
-
-const setUsernameMutation = gql`
-  mutation setUsername($name: String!) {
-    setUsername(name: $name)
-  }
-`;
 
 export const CompleteAccountForm = (props: { onComplete: () => void }) => {
   const [usernameValue, setUsernameValue] = useState("");
+  usernameValue;
+  // if account is complete call props.onComplete
 
-  const [setUsername, { data: hasSetUsername }] = useMutation<
-    Mutation["setUsername"],
-    MutationSetUsernameArgs
-  >(setUsernameMutation, {
-    variables: { name: usernameValue ?? "" },
-  });
-
-  const { user } = useSignInApi();
-
-  if (user?.hasFullAccount || hasSetUsername) {
-    props.onComplete();
-    return null;
-  }
   return (
     <Form
       name="normal_login"
@@ -59,7 +39,7 @@ export const CompleteAccountForm = (props: { onComplete: () => void }) => {
           type="primary"
           htmlType="submit"
           onClick={() => {
-            setUsername();
+            // setUsername();
           }}
           style={{
             width: "100%",

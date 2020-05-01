@@ -1,9 +1,8 @@
 import * as React from "react";
-import { Navigator, useNavigateTo } from "../navigation";
-import { Layout, Menu, Typography } from "antd";
+import { Navigator } from "../navigation";
+import { Layout } from "antd";
 import { useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
-
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 export const { useGlobalState } = createGlobalState({
@@ -13,12 +12,10 @@ export const { useGlobalState } = createGlobalState({
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
-
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
-import { reSyncDBs } from "../database/database";
 import { Sidebar } from "../components/Layout/Sidebar";
-import { useGetKeytar } from "../components/start/hooks";
+import { useGetKeytar } from "../components/Start/hooks";
 
 const isProd = !require("electron-is-dev");
 
@@ -27,13 +24,12 @@ export const firebaseApp = firebase.initializeApp(config.firebaseOptios);
 
 const onStart = () => {
   console.log("started");
-  reSyncDBs();
 };
 
 export const App = () => {
   const userToken = useGetKeytar("token");
   const [siderCollapsed, setSiderCollapsed] = useState(true);
-  const navigateTo = useNavigateTo();
+
   const { Sider, Content } = Layout;
 
   React.useEffect(() => {

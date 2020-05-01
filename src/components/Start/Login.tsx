@@ -5,7 +5,7 @@ import { FirebaseForm } from "./FirebaseForm";
 import { CompleteAccountForm } from "./CompleteAccountForm";
 import { useState } from "react";
 
-import { useGetKeytar, useSignInFirebase } from "./hooks";
+import { useGetKeytar } from "./hooks";
 const LoginWrap = styled.div``;
 
 export const LogIn = (props: { onSignInComplete: () => void }) => {

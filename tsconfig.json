@@ -15,11 +15,15 @@
     "noEmit": true,
     "jsx": "react",
     "baseUrl": ".",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+
     "paths": {
       "@/*": ["src/*"],
       "@main/*": ["src/main/*"],
       "@renderer*/": ["src/renderer/*"]
     }
   },
+  "compileOnSave": true,
   "include": ["src"]
 }
