@@ -12,7 +12,8 @@
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\"",
     "fetch-schema": "npx get-graphql-schema http://localhost:3001/graphql > src/schema/schema.graphql",
-    "generate-types": "graphql-codegen --config codegen.yml"
+    "generate-types": "graphql-codegen --config codegen.yml",
+    "generate-types-2": "apollo-codegen generate **/*.ts --target typescript --tagName=gql --output src/generated/types.ts --schema src/schema/schema.graphql"
   },
   "keywords": [],
   "config": {
