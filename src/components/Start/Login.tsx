@@ -5,18 +5,19 @@ import { FirebaseForm } from "./FirebaseForm";
 
 export const Login = (props: { onComplete: () => void }) => {
   const [storedEmail, setStoredEmail] = useKeytar("email");
-  const [storedPass, setStoredPass] = useKeytar("pass");
+  const [storedPass, setStoredPass] = useKeytar("password");
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [signUpMutation, { error, data }] = useSignUpMutation();
   useEffect(() => {
+    console.log("login init, email:", storedEmail, storedPass);
     if (storedEmail && storedPass) {
       signIn({
         email: storedEmail,
         pass: storedPass,
       });
     }
-  }, []);
+  }, [storedEmail, storedPass]);
 
   const signUp = (p: { email: string; pass: string }) => {
     signUpMutation({

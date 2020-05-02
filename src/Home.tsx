@@ -6,7 +6,6 @@ export const Home = () => {
   return (
     <Page>
       <>
-        Home
         <SampleTable samples={[]} />
       </>
     </Page>

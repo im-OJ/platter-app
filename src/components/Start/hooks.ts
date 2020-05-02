@@ -9,7 +9,8 @@ export type SingInParams = {
   pass: string;
 };
 
-export const setKeytar = (name: string, value: string | null) => {
+const setKeytar = (name: string, value: string | null) => {
+  console.log("setting keytar ", name, value);
   if (!value) {
     keytar.deletePassword("main", name);
     return;
@@ -17,8 +18,9 @@ export const setKeytar = (name: string, value: string | null) => {
   keytar.setPassword("main", name, value).catch(console.error);
 };
 
-export const useGetKeytar = (name: string) => {
+const useGetKeytar = (name: string) => {
   const [value, setValue] = useState<string | null>(null);
+  console.log("getting keytar", value);
   keytar
     .getPassword("main", name)
     .then((v) => setValue(v))
