@@ -20,7 +20,7 @@ import { useGetKeytar } from "../components/Start/hooks";
 const isProd = !require("electron-is-dev");
 
 console.log("Is production: ", isProd);
-export const firebaseApp = firebase.initializeApp(config.firebaseOptios);
+export const firebaseApp = firebase.initializeApp(config.firebaseOptions);
 
 const onStart = () => {
   console.log("started");
@@ -36,11 +36,9 @@ export const App = () => {
     onStart();
   }, []);
 
-  // todo extract all this out, store token with keytar NOT global hook
   const authLink = setContext((_, { headers }) => {
-    // get the authentication token from local storage if it exists
     const token = userToken;
-    // return the headers to the context so httpLink can read them
+
     return {
       headers: {
         ...headers,

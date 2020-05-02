@@ -3,15 +3,12 @@ const useLocalApi = !isProd && true;
 
 export const config = {
   isProd,
-  dbUrl: isProd
-    ? "https://platter-db.herokuapp.com/"
-    : "https://platter-db-dev.herokuapp.com/",
   apiUrl: useLocalApi
-    ? "http://localhost:3001/graphql"
+    ? "http://localhost:5001/platter-app-dev/us-central1/api"
     : isProd
-    ? "https://platter-api.herokuapp.com/graphql"
-    : "https://platter-api-dev.herokuapp.com/graphql",
-  firebaseOptios: isProd
+    ? "https://us-central1-platter-app-8a7ce.cloudfunctions.net/api"
+    : "https://us-central1-platter-app-dev.cloudfunctions.net/api",
+  firebaseOptions: isProd
     ? {
         apiKey: "AIzaSyCBSE-x0NmHG2C4roY16qhqzFzKiDPSd3w",
         authDomain: "platter-app-8a7ce.firebaseapp.com",

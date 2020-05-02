@@ -1,17 +1,18 @@
 import { firebaseApp } from "../../renderer/App";
-import { useNavigateTo } from "../../navigation";
-import { gql, useQuery } from "@apollo/client";
-import { Query, User } from "../../generated/graphql";
+import { gql, useQuery, useMutation } from "@apollo/client";
+import {
+  Query,
+  User,
+  Mutation,
+  MutationSignUpArgs,
+} from "../../generated/graphql";
 import { useState } from "react";
 import keytar from "keytar";
-export type SingInParams =
-  | {
-      email: string;
-      pass: string;
-    }
-  | {
-      token: string;
-    };
+import { useNavigateTo } from "../../navigation";
+export type SingInParams = {
+  email: string;
+  pass: string;
+};
 
 const signInQuery = gql`
   query signInData {
@@ -23,8 +24,21 @@ const signInQuery = gql`
   }
 `;
 
-export const setKeytar = (name: string, value: string) => {
-  console.log("setting keytar", value);
+type KeyTarName = "email" | "pass" | "token";
+
+export const useLogOut = () => {
+  const navigateTo = useNavigateTo();
+  const deletePasswords = async () => {
+    await keytar.deletePassword("main", "email");
+    await keytar.deletePassword("main", "pass");
+    await keytar.deletePassword("main", "token");
+  };
+  deletePasswords().then(() => {
+    navigateTo("start");
+  });
+};
+
+export const setKeytar = (name: KeyTarName, value: string) => {
   keytar.setPassword("main", name, value).catch(console.error);
 };
 
@@ -49,68 +63,55 @@ export const useSignInApi = (): { user: User | null } => {
   return { user: user ?? null };
 };
 
-export const useSignInFirebase = (p: { onComplete: () => void }) => {
-  const userToken = useGetKeytar("token");
+export const useSignInFirebase = (p: {
+  onComplete: () => void;
+  onFail?: () => void;
+}) => {
   const mySetUserToken = (token: string) => {
     setKeytar("token", token);
   };
-  const navigateTo = useNavigateTo();
-
   return (params: SingInParams) => {
-    if ("email" in params) {
-      firebaseApp
-        .auth()
-        .signInWithEmailAndPassword(params.email, params.pass)
-        .then((t) => {
-          if (
-            firebaseApp &&
-            firebaseApp.auth &&
-            firebaseApp.auth().currentUser
-          ) {
-            // @ts-ignore
-            firebaseApp
-              .auth()
-              .currentUser.getIdToken(/* forceRefresh */ true)
-              .then(function (idToken) {
-                mySetUserToken(idToken);
-                p.onComplete();
-              })
-              .catch(function (error) {
-                console.error;
-              });
-          }
-          navigateTo("home");
-        })
-        .catch(console.error);
-    } else {
-      if (userToken) {
-        firebaseApp
-          .auth()
-          .signInWithCustomToken(userToken)
-          .then((e) => {
-            if (e.user?.email) {
+    firebaseApp
+      .auth()
+      .signInWithEmailAndPassword(params.email, params.pass)
+      .then((t) => {
+        if (firebaseApp && firebaseApp.auth && firebaseApp.auth().currentUser) {
+          firebaseApp.auth().currentUser?.refreshToken;
+          firebaseApp.auth();
+          // @ts-ignore
+          firebaseApp
+            .auth()
+            .currentUser.getIdToken(/* forceRefresh */ true)
+            .then(function (idToken) {
+              console.log("token set");
+              mySetUserToken(idToken);
+              setKeytar("email", params.email);
+              setKeytar("pass", params.pass);
               p.onComplete();
-            } else {
-              console.log("Error firebase sign in failed");
-              throw new Error("couldnt sign in");
-            }
-          })
-          .catch(console.error);
-      } else {
-        console.log("tried to sign in with no user token");
-      }
-    }
+            })
+            .catch(function (error) {
+              console.log("couldn't get token");
+              p.onFail ? p.onFail() : null;
+              return null;
+            });
+        }
+      })
+      .catch(() => {
+        console.log("couldn't sign in");
+        p.onFail ? p.onFail() : null;
+        return null;
+      });
   };
 };
 
-export const useSignUpFirebase = (p: { onComplete: () => void }) => {
-  return (email: string, pass: string) => {
-    firebaseApp
-      .auth()
-      .createUserWithEmailAndPassword(email, pass)
-      .then(() => {
-        p.onComplete();
-      })
-      .catch(console.error);
-  };
+const signUpMuation = gql`
+  mutation SignUp($email: String!, $password: String!) {
+    signUp(email: $email, password: $password) {
+      id
+    }
+  }
+`;
+
+export const useSignUpFirebase = () => {
+  return useMutation<Mutation, MutationSignUpArgs>(signUpMuation);
 };
