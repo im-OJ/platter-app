@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Card, Modal } from "antd";
 
 import { Login } from "./Login";
+import { useNavigateTo } from "../../navigation";
+import { useState } from "react";
 
 const AbsoluteFull = styled(Card)`
   position: fixed;
@@ -15,20 +17,25 @@ const AbsoluteFull = styled(Card)`
 `;
 
 const Start = () => {
-  // const [modalVisible, setModalVisible] = useState(true);
-  // const navigateTo = useNavigateTo();
+  const [modalVisible, setModalVisible] = useState(true);
+  const navigateTo = useNavigateTo();
   return (
     <FullScreen>
       <Modal
         title={null}
         footer={null}
-        visible={true}
+        visible={modalVisible}
         centered
         width={350}
         closable={false}
         afterClose={() => {}}
       >
-        <Login />
+        <Login
+          onComplete={() => {
+            navigateTo("home");
+            setModalVisible(false);
+          }}
+        />
       </Modal>
     </FullScreen>
   );

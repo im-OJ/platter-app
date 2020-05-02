@@ -1,20 +1,22 @@
 import * as React from "react";
 import { useKeytar, useSignInFirebase, useSignUpMutation } from "./hooks";
-import { useState } from "react";
-import { useNavigateTo } from "../../navigation";
+import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
 
-export const Login = () => {
+export const Login = (props: { onComplete: () => void }) => {
   const [storedEmail, setStoredEmail] = useKeytar("email");
   const [storedPass, setStoredPass] = useKeytar("pass");
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const navigateTo = useNavigateTo();
-  const [signUpMutation, { error }] = useSignUpMutation();
-
-  if (error && errorMessage !== error.message) {
-    setErrorMessage(error.message);
-  }
+  const [signUpMutation, { error, data }] = useSignUpMutation();
+  useEffect(() => {
+    if (storedEmail && storedPass) {
+      signIn({
+        email: storedEmail,
+        pass: storedPass,
+      });
+    }
+  }, []);
 
   const signUp = (p: { email: string; pass: string }) => {
     signUpMutation({
@@ -22,6 +24,11 @@ export const Login = () => {
         email: p.email,
         password: p.pass,
       },
+    }).then(() => {
+      console.log("signed up, signing in");
+      signIn({
+        ...p,
+      });
     });
   };
 
@@ -39,19 +46,19 @@ export const Login = () => {
       setLoggedIn(false);
     },
   });
+
   if (loggedIn) {
-    navigateTo("home");
+    console.log(loggedIn);
+    props.onComplete();
     return null;
   }
-
-  if (storedEmail && storedPass) {
-    signIn({
-      email: storedEmail,
-      pass: storedPass,
-    });
+  if (data?.signUp?.id) {
+    setLoggedIn(true);
     return null;
   }
-
+  if (error && errorMessage !== error.message) {
+    setErrorMessage(error.message);
+  }
   return (
     <FirebaseForm
       onSignInSubmit={(email, pass) => signIn({ email, pass })}

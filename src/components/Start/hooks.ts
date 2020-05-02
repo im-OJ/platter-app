@@ -70,7 +70,6 @@ const signUpMuation = gql`
   mutation SignUp($email: String!, $password: String!) {
     signUp(email: $email, password: $password) {
       id
-      hasFullAccount
     }
   }
 `;

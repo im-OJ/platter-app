@@ -5,7 +5,10 @@ import { Page } from "./components/Page";
 export const Home = () => {
   return (
     <Page>
-      <SampleTable samples={[]} />
+      <>
+        Home
+        <SampleTable samples={[]} />
+      </>
     </Page>
   );
 };

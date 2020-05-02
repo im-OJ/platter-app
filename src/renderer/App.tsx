@@ -15,6 +15,7 @@ import firebase from "firebase";
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
+import { useKeytar } from "../components/Start/hooks";
 
 const isProd = !require("electron-is-dev");
 
@@ -29,8 +30,10 @@ export const App = () => {
   const [siderCollapsed, setSiderCollapsed] = useState(true);
   const getContext = useGetContext();
   const { Sider, Content } = Layout;
-
+  // @ts-ignore
+  const [_, setToken] = useKeytar("token");
   React.useEffect(() => {
+    setToken(null);
     onStart();
   }, []);
 
@@ -88,11 +91,14 @@ export const App = () => {
 };
 
 const useGetContext = () => {
+  const [token] = useKeytar("token");
+  console.log("refresh token");
   const authLink = setContext((_, { headers }) => {
+    console.log("get context");
     return {
       headers: {
         ...headers,
-        authorization: "todo",
+        authorization: token,
       },
     };
   });
