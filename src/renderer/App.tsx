@@ -15,7 +15,6 @@ import firebase from "firebase";
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
-import { useGetKeytar } from "../components/Start/hooks";
 
 const isProd = !require("electron-is-dev");
 
@@ -27,25 +26,14 @@ const onStart = () => {
 };
 
 export const App = () => {
-  const userToken = useGetKeytar("token");
   const [siderCollapsed, setSiderCollapsed] = useState(true);
-
+  const getContext = useGetContext();
   const { Sider, Content } = Layout;
 
   React.useEffect(() => {
     onStart();
   }, []);
 
-  const authLink = setContext((_, { headers }) => {
-    const token = userToken;
-
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? token : "no-token",
-      },
-    };
-  });
   console.log("api: ", config.apiUrl);
   const httpLink = createHttpLink({
     uri: config.apiUrl,
@@ -54,11 +42,7 @@ export const App = () => {
   const client = new ApolloClient({
     cache: new InMemoryCache(),
     // @ts-ignore
-    link: authLink.concat(httpLink),
-    headers: {
-      authorization: userToken || "no-token",
-    },
-    body: {},
+    link: getContext.concat(httpLink),
   });
 
   return (
@@ -101,4 +85,16 @@ export const App = () => {
       </Layout>
     </ApolloProvider>
   );
+};
+
+const useGetContext = () => {
+  const authLink = setContext((_, { headers }) => {
+    return {
+      headers: {
+        ...headers,
+        authorization: "todo",
+      },
+    };
+  });
+  return authLink;
 };

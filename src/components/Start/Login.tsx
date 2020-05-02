@@ -1,62 +1,62 @@
 import * as React from "react";
-
-import styled from "styled-components";
-import { FirebaseForm } from "./FirebaseForm";
-import { CompleteAccountForm } from "./CompleteAccountForm";
+import { useKeytar, useSignInFirebase, useSignUpMutation } from "./hooks";
 import { useState } from "react";
+import { useNavigateTo } from "../../navigation";
+import { FirebaseForm } from "./FirebaseForm";
 
-import { useGetKeytar, useSignInFirebase } from "./hooks";
-const LoginWrap = styled.div``;
+export const Login = () => {
+  const [storedEmail, setStoredEmail] = useKeytar("email");
+  const [storedPass, setStoredPass] = useKeytar("pass");
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const navigateTo = useNavigateTo();
+  const [signUpMutation, { error }] = useSignUpMutation();
 
-export const LogIn = (props: { onSignInComplete: () => void }) => {
-  const { email: savedEmail, pass: savedPass } = useGetSavedLogin();
-  const [form, setForm] = useState<"firebase" | "completeAccount">("firebase");
-  const [attmeptedToLogIn, setAttmeptedToLogIn] = useState(false);
+  if (error && errorMessage !== error.message) {
+    setErrorMessage(error.message);
+  }
+
+  const signUp = (p: { email: string; pass: string }) => {
+    signUpMutation({
+      variables: {
+        email: p.email,
+        password: p.pass,
+      },
+    });
+  };
+
   const signIn = useSignInFirebase({
-    onComplete: () => {
-      setForm("completeAccount");
-
-      setAttmeptedToLogIn(true);
+    onComplete: (p) => {
+      console.log("succesfully signed in", p.token.substr(0, 8));
+      setStoredEmail(p.email);
+      setStoredPass(p.pass);
+      setLoggedIn(true);
     },
     onFail: () => {
-      setForm("completeAccount");
-      setAttmeptedToLogIn(true);
+      setErrorMessage("sign in failed");
+      setStoredEmail(null);
+      setStoredPass(null);
+      setLoggedIn(false);
     },
   });
-
-  if (
-    savedEmail &&
-    savedPass &&
-    form !== "completeAccount" &&
-    !attmeptedToLogIn
-  ) {
-    signIn({
-      email: savedEmail,
-      pass: savedPass,
-    });
+  if (loggedIn) {
+    navigateTo("home");
+    return null;
   }
-  return (
-    <LoginWrap>
-      {form === "firebase" && (
-        <FirebaseForm
-          onComplete={() => {
-            setForm("completeAccount");
-          }}
-        />
-      )}
-      {form === "completeAccount" && (
-        <CompleteAccountForm
-          onComplete={() => {
-            props.onSignInComplete();
-          }}
-        />
-      )}
-    </LoginWrap>
-  );
-};
 
-export const useGetSavedLogin = () => {
-  const email = useGetKeytar("email");
-  const pass = useGetKeytar("pass");
-  return { email, pass };
+  if (storedEmail && storedPass) {
+    signIn({
+      email: storedEmail,
+      pass: storedPass,
+    });
+    return null;
+  }
+
+  return (
+    <FirebaseForm
+      onSignInSubmit={(email, pass) => signIn({ email, pass })}
+      onSignUpSubmit={(email, pass) => signUp({ email, pass })}
+      errorMessage={errorMessage}
+    />
+  );
 };

@@ -3,7 +3,7 @@ import { Home } from "./Home";
 import { useGlobalState } from "./renderer/App";
 import { Upload } from "./components/Upload";
 import _ from "lodash";
-import { Start } from "./components/Start/index";
+import Start from "./components/Start";
 import Test from "./components/Test";
 type Location = "home" | "upload" | "start" | "test";
 

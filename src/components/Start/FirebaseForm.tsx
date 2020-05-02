@@ -1,42 +1,21 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Typography } from "antd";
-import { useState } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { useSignInFirebase, useSignUpFirebase } from "./hooks";
+import { useState } from "react";
 
-export const FirebaseForm = (props: { onComplete: () => void }) => {
+export const FirebaseForm = (props: {
+  errorMessage?: string;
+  onSignInSubmit: (email: string, pass: string) => void;
+  onSignUpSubmit: (email: string, pass: string) => void;
+}) => {
   const [emailValue, setEmailValue] = useState("");
   const [passValue, setPassValue] = useState("");
-  const [errorMessage, setErrorMessage] = useState<null | string>(null);
-
-  const signIn = useSignInFirebase({
-    onComplete: () => props.onComplete(),
-    onFail: () => setErrorMessage("Error signing in"),
-  });
-
-  const [signUp, { error }] = useSignUpFirebase();
-
-  if (error && errorMessage !== error.message) {
-    setErrorMessage(error.message);
-  }
-  const onSignUpClick = () => {
-    signUp({
-      variables: { email: emailValue, password: passValue },
-    })
-      .then(() => {
-        console.log("signed up");
-        onSignInClick();
-      })
-      .catch((e) => {
-        console.error(e);
-        // setErrorMessage("Error signing up");
-      });
+  const onSignInClick = () => {
+    props.onSignInSubmit(emailValue, passValue);
   };
-  const onSignInClick = () =>
-    signIn({
-      email: emailValue,
-      pass: passValue,
-    });
+  const onSignUpClick = () => {
+    props.onSignUpSubmit(emailValue, passValue);
+  };
   return (
     <Form
       name="normal_login"
@@ -127,7 +106,7 @@ export const FirebaseForm = (props: { onComplete: () => void }) => {
           Sign Up
         </Button>
       </Form.Item>
-      <Typography style={{ color: "red" }}>{errorMessage}</Typography>
+      <Typography style={{ color: "red" }}>{props.errorMessage}</Typography>
     </Form>
   );
 };
