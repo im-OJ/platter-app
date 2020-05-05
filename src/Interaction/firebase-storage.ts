@@ -16,9 +16,11 @@ const useFileUploader = (
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
+  const [name, setName] = useState("");
   return {
     uploader: (file) => {
       console.log("uploading file", file.name);
+      setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
       const uploadTask = storage()
         .ref(myPathPrefix + "/" + file.name)
@@ -36,7 +38,6 @@ const useFileUploader = (
         setUrl(p.downloadURL);
         setIsBusy(false);
       });
-      console.log("upload state change ", progress);
     },
     item: { progress, name, url },
     isBusy,
@@ -45,21 +46,23 @@ const useFileUploader = (
 
 export const useUploadFiles = (
   pathPrefix: string
-): { uploader: (files: Array<File>) => void } => {
+): {
+  uploader: (files: Array<File>) => void;
+  items: Array<FileUploadState> | null;
+} => {
   const {
     uploader: singleUploader,
     item: currentItem,
     isBusy,
   } = useFileUploader(pathPrefix);
   const [que, setQue] = useState<Array<File> | null>(null);
+  const [items, setItems] = useState<Array<FileUploadState> | null>(null);
 
   const uploader = (files: Array<File>) => {
     setQue(que ? [...que, ...files.filter((f) => !que.includes(f))] : files);
-    console.log("que length: " + que?.length);
   };
 
   useEffect(() => {
-    console.log("que change / busy change", que);
     if (!isBusy) {
       if (!que) {
         return;
@@ -74,7 +77,9 @@ export const useUploadFiles = (
 
   useEffect(() => {
     console.log("on item " + currentItem.name);
+    // todo dont allow dupes
+    setItems(items ? [...items, currentItem] : [currentItem]);
   }, [currentItem.name]);
 
-  return { uploader };
+  return { uploader, items };
 };

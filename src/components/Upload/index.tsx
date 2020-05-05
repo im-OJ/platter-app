@@ -5,7 +5,7 @@ import { useUploadFiles } from "../../Interaction/firebase-storage";
 
 export const Upload = () => {
   const { getRootProps, getInputProps } = useDropzone();
-  const { uploader } = useUploadFiles("samples");
+  const { items, uploader } = useUploadFiles("samples");
 
   const handleFiles = (f: Array<File>) => {
     uploader(f);
@@ -34,7 +34,16 @@ export const Upload = () => {
           <p>Drag 'n' drop some files here, or click to select files</p>
         </div>
         <br />
-        <div></div>
+        <div>
+          {items &&
+            items.map((i) => {
+              return (
+                <>
+                  {i.name + ":" + i.progress} <br />
+                </>
+              );
+            })}
+        </div>
       </>
     </Page>
   );
