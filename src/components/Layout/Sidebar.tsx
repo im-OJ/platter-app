@@ -27,9 +27,18 @@ export const Sidebar = () => {
       </Menu.Item>
       <Menu.Item
         onClick={() => {
-          navigateTo("test");
+          navigateTo("profile");
         }}
         key="3"
+      >
+        <UploadOutlined />
+        <span className="nav-text">Upload</span>
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          navigateTo("test");
+        }}
+        key="4"
       >
         <LockOutlined />
         <span className="nav-text">T</span>

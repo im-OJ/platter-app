@@ -5,10 +5,6 @@ import { useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
-export const { useGlobalState } = createGlobalState({
-  location: "start",
-  token: "token-not-set",
-});
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
@@ -17,6 +13,10 @@ import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../components/Start/hooks";
 
+export const { useGlobalState } = createGlobalState({
+  location: "start",
+  token: "token-not-set",
+});
 const isProd = !require("electron-is-dev");
 
 console.log("Is production: ", isProd);

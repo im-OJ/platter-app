@@ -5,13 +5,15 @@ import { Upload } from "./components/Upload";
 import _ from "lodash";
 import Start from "./components/Start";
 import Test from "./components/Test";
-type Location = "home" | "upload" | "start" | "test";
+import { Profile } from "./components/Profile";
+type Location = "home" | "upload" | "start" | "test" | "profile";
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
   upload: <Upload />,
   start: <Start />,
   test: <Test />,
+  profile: <Profile />
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
@@ -20,7 +22,7 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
 
 export const Navigator = () => {
   const [gLocation] = useGlobalState("location");
-  // @ts-ignore
+
   return (
     <>
       {_.map(screens, (component, key) => {
