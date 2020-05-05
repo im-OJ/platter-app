@@ -1,22 +1,41 @@
 import * as React from "react";
 import { Page } from "../Page";
-import Dragger from "antd/lib/upload/Dragger";
-import { InboxOutlined } from "@ant-design/icons";
+import { useDropzone } from "react-dropzone";
+import { useUploadFiles } from "../../Interaction/firebase-storage";
+
 export const Upload = () => {
+  const { getRootProps, getInputProps } = useDropzone();
+  const { uploader } = useUploadFiles("samples");
+
+  const handleFiles = (f: Array<File>) => {
+    uploader(f);
+  };
+
   return (
     <Page>
-      <Dragger name="file" multiple={true}>
-        <p className="ant-upload-drag-icon">
-          <InboxOutlined />
-        </p>
-        <p className="ant-upload-text">
-          Click or drag file to this area to upload
-        </p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibit from uploading
-          company data or other band files
-        </p>
-      </Dragger>
+      <>
+        <div
+          {...getRootProps()}
+          style={{
+            width: "60%",
+            height: 200,
+          }}
+        >
+          <input
+            {...getInputProps()}
+            onChange={(e) => {
+              console.log("on change!");
+              if (!e.target.files) {
+                return;
+              }
+              handleFiles(Array.from(e.target.files));
+            }}
+          />
+          <p>Drag 'n' drop some files here, or click to select files</p>
+        </div>
+        <br />
+        <div></div>
+      </>
     </Page>
   );
 };

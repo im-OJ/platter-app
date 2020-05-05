@@ -41,7 +41,7 @@ export const Login = (props: { onComplete: () => void }) => {
       setLoggedIn(true);
     },
     onFail: () => {
-      setErrorMessage("sign in failed");
+      setErrorMessage("Sign in failed, check connection");
       setStoredEmail(null);
       setStoredPass(null);
       setLoggedIn(false);

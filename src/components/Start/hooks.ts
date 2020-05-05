@@ -20,7 +20,6 @@ const setKeytar = (name: string, value: string | null) => {
 
 const useGetKeytar = (name: string) => {
   const [value, setValue] = useState<string | null>(null);
-  console.log("getting keytar", value);
   keytar
     .getPassword("main", name)
     .then((v) => setValue(v))

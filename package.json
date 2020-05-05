@@ -91,6 +91,7 @@
     "pouchdb-browser": "^7.2.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-dropzone": "^11.0.1",
     "react-firebase-file-uploader": "^2.4.3",
     "react-hooks-global-state": "^1.0.0",
     "styled-components": "^5.1.0",
