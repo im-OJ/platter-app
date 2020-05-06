@@ -3,19 +3,19 @@ import { Page } from "../Page";
 
 export const Profile = () => {
 
-  
-    return (
-      <Page>
-        <>
+
+  return (
+    <Page>
+      <>
         <div
           style={{
             width: "60%",
             height: 200,
-            backgroundColor: "Red",
+            backgroundColor: "Green",
           }}
         >
         </div>
-        </>
-      </Page>
-    );
-  };
+      </>
+    </Page>
+  );
+};
