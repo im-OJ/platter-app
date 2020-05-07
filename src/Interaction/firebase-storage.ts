@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import { useState, useEffect } from "react";
 import _ from "lodash";
+import { UploadFile } from "antd/lib/upload/interface";
 
 export const storage = () => firebase.storage();
 
@@ -12,13 +13,21 @@ export type FileUploadState = {
 
 const useFileUploader = (
   pathPrefix: string
-): { uploader: (f: File) => void; item: FileUploadState; isBusy: boolean } => {
+): {
+  uploader: (f: UploadFile) => void;
+  item: FileUploadState;
+  isBusy: boolean;
+} => {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");
   return {
-    uploader: (file) => {
+    uploader: (uploadFile) => {
+      const file = uploadFileToFile(uploadFile);
+      if (!file) {
+        return;
+      }
       console.log("uploading file", file.name);
       setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
@@ -47,7 +56,7 @@ const useFileUploader = (
 export const useUploadFiles = (
   pathPrefix: string
 ): {
-  uploader: (files: Array<File>) => void;
+  uploader: (files: Array<UploadFile>) => void;
   items: Array<FileUploadState> | null;
 } => {
   const {
@@ -55,10 +64,12 @@ export const useUploadFiles = (
     item: currentItem,
     isBusy,
   } = useFileUploader(pathPrefix);
-  const [que, setQue] = useState<Array<File> | null>(null);
+  const [que, setQue] = useState<Array<UploadFile> | null>(null);
   const [items, setItems] = useState<Array<FileUploadState> | null>(null);
+  const [myFiles, setMyFiles] = useState<Array<UploadFile> | null>(null);
 
-  const uploader = (files: Array<File>) => {
+  const uploader = (files: Array<UploadFile>) => {
+    setMyFiles(files);
     setQue(que ? [...que, ...files.filter((f) => !que.includes(f))] : files);
   };
 
@@ -76,10 +87,42 @@ export const useUploadFiles = (
   }, [que, isBusy]);
 
   useEffect(() => {
-    console.log("on item " + currentItem.name);
-    // todo dont allow dupes
-    setItems(items ? [...items, currentItem] : [currentItem]);
-  }, [currentItem.name]);
+    if (!myFiles) {
+      return;
+    }
+    const i: Array<FileUploadState> = myFiles.reverse().map((f) => {
+      return {
+        name: f.name,
+        progress: 0,
+        url: null,
+      };
+    });
+    // todo next: make i not include things already in items
+    setItems(i);
+  }, [myFiles]);
+
+  useEffect(() => {
+    if (!items) {
+      console.error("Expected items but got none");
+      return;
+    }
+    const newItems = items.map((i) => {
+      if (i.name === currentItem.name) {
+        return currentItem;
+      } else {
+        return i;
+      }
+    });
+    setItems(newItems);
+  }, [currentItem.progress]);
 
   return { uploader, items };
+};
+
+const uploadFileToFile = (uf: UploadFile) => {
+  const blob = uf.originFileObj;
+  if (!blob) {
+    return;
+  }
+  return new File([blob], uf.name);
 };

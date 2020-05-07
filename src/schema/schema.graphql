@@ -5,6 +5,10 @@ enum CacheControlScope {
   PRIVATE
 }
 
+type File {
+  id: String!
+}
+
 type FirebaseUser {
   id: String!
   email: String
@@ -13,11 +17,31 @@ type FirebaseUser {
 type Mutation {
   signUp(email: String!, password: String!): FirebaseUser
   updateUser(data: UpdateUser): User
+  uploadSample(file: Upload!): File!
 }
 
 type Query {
   hello: String
   me: User
+}
+
+type Sample {
+  name: String
+  id: String!
+  tags: [String]
+  downloads: Int!
+  userId: String!
+  url: String
+}
+
+input SampleInput {
+  tagText: [String!]
+  name: String
+}
+
+type Tag {
+  text: String!
+  id: String
 }
 
 type Token {

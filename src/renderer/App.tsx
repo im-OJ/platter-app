@@ -8,7 +8,7 @@ import { createHttpLink } from "apollo-link-http";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
-import "antd/dist/antd.dark.css";
+import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../components/Start/hooks";

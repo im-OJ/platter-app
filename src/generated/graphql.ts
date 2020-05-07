@@ -3,7 +3,6 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from "graphql";
-
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
@@ -25,6 +24,11 @@ export enum CacheControlScope {
   Private = "PRIVATE",
 }
 
+export type File = {
+  __typename?: "File";
+  id: Scalars["String"];
+};
+
 export type FirebaseUser = {
   __typename?: "FirebaseUser";
   id: Scalars["String"];
@@ -35,6 +39,7 @@ export type Mutation = {
   __typename?: "Mutation";
   signUp?: Maybe<FirebaseUser>;
   updateUser?: Maybe<User>;
+  uploadSample: File;
 };
 
 export type MutationSignUpArgs = {
@@ -46,10 +51,35 @@ export type MutationUpdateUserArgs = {
   data?: Maybe<UpdateUser>;
 };
 
+export type MutationUploadSampleArgs = {
+  file: Scalars["Upload"];
+};
+
 export type Query = {
   __typename?: "Query";
   hello?: Maybe<Scalars["String"]>;
   me?: Maybe<User>;
+};
+
+export type Sample = {
+  __typename?: "Sample";
+  name?: Maybe<Scalars["String"]>;
+  id: Scalars["String"];
+  tags?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  downloads: Scalars["Int"];
+  userId: Scalars["String"];
+  url?: Maybe<Scalars["String"]>;
+};
+
+export type SampleInput = {
+  tagText?: Maybe<Array<Scalars["String"]>>;
+  name?: Maybe<Scalars["String"]>;
+};
+
+export type Tag = {
+  __typename?: "Tag";
+  text: Scalars["String"];
+  id?: Maybe<Scalars["String"]>;
 };
 
 export type Token = {
@@ -180,14 +210,18 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars["String"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   CacheControlScope: CacheControlScope;
+  File: ResolverTypeWrapper<File>;
   FirebaseUser: ResolverTypeWrapper<FirebaseUser>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Sample: ResolverTypeWrapper<Sample>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  SampleInput: SampleInput;
+  Tag: ResolverTypeWrapper<Tag>;
   Token: ResolverTypeWrapper<Token>;
   UpdateUser: UpdateUser;
   Upload: ResolverTypeWrapper<Scalars["Upload"]>;
   User: ResolverTypeWrapper<User>;
-  Int: ResolverTypeWrapper<Scalars["Int"]>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -195,14 +229,18 @@ export type ResolversParentTypes = {
   String: Scalars["String"];
   Boolean: Scalars["Boolean"];
   CacheControlScope: CacheControlScope;
+  File: File;
   FirebaseUser: FirebaseUser;
   Mutation: {};
   Query: {};
+  Sample: Sample;
+  Int: Scalars["Int"];
+  SampleInput: SampleInput;
+  Tag: Tag;
   Token: Token;
   UpdateUser: UpdateUser;
   Upload: Scalars["Upload"];
   User: User;
-  Int: Scalars["Int"];
 };
 
 export type CacheControlDirectiveArgs = {
@@ -216,6 +254,14 @@ export type CacheControlDirectiveResolver<
   ContextType = any,
   Args = CacheControlDirectiveArgs
 > = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type FileResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["File"] = ResolversParentTypes["File"]
+> = {
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
 
 export type FirebaseUserResolvers<
   ContextType = any,
@@ -242,6 +288,12 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateUserArgs, never>
   >;
+  uploadSample?: Resolver<
+    ResolversTypes["File"],
+    ParentType,
+    ContextType,
+    RequireFields<MutationUploadSampleArgs, "file">
+  >;
 };
 
 export type QueryResolvers<
@@ -250,6 +302,32 @@ export type QueryResolvers<
 > = {
   hello?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+};
+
+export type SampleResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Sample"] = ResolversParentTypes["Sample"]
+> = {
+  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  tags?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["String"]>>>,
+    ParentType,
+    ContextType
+  >;
+  downloads?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
+export type TagResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"]
+> = {
+  text?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
 export type TokenResolvers<
@@ -276,9 +354,12 @@ export type UserResolvers<
 };
 
 export type Resolvers<ContextType = any> = {
+  File?: FileResolvers<ContextType>;
   FirebaseUser?: FirebaseUserResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Sample?: SampleResolvers<ContextType>;
+  Tag?: TagResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;

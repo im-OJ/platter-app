@@ -1,50 +1,55 @@
 import * as React from "react";
 import { Page } from "../Page";
-import { useDropzone } from "react-dropzone";
+
 import { useUploadFiles } from "../../Interaction/firebase-storage";
+import Dragger from "antd/lib/upload/Dragger";
+import { UploadFile } from "antd/lib/upload/interface";
+import { EditSample } from "./components/EditSample";
 
 export const Upload = () => {
-  const { getRootProps, getInputProps } = useDropzone();
   const { items, uploader } = useUploadFiles("samples");
 
-  const handleFiles = (f: Array<File>) => {
+  const handleFiles = (f: Array<UploadFile>) => {
     uploader(f);
   };
 
   return (
     <Page>
-      <>
-        <div
-          {...getRootProps()}
+      <div
+        style={{
+          flex: 1,
+
+          margin: "auto",
+        }}
+      >
+        <Dragger
           style={{
-            width: "60%",
+            width: 200,
             height: 200,
+            textAlign: "center",
+            margin: "auto",
+            padding: 20,
           }}
-        >
-          <input
-            {...getInputProps()}
-            onChange={(e) => {
-              console.log("on change!");
-              if (!e.target.files) {
-                return;
-              }
-              handleFiles(Array.from(e.target.files));
+          multiple
+          showUploadList={false}
+          onChange={(e) => {
+            handleFiles(e.fileList);
+          }}
+        />
+        {items?.map((i) => (
+          <EditSample
+            uploadProgress={i.progress}
+            key={i.name}
+            onSampleUpdate={(s) => {
+              console.log("new sample", s);
+            }}
+            sample={{
+              name: i.name,
+              url: i.url,
             }}
           />
-          <p>Drag 'n' drop some files here, or click to select files</p>
-        </div>
-        <br />
-        <div>
-          {items &&
-            items.map((i) => {
-              return (
-                <>
-                  {i.name + ":" + i.progress} <br />
-                </>
-              );
-            })}
-        </div>
-      </>
+        ))}
+      </div>
     </Page>
   );
 };
