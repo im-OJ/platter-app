@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Menu } from "antd";
-import { HomeOutlined, UploadOutlined, ProfileOutlined, LockOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  UploadOutlined,
+  UserOutlined,
+  LockOutlined,
+} from "@ant-design/icons";
 import { useNavigateTo } from "../../navigation";
 
 export const Sidebar = () => {
@@ -16,14 +21,16 @@ export const Sidebar = () => {
         <HomeOutlined />
         <span className="nav-text">Home</span>
       </Menu.Item>
+
       <Menu.Item
         onClick={() => {
           navigateTo("upload");
         }}
         key="2"
       >
-        <ProfileOutlined />
-        <span className="nav-text">Profile</span>
+        <UploadOutlined />
+
+        <span className="nav-text">Upload</span>
       </Menu.Item>
       <Menu.Item
         onClick={() => {
@@ -31,8 +38,8 @@ export const Sidebar = () => {
         }}
         key="3"
       >
-        <UploadOutlined />
-        <span className="nav-text">Upload</span>
+        <UserOutlined />
+        <span className="nav-text">Profile</span>
       </Menu.Item>
       <Menu.Item
         onClick={() => {
