@@ -13,7 +13,7 @@ const screens: Record<Location, JSX.Element> = {
   upload: <Upload />,
   start: <Start />,
   test: <Test />,
-  profile: <Profile />
+  profile: <Profile />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
@@ -26,7 +26,11 @@ export const Navigator = () => {
   return (
     <>
       {_.map(screens, (component, key) => {
-        return <Toggle visible={gLocation === key}>{component}</Toggle>;
+        return (
+          <Toggle key={key} visible={gLocation === key}>
+            {component}
+          </Toggle>
+        );
       })}
     </>
   );

@@ -20,7 +20,7 @@ const useFileUploader = (
   isBusy: boolean;
 } => {
   const [progress, setProgress] = useState(0);
-  const [token] = useKeytar("token");
+  const { value: token } = useKeytar("token");
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");

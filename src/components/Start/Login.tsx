@@ -5,8 +5,9 @@ import { FirebaseForm } from "./FirebaseForm";
 import { useKeytar } from "../../Interaction/keytar";
 
 export const Login = (props: { onComplete: () => void }) => {
-  const [storedEmail, setStoredEmail] = useKeytar("email");
-  const [storedPass, setStoredPass] = useKeytar("password");
+  const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");
+  const { value: storedPass, setValue: setStoredPass } = useKeytar("password");
+  const { setValue: setStoredToken } = useKeytar("token");
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [signUpMutation, { error, data }] = useSignUpMutation();
@@ -21,6 +22,8 @@ export const Login = (props: { onComplete: () => void }) => {
   }, [storedEmail, storedPass]);
 
   const signUp = (p: { email: string; pass: string }) => {
+    setStoredEmail(null), setStoredPass(null), setStoredToken(null);
+
     signUpMutation({
       variables: {
         email: p.email,
@@ -37,6 +40,7 @@ export const Login = (props: { onComplete: () => void }) => {
   const signIn = useSignInFirebase({
     onComplete: (p) => {
       console.log("succesfully signed in", p.token.substr(0, 8));
+      setStoredToken(p.token);
       setStoredEmail(p.email);
       setStoredPass(p.pass);
       setLoggedIn(true);

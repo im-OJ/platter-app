@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Navigator } from "../navigation";
 import { Layout } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
@@ -30,9 +30,11 @@ export const App = () => {
   const [siderCollapsed, setSiderCollapsed] = useState(true);
   const getContext = useGetContext();
   const { Sider, Content } = Layout;
-  // @ts-ignore
-  const [_, setToken] = useKeytar("token");
-  React.useEffect(() => {
+
+  const { setValue: setToken } = useKeytar("token");
+
+  useEffect(() => {
+    console.log("setting token to null");
     setToken(null);
     onStart();
   }, []);
@@ -91,10 +93,12 @@ export const App = () => {
 };
 
 const useGetContext = () => {
-  const [token] = useKeytar("token");
+  const { value: token, refresh } = useKeytar("token");
   console.log("refresh token");
+
   const authLink = setContext((_, { headers }) => {
-    console.log("get context");
+    refresh();
+    console.log("get context ", token);
     return {
       headers: {
         ...headers,
