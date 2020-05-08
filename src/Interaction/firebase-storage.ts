@@ -2,7 +2,7 @@ import firebase from "firebase";
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { UploadFile } from "antd/lib/upload/interface";
-import { useKeytar } from "../components/Start/hooks";
+import { useKeytar } from "../Interaction/keytar";
 
 export const storage = () => firebase.storage();
 

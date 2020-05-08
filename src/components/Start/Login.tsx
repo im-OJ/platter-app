@@ -1,7 +1,8 @@
 import * as React from "react";
-import { useKeytar, useSignInFirebase, useSignUpMutation } from "./hooks";
+import { useSignInFirebase, useSignUpMutation } from "./hooks";
 import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
+import { useKeytar } from "../../Interaction/keytar";
 
 export const Login = (props: { onComplete: () => void }) => {
   const [storedEmail, setStoredEmail] = useKeytar("email");
