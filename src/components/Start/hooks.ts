@@ -1,6 +1,7 @@
 import { firebaseApp } from "../../renderer/App";
 import { useMutation, gql } from "@apollo/client";
 import { Mutation, MutationSignUpArgs } from "@/generated/graphql";
+import { useKeytar } from "../../Interaction/keytar";
 
 export type SingInParams = {
   email: string;
@@ -11,7 +12,15 @@ export const useSignInFirebase = (p: {
   onComplete: (p: { email: string; pass: string; token: string }) => void;
   onFail?: () => void;
 }) => {
+  const { setValue: setKeytarToken } = useKeytar("token");
   return (params: SingInParams) => {
+    firebaseApp.auth().onAuthStateChanged((e) => {
+      e?.getIdToken(true).then((token) => {
+        console.log("auth state changed, updating token");
+        setKeytarToken(token);
+      });
+    });
+
     firebaseApp
       .auth()
       .signInWithEmailAndPassword(params.email, params.pass)

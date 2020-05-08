@@ -12,7 +12,6 @@ export const Login = (props: { onComplete: () => void }) => {
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [signUpMutation, { error, data }] = useSignUpMutation();
   useEffect(() => {
-    console.log("login init, email:", storedEmail, storedPass);
     if (storedEmail && storedPass) {
       signIn({
         email: storedEmail,
