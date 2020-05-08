@@ -30,7 +30,7 @@ const useFileUploader = (
       if (!file) {
         return;
       }
-      console.log("uploading file", file.name);
+      console.log("uploading file", file.name, "token: ", token);
 
       setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
