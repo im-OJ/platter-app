@@ -108,6 +108,7 @@ export const useUploadFiles = (
         name: f.name,
         progress: 0,
         url: null,
+        id: "",
       };
     });
     // todo next: make i not include things already in items
