@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import _ from "lodash";
 import { UploadFile } from "antd/lib/upload/interface";
 import { useKeytar } from "../Interaction/keytar";
-
+const uuid4 = require("uuid4");
 export const storage = () => firebase.storage();
 
 export type FileUploadState = {
   name: string;
   progress: number;
   url: string | null;
+  id: string;
 };
 
 const useFileUploader = (
@@ -24,13 +25,13 @@ const useFileUploader = (
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");
+  const id = uuid4();
   return {
     uploader: (uploadFile) => {
       const file = uploadFileToFile(uploadFile);
       if (!file) {
         return;
       }
-      console.log("uploading file", file.name, "token: ", token);
 
       setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
@@ -39,6 +40,7 @@ const useFileUploader = (
         .put(file, {
           customMetadata: {
             token: token ?? "no-token",
+            id: id,
           },
         });
       uploadTask.on("state_changed", (snapshot) => {
@@ -55,7 +57,7 @@ const useFileUploader = (
         setIsBusy(false);
       });
     },
-    item: { progress, name, url },
+    item: { progress, name, url, id },
     isBusy,
   };
 };
