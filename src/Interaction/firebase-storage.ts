@@ -2,6 +2,7 @@ import firebase from "firebase";
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { UploadFile } from "antd/lib/upload/interface";
+import { useKeytar } from "@/components/Start/hooks";
 
 export const storage = () => firebase.storage();
 
@@ -19,6 +20,7 @@ const useFileUploader = (
   isBusy: boolean;
 } => {
   const [progress, setProgress] = useState(0);
+  const [token] = useKeytar("token");
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");
@@ -29,11 +31,16 @@ const useFileUploader = (
         return;
       }
       console.log("uploading file", file.name);
+
       setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
       const uploadTask = storage()
         .ref(myPathPrefix + "/" + file.name)
-        .put(file);
+        .put(file, {
+          customMetadata: {
+            token: token ?? "no-token",
+          },
+        });
       uploadTask.on("state_changed", (snapshot) => {
         const myProgress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -74,6 +81,8 @@ export const useUploadFiles = (
   };
 
   useEffect(() => {
+    // if que or isBusy changes
+    // we call singleUploader with the next in que
     if (!isBusy) {
       if (!que) {
         return;
@@ -87,6 +96,8 @@ export const useUploadFiles = (
   }, [que, isBusy]);
 
   useEffect(() => {
+    // if myFiles changes (aka when user selects files)
+    // setItems to said files
     if (!myFiles) {
       return;
     }
@@ -102,11 +113,13 @@ export const useUploadFiles = (
   }, [myFiles]);
 
   useEffect(() => {
+    // On Progress change update items to represent that
     if (!items) {
       console.error("Expected items but got none");
       return;
     }
     const newItems = items.map((i) => {
+      // todo Use something other than name to check this
       if (i.name === currentItem.name) {
         return currentItem;
       } else {
@@ -116,6 +129,7 @@ export const useUploadFiles = (
     setItems(newItems);
   }, [currentItem.progress]);
 
+  // return function to upload and items (containing stats about upload)
   return { uploader, items };
 };
 
