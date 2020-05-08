@@ -15,8 +15,8 @@ import { useKeytar } from "../Interaction/keytar";
 
 export const { useGlobalState } = createGlobalState({
   location: "start",
-  token: "token-not-set",
 });
+
 const isProd = !require("electron-is-dev");
 
 console.log("Is production: ", isProd);
@@ -94,11 +94,9 @@ export const App = () => {
 
 const useGetContext = () => {
   const { value: token, refresh } = useKeytar("token");
-  console.log("refresh token");
 
   const authLink = setContext((_, { headers }) => {
     refresh();
-    console.log("get context ", token);
     return {
       headers: {
         ...headers,

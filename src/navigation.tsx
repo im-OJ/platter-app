@@ -22,7 +22,7 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
 
 export const Navigator = () => {
   const [gLocation] = useGlobalState("location");
-
+  console.log("location: ", gLocation);
   return (
     <>
       {_.map(screens, (component, key) => {

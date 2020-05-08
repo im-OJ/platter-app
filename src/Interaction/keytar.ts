@@ -2,7 +2,6 @@ import keytar from "keytar";
 import { useState } from "react";
 
 const setKeytar = (name: string, value: string | null) => {
-  console.log("setting keytar ", name, value?.substr(0, 8));
   if (!value) {
     keytar.deletePassword("main", name);
     return;
@@ -30,6 +29,7 @@ export const useKeytar = (
       }
     });
 
+  refresh();
   return {
     value,
     setValue: (value: string | null) => setKeytar(name, value),

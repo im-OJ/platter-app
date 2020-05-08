@@ -12,7 +12,6 @@ export const useSignInFirebase = (p: {
   onFail?: () => void;
 }) => {
   return (params: SingInParams) => {
-    console.log("signign in firebase", params.email);
     firebaseApp
       .auth()
       .signInWithEmailAndPassword(params.email, params.pass)
