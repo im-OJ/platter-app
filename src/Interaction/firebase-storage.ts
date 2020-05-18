@@ -2,8 +2,9 @@ import firebase from "firebase";
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { UploadFile } from "antd/lib/upload/interface";
-import { useKeytar } from "../Interaction/keytar";
-const uuid4 = require("uuid4");
+import { gql, useMutation } from "@apollo/client";
+import { Mutation, MutationNewSampleArgs } from "@/generated/graphql";
+
 export const storage = () => firebase.storage();
 
 export type FileUploadState = {
@@ -13,19 +14,33 @@ export type FileUploadState = {
   id: string;
 };
 
+const newSampleMutation = gql`
+  mutation uploadSample($tagText: [String!]!, $url: String!, $name: String!) {
+    newSample(sample: { tagText: $tagText, url: $url, name: $name }) {
+      name
+      id
+      tagLink {
+        name
+      }
+      user {
+        id
+      }
+    }
+  }
+`;
+
 const useFileUploader = (
   pathPrefix: string
 ): {
-  uploader: (f: UploadFile) => void;
+  uploader: (f: MyUploadFile) => void;
   item: FileUploadState;
   isBusy: boolean;
 } => {
   const [progress, setProgress] = useState(0);
-  const { value: token } = useKeytar("token");
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");
-  const id = uuid4();
+
   return {
     uploader: (uploadFile) => {
       const file = uploadFileToFile(uploadFile);
@@ -39,8 +54,7 @@ const useFileUploader = (
         .ref(myPathPrefix + "/" + file.name)
         .put(file, {
           customMetadata: {
-            token: token ?? "no-token",
-            id: id,
+            hello: "world",
           },
         });
       uploadTask.on("state_changed", (snapshot) => {
@@ -54,13 +68,22 @@ const useFileUploader = (
       uploadTask.then((p) => {
         console.log("File upload complete");
         setUrl(p.downloadURL);
+        if (!uploadFile.url) {
+          console.error("no url");
+          return;
+        }
+
         setIsBusy(false);
       });
     },
-    item: { progress, name, url, id },
+    item: { progress, name, url, id: "todo" },
     isBusy,
   };
 };
+
+interface MyUploadFile extends UploadFile {
+  tags: Array<string>;
+}
 
 export const useUploadFiles = (
   pathPrefix: string
@@ -73,11 +96,11 @@ export const useUploadFiles = (
     item: currentItem,
     isBusy,
   } = useFileUploader(pathPrefix);
-  const [que, setQue] = useState<Array<UploadFile> | null>(null);
+  const [que, setQue] = useState<Array<MyUploadFile> | null>(null);
   const [items, setItems] = useState<Array<FileUploadState> | null>(null);
-  const [myFiles, setMyFiles] = useState<Array<UploadFile> | null>(null);
+  const [myFiles, setMyFiles] = useState<Array<MyUploadFile> | null>(null);
 
-  const uploader = (files: Array<UploadFile>) => {
+  const uploader = (files: Array<MyUploadFile>) => {
     setMyFiles(files);
     setQue(que ? [...que, ...files.filter((f) => !que.includes(f))] : files);
   };
@@ -136,7 +159,10 @@ export const useUploadFiles = (
   return { uploader, items };
 };
 
-const uploadFileToFile = (uf: UploadFile) => {
+export const useNewSampleMutation = () =>
+  useMutation<Mutation, MutationNewSampleArgs>(newSampleMutation);
+
+const uploadFileToFile = (uf: MyUploadFile) => {
   const blob = uf.originFileObj;
   if (!blob) {
     return;

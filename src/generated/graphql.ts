@@ -3,6 +3,7 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from "graphql";
+
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = {
   [X in Exclude<keyof T, K>]?: T[X];
@@ -39,7 +40,7 @@ export type Mutation = {
   __typename?: "Mutation";
   signUp?: Maybe<FirebaseUser>;
   updateUser?: Maybe<User>;
-  uploadSample: File;
+  newSample?: Maybe<Sample>;
 };
 
 export type MutationSignUpArgs = {
@@ -51,35 +52,46 @@ export type MutationUpdateUserArgs = {
   data?: Maybe<UpdateUser>;
 };
 
-export type MutationUploadSampleArgs = {
-  file: Scalars["Upload"];
+export type MutationNewSampleArgs = {
+  sample?: Maybe<SampleInput>;
 };
 
 export type Query = {
   __typename?: "Query";
   hello?: Maybe<Scalars["String"]>;
   me?: Maybe<User>;
+  getSamples?: Maybe<Scalars["Boolean"]>;
+};
+
+export type QueryGetSamplesArgs = {
+  ids: Array<Scalars["String"]>;
 };
 
 export type Sample = {
   __typename?: "Sample";
   name?: Maybe<Scalars["String"]>;
   id: Scalars["String"];
-  tags?: Maybe<Array<Maybe<Scalars["String"]>>>;
+  tagLink?: Maybe<Array<Maybe<TagText>>>;
   downloads: Scalars["Int"];
-  userId: Scalars["String"];
+  user: UserLink;
   url?: Maybe<Scalars["String"]>;
 };
 
 export type SampleInput = {
   tagText?: Maybe<Array<Scalars["String"]>>;
-  name?: Maybe<Scalars["String"]>;
+  url: Scalars["String"];
+  name: Scalars["String"];
 };
 
 export type Tag = {
   __typename?: "Tag";
-  text: Scalars["String"];
-  id?: Maybe<Scalars["String"]>;
+  title: Scalars["String"];
+  samples?: Maybe<Array<Sample>>;
+};
+
+export type TagText = {
+  __typename?: "TagText";
+  name: Scalars["String"];
 };
 
 export type Token = {
@@ -97,6 +109,13 @@ export type User = {
   id: Scalars["String"];
   username?: Maybe<Scalars["String"]>;
   hasFullAccount: Scalars["Boolean"];
+  samples?: Maybe<Array<Sample>>;
+};
+
+export type UserLink = {
+  __typename?: "UserLink";
+  id: Scalars["String"];
+  name?: Maybe<Scalars["String"]>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -218,10 +237,12 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   SampleInput: SampleInput;
   Tag: ResolverTypeWrapper<Tag>;
+  TagText: ResolverTypeWrapper<TagText>;
   Token: ResolverTypeWrapper<Token>;
   UpdateUser: UpdateUser;
   Upload: ResolverTypeWrapper<Scalars["Upload"]>;
   User: ResolverTypeWrapper<User>;
+  UserLink: ResolverTypeWrapper<UserLink>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -237,10 +258,12 @@ export type ResolversParentTypes = {
   Int: Scalars["Int"];
   SampleInput: SampleInput;
   Tag: Tag;
+  TagText: TagText;
   Token: Token;
   UpdateUser: UpdateUser;
   Upload: Scalars["Upload"];
   User: User;
+  UserLink: UserLink;
 };
 
 export type CacheControlDirectiveArgs = {
@@ -288,11 +311,11 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationUpdateUserArgs, never>
   >;
-  uploadSample?: Resolver<
-    ResolversTypes["File"],
+  newSample?: Resolver<
+    Maybe<ResolversTypes["Sample"]>,
     ParentType,
     ContextType,
-    RequireFields<MutationUploadSampleArgs, "file">
+    RequireFields<MutationNewSampleArgs, never>
   >;
 };
 
@@ -302,6 +325,12 @@ export type QueryResolvers<
 > = {
   hello?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+  getSamples?: Resolver<
+    Maybe<ResolversTypes["Boolean"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetSamplesArgs, "ids">
+  >;
 };
 
 export type SampleResolvers<
@@ -310,13 +339,13 @@ export type SampleResolvers<
 > = {
   name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  tags?: Resolver<
-    Maybe<Array<Maybe<ResolversTypes["String"]>>>,
+  tagLink?: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["TagText"]>>>,
     ParentType,
     ContextType
   >;
   downloads?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes["UserLink"], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
@@ -325,8 +354,20 @@ export type TagResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Tag"] = ResolversParentTypes["Tag"]
 > = {
-  text?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  title?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  samples?: Resolver<
+    Maybe<Array<ResolversTypes["Sample"]>>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
+export type TagTextResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["TagText"] = ResolversParentTypes["TagText"]
+> = {
+  name?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -350,6 +391,20 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   hasFullAccount?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+  samples?: Resolver<
+    Maybe<Array<ResolversTypes["Sample"]>>,
+    ParentType,
+    ContextType
+  >;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
+export type UserLinkResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["UserLink"] = ResolversParentTypes["UserLink"]
+> = {
+  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -360,9 +415,11 @@ export type Resolvers<ContextType = any> = {
   Query?: QueryResolvers<ContextType>;
   Sample?: SampleResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
+  TagText?: TagTextResolvers<ContextType>;
   Token?: TokenResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
+  UserLink?: UserLinkResolvers<ContextType>;
 };
 
 /**

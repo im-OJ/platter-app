@@ -17,31 +17,37 @@ type FirebaseUser {
 type Mutation {
   signUp(email: String!, password: String!): FirebaseUser
   updateUser(data: UpdateUser): User
-  uploadSample(file: Upload!): File!
+  newSample(sample: SampleInput): Sample
 }
 
 type Query {
   hello: String
   me: User
+  getSamples(ids: [String!]!): Boolean
 }
 
 type Sample {
   name: String
   id: String!
-  tags: [String]
+  tagLink: [TagText]
   downloads: Int!
-  userId: String!
+  user: UserLink!
   url: String
 }
 
 input SampleInput {
   tagText: [String!]
-  name: String
+  url: String!
+  name: String!
 }
 
 type Tag {
-  text: String!
-  id: String
+  title: String!
+  samples: [Sample!]
+}
+
+type TagText {
+  name: String!
 }
 
 type Token {
@@ -60,5 +66,11 @@ type User {
   id: String!
   username: String
   hasFullAccount: Boolean!
+  samples: [Sample!]
+}
+
+type UserLink {
+  id: String!
+  name: String
 }
 
