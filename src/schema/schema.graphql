@@ -1,4 +1,7 @@
-directive @cacheControl(maxAge: Int, scope: CacheControlScope) on FIELD_DEFINITION | OBJECT | INTERFACE
+directive @cacheControl(
+  maxAge: Int
+  scope: CacheControlScope
+) on FIELD_DEFINITION | OBJECT | INTERFACE
 
 enum CacheControlScope {
   PUBLIC
@@ -17,7 +20,7 @@ type FirebaseUser {
 type Mutation {
   signUp(email: String!, password: String!): FirebaseUser
   updateUser(data: UpdateUser): User
-  newSample(sample: SampleInput): Sample
+  newSample(sample: SampleInput!): Sample
 }
 
 type Query {
@@ -59,7 +62,9 @@ input UpdateUser {
   description: String
 }
 
-"""The `Upload` scalar type represents a file upload."""
+"""
+The `Upload` scalar type represents a file upload.
+"""
 scalar Upload
 
 type User {
@@ -73,4 +78,3 @@ type UserLink {
   id: String!
   name: String
 }
-

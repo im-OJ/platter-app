@@ -3,8 +3,7 @@ import { Sample } from "@/generated/graphql";
 import { Row, Col, Input, Progress, Button } from "antd";
 import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
-import Form from "antd/lib/form/Form";
-import { useNewSampleMutation } from "@/Interaction/firebase-storage";
+import { useNewSampleMutation } from "../../../Interaction/firebase-storage";
 
 type EditSampleProps = {
   sample: Partial<Sample>;
@@ -13,8 +12,17 @@ type EditSampleProps = {
 };
 export const EditSample = (props: EditSampleProps) => {
   const [tags, setTags] = useState<Array<string>>([]);
-  const [name, setName] = useState<string>();
-  const [submit, { data }] = useNewSampleMutation();
+  const [name, setName] = useState<string | undefined>(
+    props.sample.name ?? undefined
+  );
+
+  const [submit, { data, error }] = useNewSampleMutation();
+  if (data) {
+    console.log("got data: ", data);
+  }
+  if (error) {
+    console.error(error);
+  }
 
   useEffect(() => {
     props.onSampleUpdate({
@@ -22,12 +30,20 @@ export const EditSample = (props: EditSampleProps) => {
       name,
     });
   }, [tags, name]);
+
   const onSubmit = () => {
+    if (!name || !props.sample.url || name.length < 3) {
+      console.log("Not filled in, can't submit");
+      console.log(name, props.sample.url);
+      return;
+    }
+    console.log("submitting", name, props.sample.url, tags);
     submit({
       variables: {
         sample: {
           name,
-          url,
+          url: props.sample.url,
+          tagText: tags,
         },
       },
     });
@@ -42,6 +58,7 @@ export const EditSample = (props: EditSampleProps) => {
               setName(e.target.value);
             }}
             defaultValue={props.sample.name ?? ""}
+            value={name}
           />
         </Col>
         <Col span={10}>
@@ -62,10 +79,11 @@ export const EditSample = (props: EditSampleProps) => {
               width: "100%",
             }}
           >
-            Sign Up
+            Submit
           </Button>
         </Col>
       </Row>
+      <Row style={{ paddingBottom: 4 }}>{props.sample.url}</Row>
       <Row style={{ paddingBottom: 4 }}>
         <Progress size="small" percent={props.uploadProgress ?? 0} />
       </Row>

@@ -15,8 +15,8 @@ export type FileUploadState = {
 };
 
 const newSampleMutation = gql`
-  mutation uploadSample($tagText: [String!]!, $url: String!, $name: String!) {
-    newSample(sample: { tagText: $tagText, url: $url, name: $name }) {
+  mutation uploadSample($data: SampleInput) {
+    newSample(sample: $data) {
       name
       id
       tagLink {
@@ -65,10 +65,13 @@ const useFileUploader = (
         setIsBusy(true);
       });
 
-      uploadTask.then((p) => {
+      uploadTask.then(async (p) => {
         console.log("File upload complete");
-        setUrl(p.downloadURL);
-        if (!uploadFile.url) {
+        console.log(p);
+        const url = await p.ref.getDownloadURL();
+        setUrl(url);
+
+        if (!url) {
           console.error("no url");
           return;
         }
@@ -82,13 +85,13 @@ const useFileUploader = (
 };
 
 interface MyUploadFile extends UploadFile {
-  tags: Array<string>;
+  tags?: Array<string>;
 }
 
 export const useUploadFiles = (
   pathPrefix: string
 ): {
-  uploader: (files: Array<UploadFile>) => void;
+  uploader: (files: Array<MyUploadFile>) => void;
   items: Array<FileUploadState> | null;
 } => {
   const {
