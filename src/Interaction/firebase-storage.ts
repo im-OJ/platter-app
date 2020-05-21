@@ -2,8 +2,6 @@ import firebase from "firebase";
 import { useState, useEffect } from "react";
 import _ from "lodash";
 import { UploadFile } from "antd/lib/upload/interface";
-import { gql, useMutation } from "@apollo/client";
-import { Mutation, MutationNewSampleArgs } from "@/generated/graphql";
 
 export const storage = () => firebase.storage();
 
@@ -13,21 +11,6 @@ export type FileUploadState = {
   url: string | null;
   id: string;
 };
-
-const newSampleMutation = gql`
-  mutation uploadSample($data: SampleInput) {
-    newSample(sample: $data) {
-      name
-      id
-      tagLink {
-        name
-      }
-      user {
-        id
-      }
-    }
-  }
-`;
 
 const useFileUploader = (
   pathPrefix: string
@@ -161,9 +144,6 @@ export const useUploadFiles = (
   // return function to upload and items (containing stats about upload)
   return { uploader, items };
 };
-
-export const useNewSampleMutation = () =>
-  useMutation<Mutation, MutationNewSampleArgs>(newSampleMutation);
 
 const uploadFileToFile = (uf: MyUploadFile) => {
   const blob = uf.originFileObj;

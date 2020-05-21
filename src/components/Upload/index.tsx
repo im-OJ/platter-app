@@ -40,9 +40,7 @@ export const Upload = () => {
           <EditSample
             uploadProgress={i.progress}
             key={i.name}
-            onSampleUpdate={(s) => {
-              console.log("new sample", s);
-            }}
+            onSampleUpdate={(s) => {}}
             sample={{
               name: i.name,
               url: i.url,

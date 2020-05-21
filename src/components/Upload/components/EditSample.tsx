@@ -3,7 +3,7 @@ import { Sample } from "@/generated/graphql";
 import { Row, Col, Input, Progress, Button } from "antd";
 import { TagInput } from "./TagInput";
 import { useState, useEffect } from "react";
-import { useNewSampleMutation } from "../../../Interaction/firebase-storage";
+import { useNewSampleMutation } from "../hooks";
 
 type EditSampleProps = {
   sample: Partial<Sample>;
@@ -32,21 +32,24 @@ export const EditSample = (props: EditSampleProps) => {
   }, [tags, name]);
 
   const onSubmit = () => {
+    console.log("on submit");
     if (!name || !props.sample.url || name.length < 3) {
       console.log("Not filled in, can't submit");
       console.log(name, props.sample.url);
       return;
     }
-    console.log("submitting", name, props.sample.url, tags);
-    submit({
-      variables: {
-        sample: {
-          name,
-          url: props.sample.url,
-          tagText: tags,
-        },
+    const vars = {
+      sample: {
+        name,
+        url: props.sample.url,
+        tagText: tags,
       },
-    });
+    };
+
+    console.log("vars:", { vars });
+    submit({
+      variables: vars,
+    }).catch((e) => console.error(e));
   };
   return (
     <div style={{ flex: 1 }}>
