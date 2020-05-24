@@ -1,67 +1,49 @@
 import * as React from "react";
-import { Table, Tag } from "antd";
-import { ColumnsType } from "antd/lib/table";
-import styled from "styled-components";
+import { Sample } from "./Sample";
+import { gql, useQuery } from "@apollo/client";
+import { Query, QuerySearchSamplesArgs } from "@/generated/graphql";
 
-export const SampleTable = (props: { samples: any }) => {
-  const samples = props.samples;
-  const playAudio = useAudioPlayer();
+interface Props {
+  tags: Array<string>;
+}
 
-  const columns: ColumnsType<any> = [
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-      width: 250,
+const sampleQuery = gql`
+  query SampleTableSearch($tags: [String!]) {
+    searchSamples(tags: $tags) {
+      name
+      tagLink {
+        name
+      }
+      url
+    }
+  }
+`;
+
+export const SampleTable = (props: Props) => {
+  const { data, error } = useQuery<Query, QuerySearchSamplesArgs>(sampleQuery, {
+    variables: {
+      tags: props.tags,
     },
-    {
-      title: "Tags",
-      dataIndex: "tags",
-      key: "tags",
+  });
 
-      render: (tags) =>
-        tags.map((text: string, record: any, next: any) => {
-          return (
-            <TagWrap>
-              <Tag>{text}</Tag>
-            </TagWrap>
-          );
-          // next.map((t: string) => t + ", ");
-        }),
-    },
-  ];
-
+  if (error) {
+    console.log(error);
+  }
   return (
     <>
-      <Table
-        size="small"
-        style={{ overflow: "hidden", width: "100%", left: 20, height: "100%" }}
-        columns={columns}
-        dataSource={samples || []}
-        onRow={(record, rowIndex) => {
-          const audio = new Audio(record.url);
-          audio.load();
-          return {
-            style: { cursor: "pointer" },
-            onClick: () => {
-              playAudio(record.url);
-              // console.log("playing");
-              // audio.play();
-            }, // click row
-          };
-        }}
-      />
+      {data &&
+        data.searchSamples?.map((sample) => {
+          if (!sample.name || !sample.tagLink || !sample.url) {
+            return null;
+          }
+          return (
+            <Sample
+              name={sample.name}
+              tags={sample.tagLink.map((tl) => tl?.name ?? "")}
+              url={sample.url}
+            />
+          );
+        })}
     </>
   );
 };
-
-const useAudioPlayer = () => {
-  return (url: string) => {
-    const audio = new Audio(url);
-    audio.load();
-    audio.play();
-  };
-};
-const TagWrap = styled.span`
-  padding: 4;
-`;

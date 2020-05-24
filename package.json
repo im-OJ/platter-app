@@ -94,6 +94,7 @@
     "react-dropzone": "^11.0.1",
     "react-firebase-file-uploader": "^2.4.3",
     "react-hooks-global-state": "^1.0.0",
+    "react-howler": "^3.7.4",
     "styled-components": "^5.1.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",

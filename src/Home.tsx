@@ -6,7 +6,7 @@ export const Home = () => {
   return (
     <Page>
       <>
-        <SampleTable samples={[]} />
+        <SampleTable tags={["a"]} />
       </>
     </Page>
   );
