@@ -17,6 +17,7 @@ export const Sample = (props: Props) => {
   return (
     <Row
       onClick={() => {
+        console.log("sample clicked");
         play();
       }}
     >
@@ -24,7 +25,16 @@ export const Sample = (props: Props) => {
       {props.tags.map((t) => {
         return <Tag>{t}</Tag>;
       })}
-      <ReactHowler src={props.url} playing={playSound} />
+      <ReactHowler
+        src={props.url}
+        playing={playSound}
+        onEnd={() => {
+          setPlaySound(false);
+        }}
+        onPlay={() => {
+          console.log("Playing sound");
+        }}
+      />
     </Row>
   );
 };

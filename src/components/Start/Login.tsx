@@ -2,7 +2,7 @@ import * as React from "react";
 import { useSignInFirebase, useSignUpMutation } from "./hooks";
 import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
-import { useKeytar } from "../../Interaction/keytar";
+import { useKeytar } from "../../helpers/keytar";
 
 export const Login = (props: { onComplete: () => void }) => {
   const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");

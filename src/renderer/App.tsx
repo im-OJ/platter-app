@@ -11,7 +11,7 @@ import firebase from "firebase";
 import "antd/dist/antd.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
-import { useKeytar } from "../Interaction/keytar";
+import { useKeytar } from "../helpers/keytar";
 
 export const { useGlobalState } = createGlobalState({
   location: "start",

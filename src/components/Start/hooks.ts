@@ -1,7 +1,7 @@
 import { firebaseApp } from "../../renderer/App";
 import { useMutation, gql } from "@apollo/client";
 import { Mutation, MutationSignUpArgs } from "@/generated/graphql";
-import { useKeytar } from "../../Interaction/keytar";
+import { useKeytar } from "../../helpers/keytar";
 
 export type SingInParams = {
   email: string;

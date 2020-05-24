@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page } from "../Page";
 
-import { useUploadFiles } from "../../Interaction/firebase-storage";
+import { useUploadFiles } from "../../helpers/firebase-storage";
 import Dragger from "antd/lib/upload/Dragger";
 import { UploadFile } from "antd/lib/upload/interface";
 import { EditSample } from "./components/EditSample";
