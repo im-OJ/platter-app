@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from "electron";
+import { config } from "../config";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
-
-export const isProd = false;
 
 // require("update-electron-app")();
 
@@ -18,7 +17,7 @@ let mainWindow: any;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: isProd ? 800 : 1100,
+    width: config.isProd ? 800 : 1100,
     height: 600,
     // frame: false,
     webPreferences: {
@@ -30,7 +29,9 @@ const createWindow = () => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (!config.isProd) {
+    mainWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
