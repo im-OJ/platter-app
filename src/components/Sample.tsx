@@ -1,40 +1,35 @@
 import * as React from "react";
-import ReactHowler from "react-howler";
-import { Row, Tag } from "antd";
-import { useState } from "react";
+import { Row, Tag, Button, Card } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 
 interface Props {
   name: string;
   url: string;
   tags: Array<string>;
+  playUrl: (url: string) => void;
 }
 
 export const Sample = (props: Props) => {
-  const [playSound, setPlaySound] = useState(false);
   const play = () => {
-    setPlaySound(true);
+    props.playUrl(props.url);
   };
   return (
-    <Row
-      onClick={() => {
-        console.log("sample clicked");
-        play();
-      }}
-    >
-      {props.name}
-      {props.tags.map((t) => {
-        return <Tag>{t}</Tag>;
-      })}
-      <ReactHowler
-        src={props.url}
-        playing={playSound}
-        onEnd={() => {
-          setPlaySound(false);
+    <Card>
+      <Row
+        onClick={() => {
+          console.log("sample clicked");
+          play();
         }}
-        onPlay={() => {
-          console.log("Playing sound");
-        }}
-      />
-    </Row>
+      >
+        {props.name}
+        {props.tags.map((t) => {
+          return <Tag>{t}</Tag>;
+        })}
+
+        <a href={props.url} target="_blank" rel="noopener noreferrer" download>
+          <Button type="default" shape="circle" icon={<DownloadOutlined />} />
+        </a>
+      </Row>
+    </Card>
   );
 };
