@@ -1,14 +1,14 @@
 import * as React from "react";
 import { Navigator } from "../navigation";
 import { Layout } from "antd";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
-import "antd/dist/antd.css";
+import "antd/dist/antd.compact.css";
 import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
@@ -27,7 +27,6 @@ const onStart = () => {
 };
 
 export const App = () => {
-  const [siderCollapsed, setSiderCollapsed] = useState(true);
   const getContext = useGetContext();
   const { Sider, Content } = Layout;
 
@@ -58,22 +57,20 @@ export const App = () => {
         }}
       >
         <Sider
-          collapsible
           style={{
             overflow: "auto",
             height: "100%",
             position: "fixed",
             left: 0,
           }}
-          collapsed={siderCollapsed}
-          onCollapse={setSiderCollapsed}
+          collapsed={true}
         >
           <Sidebar />
         </Sider>
         <Layout
           className="site-layout"
           style={{
-            marginLeft: siderCollapsed ? 80 : 200,
+            marginLeft: 80,
 
             height: "100%",
           }}

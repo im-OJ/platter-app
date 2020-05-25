@@ -1,11 +1,6 @@
 import * as React from "react";
 import { Menu } from "antd";
-import {
-  HomeOutlined,
-  UploadOutlined,
-  UserOutlined,
-  LockOutlined,
-} from "@ant-design/icons";
+import { HomeOutlined, UploadOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigateTo } from "../../navigation";
 
 export const Sidebar = () => {
@@ -40,15 +35,6 @@ export const Sidebar = () => {
       >
         <UserOutlined />
         <span className="nav-text">Profile</span>
-      </Menu.Item>
-      <Menu.Item
-        onClick={() => {
-          navigateTo("test");
-        }}
-        key="4"
-      >
-        <LockOutlined />
-        <span className="nav-text">T</span>
       </Menu.Item>
     </Menu>
   );

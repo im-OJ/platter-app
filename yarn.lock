@@ -9646,6 +9646,11 @@ react-lifecycles-compat@^3.0.2, react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-wavesurfer@^0.8.6:
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/react-wavesurfer/-/react-wavesurfer-0.8.6.tgz#da05f3f501e566a63853f9babec45a5251111538"
+  integrity sha1-2gXz9QHlZqY4U/m6vsRaUlERFTg=
+
 react@^16.11.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
