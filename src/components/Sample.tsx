@@ -3,13 +3,14 @@ import { Row, Tag, Button, Card, Typography, Input, Progress } from "antd";
 import { DownloadOutlined, CheckOutlined } from "@ant-design/icons";
 
 import { useState } from "react";
-import ReactHowler from "react-howler";
-import { TagInput } from "../Home";
+import Howler from "react-howler";
+
 import { useNewSampleMutation } from "./Upload/hooks";
+import { TagInput } from "./TagInput";
 
 interface Props {
   name: string;
-  url: string;
+  url: string | undefined;
   tags?: Array<string>;
   options?: {
     progress?: number;
@@ -38,8 +39,13 @@ export const Sample = (props: Props) => {
 
   const play = () => {
     //@ts-ignore
-    window.Howler.stop();
-    setPlaying(true);
+    // window.Howler.stop();
+    if (props.url) {
+      console.log("playing", props.url);
+      setPlaying(true);
+    } else {
+      console.error("no url");
+    }
   };
   setEditMode;
   const submitSample = () => {
@@ -48,6 +54,10 @@ export const Sample = (props: Props) => {
       url: props.url,
       tagText: editTags,
     });
+    if (!props.url) {
+      console.error("tried to submit with no URL");
+      return;
+    }
     submit({
       variables: {
         sample: {
@@ -64,11 +74,13 @@ export const Sample = (props: Props) => {
   return (
     <>
       {props.url && props.url.length > 4 && (
-        <ReactHowler
+        <Howler
           src={props.url}
           playing={playing}
-          loop={true}
           preload
+          onPlay={() => {
+            console.log("playing sample");
+          }}
           onEnd={() => {
             setPlaying(false);
           }}

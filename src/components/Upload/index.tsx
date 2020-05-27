@@ -20,7 +20,9 @@ export const Upload = () => {
       }
       return file.type.startsWith("audio");
     });
-    uploader(files);
+    if (files) {
+      uploader(files);
+    }
   };
   console.log(items);
   return (
@@ -67,7 +69,7 @@ export const Upload = () => {
             setError={setError}
             key={i.name}
             name={i.name}
-            url={i.url ?? ""}
+            url={i.url ?? undefined}
           />
         ))}
       </div>
