@@ -5,13 +5,6 @@ import { UploadFile } from "antd/lib/upload/interface";
 
 export const storage = () => firebase.storage();
 
-export const formatName = (name: string) => {
-  return name
-    .replace(" ", "_")
-    .substr(0, name.lastIndexOf("."))
-    .replace(".", "");
-};
-
 export type FileUploadState = {
   name: string;
   progress: number;
@@ -38,10 +31,11 @@ const useFileUploader = (
         return;
       }
 
-      setName(formatName(file.name));
+      setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
+      console.log("putting: " + JSON.stringify({ file }));
       const uploadTask = storage()
-        .ref(myPathPrefix + "/" + formatName(file.name))
+        .ref(myPathPrefix + "/" + file.name)
         .put(file, {
           customMetadata: {
             hello: "world",
@@ -121,7 +115,7 @@ export const useUploadFiles = (
     }
     const i: Array<FileUploadState> = myFiles.reverse().map((f) => {
       return {
-        name: formatName(f.name),
+        name: f.name,
         progress: 0,
         url: null,
         id: "",
@@ -157,5 +151,6 @@ const uploadFileToFile = (uf: MyUploadFile) => {
   if (!blob) {
     return;
   }
+  console.log("name: " + uf.name);
   return new File([blob], uf.name);
 };

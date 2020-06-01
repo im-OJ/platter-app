@@ -36,7 +36,7 @@ export const Sample = (props: Props) => {
   }
   const uploadDone =
     props.options && props.options.progress == 100 && props.url;
-
+  console.log(uploadDone);
   const play = () => {
     //@ts-ignore
     // window.Howler.stop();
