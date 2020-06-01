@@ -12,7 +12,7 @@ export type FileUploadState = {
   id: string;
 };
 
-const useFileUploader = (
+export const useFileUploader = (
   pathPrefix: string
 ): {
   uploader: (f: MyUploadFile) => void;
@@ -33,7 +33,6 @@ const useFileUploader = (
 
       setName(file.name);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
-      console.log("putting: " + JSON.stringify({ file }));
       const uploadTask = storage()
         .ref(myPathPrefix + "/" + file.name)
         .put(file, {
@@ -41,6 +40,7 @@ const useFileUploader = (
             hello: "world",
           },
         });
+
       uploadTask.on("state_changed", (snapshot) => {
         const myProgress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -50,11 +50,8 @@ const useFileUploader = (
       });
 
       uploadTask.then(async (p) => {
-        console.log("File upload complete");
-        console.log(p);
         const url = await p.ref.getDownloadURL();
         setUrl(url);
-
         if (!url) {
           console.error("no url");
           return;

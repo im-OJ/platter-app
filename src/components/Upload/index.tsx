@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page } from "../Page";
 
-import { useUploadFiles } from "../../helpers/firebase-storage";
+import { useFileUploader } from "../../helpers/firebase-storage";
 import Dragger from "antd/lib/upload/Dragger";
 import { UploadFile } from "antd/lib/upload/interface";
 
@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Alert } from "antd";
 
 export const Upload = () => {
-  const { items, uploader } = useUploadFiles("samples");
+  const { item, uploader } = useFileUploader("samples");
   const [error, setError] = useState<string>();
   const handleFiles = (f: Array<UploadFile>) => {
     const files = f.filter((file) => {
@@ -21,10 +21,10 @@ export const Upload = () => {
       return file.type.startsWith("audio");
     });
     if (files) {
-      uploader(files);
+      uploader(files[0]);
     }
   };
-  console.log(items);
+  console.log("item: " + item);
   return (
     <Page>
       <div
@@ -37,7 +37,6 @@ export const Upload = () => {
         <Dragger
           style={{
             width: "100%",
-
             textAlign: "center",
             margin: "auto",
             padding: 4,
@@ -60,18 +59,17 @@ export const Upload = () => {
             onClose={() => setError(undefined)}
           />
         )}
-        {items?.map((i) => (
-          <Sample
-            options={{
-              progress: i.progress,
-              initalUpload: true,
-            }}
-            setError={setError}
-            key={i.name}
-            name={i.name}
-            url={i.url ?? undefined}
-          />
-        ))}
+
+        <Sample
+          options={{
+            progress: item.progress,
+            initalUpload: true,
+          }}
+          setError={setError}
+          key={item.name}
+          name={item.name}
+          url={item.url ?? undefined}
+        />
       </div>
     </Page>
   );

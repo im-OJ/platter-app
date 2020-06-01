@@ -29,6 +29,7 @@ export const TagInput = (props: {
       <Input
         type="text"
         size="small"
+        autoFocus
         style={{
           width: 64,
         }}

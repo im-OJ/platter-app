@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Row, Tag, Button, Card, Typography, Input, Progress } from "antd";
-import { DownloadOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  DownloadOutlined,
+  CheckOutlined,
+  CaretRightOutlined,
+  PauseOutlined,
+} from "@ant-design/icons";
 
 import { useState } from "react";
 import Howler from "react-howler";
@@ -36,10 +41,12 @@ export const Sample = (props: Props) => {
   }
   const uploadDone =
     props.options && props.options.progress == 100 && props.url;
-  console.log(uploadDone);
+  console.log(props.options, uploadDone);
   const play = () => {
-    //@ts-ignore
+    // @ts-ignore
     // window.Howler.stop();
+    // @ts-ignore
+
     if (props.url) {
       console.log("playing", props.url);
       setPlaying(true);
@@ -47,7 +54,12 @@ export const Sample = (props: Props) => {
       console.error("no url");
     }
   };
-  setEditMode;
+
+  const pause = () => {
+    setPlaying(false);
+  };
+  pause;
+
   const submitSample = () => {
     console.log("submitting", {
       name: editName,
@@ -75,11 +87,15 @@ export const Sample = (props: Props) => {
     <>
       {props.url && props.url.length > 4 && (
         <Howler
+          html5
           src={props.url}
           playing={playing}
           preload
           onPlay={() => {
             console.log("playing sample");
+          }}
+          onStop={() => {
+            setPlaying(false);
           }}
           onEnd={() => {
             setPlaying(false);
@@ -95,14 +111,31 @@ export const Sample = (props: Props) => {
         }}
       >
         <Row
-          onClick={() => {
-            console.log("sample clicked");
-            play();
-          }}
           style={{
             display: "flex",
           }}
         >
+          <Col size={1}>
+            {playing ? (
+              <Button
+                type="default"
+                shape="circle"
+                icon={<PauseOutlined />}
+                onClick={() => {
+                  pause();
+                }}
+              />
+            ) : (
+              <Button
+                type="default"
+                shape="circle"
+                icon={<CaretRightOutlined />}
+                onClick={() => {
+                  play();
+                }}
+              />
+            )}
+          </Col>
           <Col size={5}>
             {!editMode ? (
               <Typography style={{ width: "100%" }}>{props.name}</Typography>
@@ -113,10 +146,10 @@ export const Sample = (props: Props) => {
                 defaultValue={props.name}
                 value={editName}
                 onChange={(c) => setEditName(c.target.value)}
-              ></Input>
+              />
             )}
           </Col>
-          <Col size={6}>
+          <Col size={5}>
             {!editMode ? (
               tags ? (
                 tags.map((t) => {
@@ -136,12 +169,7 @@ export const Sample = (props: Props) => {
           </Col>
           <Col size={1}>
             {!editMode ? (
-              <a
-                href={props.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                download
-              >
+              <a href={props.url} rel="noopener noreferrer" download>
                 <Button
                   type="default"
                   shape="circle"
