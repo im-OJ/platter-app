@@ -3,6 +3,7 @@ import { useSignInFirebase, useSignUpMutation } from "./hooks";
 import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
 import { useKeytar } from "../../helpers/keytar";
+import { useRefetch } from "../../hooks";
 
 export const Login = (props: { onComplete: () => void }) => {
   const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");
@@ -11,6 +12,7 @@ export const Login = (props: { onComplete: () => void }) => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [signUpMutation, { error, data }] = useSignUpMutation();
+  const refetch = useRefetch(["StatusBarMe"]);
   useEffect(() => {
     if (storedEmail && storedPass) {
       signIn({
@@ -43,6 +45,8 @@ export const Login = (props: { onComplete: () => void }) => {
       setStoredEmail(p.email);
       setStoredPass(p.pass);
       setLoggedIn(true);
+      console.log("refetching");
+      refetch();
     },
     onFail: () => {
       setErrorMessage("Sign in failed, check connection");
