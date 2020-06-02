@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
-import { config } from "../config";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
+
+const prodView = true;
 
 // require("update-electron-app")();
 
@@ -17,10 +18,11 @@ let mainWindow: any;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: config.isProd ? 800 : 1100,
-    height: 600,
+    width: prodView ? 800 : 1100,
+    height: 500,
     frame: false,
     title: "Platter",
+    backgroundColor: "#fff",
     // frame: false,
     webPreferences: {
       nodeIntegration: true,
@@ -31,7 +33,7 @@ const createWindow = () => {
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
   // Open the DevTools.
-  if (!config.isProd) {
+  if (!prodView) {
     mainWindow.webContents.openDevTools();
   }
 

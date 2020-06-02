@@ -72,6 +72,7 @@ export const TitleBar = () => {
         }}
         onClick={() => {
           remote?.BrowserWindow?.getFocusedWindow()?.setAlwaysOnTop(false);
+
           setAlwaysOnTop(false);
         }}
       />

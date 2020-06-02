@@ -3,6 +3,8 @@ import { useMutation, gql } from "@apollo/client";
 import { Mutation, MutationSignUpArgs } from "@/generated/graphql";
 import { useKeytar } from "../../helpers/keytar";
 import { useNavigateTo } from "../../navigation";
+import { remote } from "electron";
+import { useRefetch } from "../../hooks";
 
 export type SingInParams = {
   email: string;
@@ -51,17 +53,24 @@ export const useSignInFirebase = (p: {
 };
 
 export const useSignOut = () => {
-  const {setValue: setEmail} = useKeytar("email")
-  const {setValue: setPass} = useKeytar("password")
-  const {setValue: setToken} = useKeytar("token")
-  const navigate = useNavigateTo()
-  return async() => firebaseApp.auth().signOut().then(async() => {
-    setPass(null)
-    setEmail(null)
-    setToken(null)
-    navigate("start")
-  })
-}
+  const { setValue: setEmail } = useKeytar("email");
+  const { setValue: setPass } = useKeytar("password");
+  const { setValue: setToken } = useKeytar("token");
+  const refetch = useRefetch(["StatusBarMe"]);
+  const navigate = useNavigateTo();
+  return async () =>
+    firebaseApp
+      .auth()
+      .signOut()
+      .then(async () => {
+        setPass(null);
+        setEmail(null);
+        setToken(null);
+        navigate("start");
+        refetch();
+        remote?.BrowserWindow?.getFocusedWindow()?.reload();
+      });
+};
 
 const signUpMuation = gql`
   mutation SignUp($email: String!, $password: String!) {

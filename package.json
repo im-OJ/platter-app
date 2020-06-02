@@ -1,8 +1,7 @@
 {
   "name": "platter-app",
-  "productname": "platter",
+  "productname": "Platter",
   "version": "1.0.2",
-  "description": "My Electron application description",
   "main": ".webpack/main",
   "repository": "https://github.com/im-OJ/platter-app.git",
   "scripts": {
@@ -17,7 +16,10 @@
   "keywords": [],
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "name": "Platter",
+        "executableName": "Platter"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
