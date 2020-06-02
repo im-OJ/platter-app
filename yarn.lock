@@ -7662,6 +7662,13 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
+less-vars-to-js@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/less-vars-to-js/-/less-vars-to-js-1.3.0.tgz#c322cf43a3c8fc3fab655da3e51a14c1499ab571"
+  integrity sha512-xeiLLn/IMCGtdyCkYQnW8UuzoW2oYMCKg9boZRaGI58fLz5r90bNJDlqGzmVt/1Uqk75/DxIVtQSNCMkE5fRZQ==
+  dependencies:
+    strip-json-comments "^2.0.1"
+
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -11402,7 +11409,7 @@ strip-indent@^1.0.1:
   dependencies:
     get-stdin "^4.0.1"
 
-strip-json-comments@~2.0.1:
+strip-json-comments@^2.0.1, strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
   integrity sha1-PFMZQukIwml8DsNEhYwobHygpgo=

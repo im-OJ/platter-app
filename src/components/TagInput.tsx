@@ -50,7 +50,7 @@ export const TagInput = (props: {
     );
   };
   return (
-    <div style={{ width: "100%", backgroundColor: "#EEEEEE" }}>
+    <div style={{ width: "100%" }}>
       {tags &&
         tags.map((t) => {
           return (

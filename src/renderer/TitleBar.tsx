@@ -15,7 +15,7 @@ const HEIGHT = 25;
 
 const TitleBarWrap = styled.div`
   -webkit-app-region: drag;
-  position: absolute;
+  position: fixed;
   display: flex;
   height: ${HEIGHT}px;
   background-color: ${backgroundCol};
@@ -28,7 +28,12 @@ const TitleBarSpace = styled.div`
   width: 100%;
   background-color: ${backgroundCol};
   padding: 4;
+  z-index: 99999999;
 `;
+
+const Clickable = styled.div`
+-webkit-app-region: no-drag;
+`
 
 type Controls = "close" | "minimize" | "pin";
 
@@ -37,7 +42,7 @@ export const TitleBar = () => {
   console.log(os.platform);
   const controlOrder: Array<Controls> = isMac
     ? ["close", "minimize", "pin"]
-    : ["minimize", "close", "pin"];
+    : ["pin", "minimize", "close"];
   const controls = {
     close: (
       <CloseOutlined
@@ -46,7 +51,8 @@ export const TitleBar = () => {
           paddingLeft: 2,
           paddingRight: 2,
         }}
-        onClick={() => {
+        onClick={(e) => {
+        
           window.close();
         }}
       />
@@ -57,6 +63,7 @@ export const TitleBar = () => {
           color: "yellow",
           paddingLeft: 2,
           paddingRight: 2,
+          
         }}
         onClick={() => {
           remote?.BrowserWindow?.getFocusedWindow()?.minimize();
@@ -90,16 +97,17 @@ export const TitleBar = () => {
       />
     ),
   };
+
   return (
     <>
       <TitleBarWrap>
-        <div style={{ padding: 2, width: "100%", height: "100%", flex: 1 }}>
-          <span style={{ float: isMac ? "left" : "right", margin: "auto" }}>
+      <div style={{ padding: 2, width: "100%", height: "100%", flex: 1 }}>
+          <Clickable style={{ float: isMac ? "left" : "right", margin: "auto", flexGrow: 1 }}>
             {controlOrder.map((val) => {
               // @ts-ignore
               return controls[val];
             })}
-          </span>
+          </Clickable>
         </div>
       </TitleBarWrap>
       <TitleBarSpace />
