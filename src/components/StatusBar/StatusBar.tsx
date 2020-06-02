@@ -7,7 +7,7 @@ import { backgroundCol } from "../../theme";
 import { config } from "../../config";
 import { UsernameForm } from "../UsernameForm";
 import { useSignOut } from "../Start/hooks";
-
+import { UserOutlined } from "@ant-design/icons";
 // @ts-ignore
 
 const meQuery = gql`
@@ -66,7 +66,7 @@ export const StatusBar = () => {
             {!loading ? (
               <UsernameMenu>
                 <Typography style={{ color: "white" }}>
-                  User: {data?.me?.username}
+                  <UserOutlined /> {data?.me?.username}
                 </Typography>
               </UsernameMenu>
             ) : (

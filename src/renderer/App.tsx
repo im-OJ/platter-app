@@ -53,15 +53,17 @@ export const App = () => {
     <ApolloProvider client={client}>
       <Layout
         style={{
+          top: 25,
           userSelect: "none",
+          height: "100%",
+          width: "100%",
         }}
       >
         <Sider
           style={{
             overflow: "auto",
             height: "100%",
-            position: "fixed",
-            left: 0,
+            position: "absolute",
           }}
           collapsed={true}
         >

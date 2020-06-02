@@ -19,6 +19,8 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: config.isProd ? 800 : 1100,
     height: 600,
+    frame: false,
+    title: "Platter",
     // frame: false,
     webPreferences: {
       nodeIntegration: true,

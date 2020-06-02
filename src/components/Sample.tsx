@@ -108,6 +108,7 @@ export const Sample = (props: Props) => {
         style={{
           padding: 4,
           width: "100%",
+          maxHeight: 45,
           overflow: "hidden",
         }}
       >
@@ -139,7 +140,12 @@ export const Sample = (props: Props) => {
           </Col>
           <Col size={4}>
             {!editMode ? (
-              <Typography style={{ width: "100%" }}>{props.name}</Typography>
+              <Typography.Paragraph
+                ellipsis
+                style={{ width: "100%", verticalAlign: "middle" }}
+              >
+                {props.name}
+              </Typography.Paragraph>
             ) : (
               <Input
                 type="text"
@@ -221,6 +227,7 @@ export const Col = (props: {
         margin: "auto",
         marginLeft: 4,
         marginRight: 4,
+        verticalAlign: "middle",
       }}
     >
       {props.children}
