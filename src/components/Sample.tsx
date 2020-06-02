@@ -12,6 +12,7 @@ import Howler from "react-howler";
 
 import { useNewSampleMutation } from "./Upload/hooks";
 import { TagInput } from "./TagInput";
+import { ipcRenderer } from "electron";
 
 interface Props {
   name: string;
@@ -106,8 +107,9 @@ export const Sample = (props: Props) => {
       <Card
         bodyStyle={{ padding: 2 }}
         style={{
-          padding: 4,
+          padding: 2,
           width: "100%",
+
           maxHeight: 45,
           overflow: "hidden",
         }}
@@ -122,6 +124,7 @@ export const Sample = (props: Props) => {
               <Button
                 type="default"
                 shape="circle"
+                size="small"
                 icon={<PauseOutlined />}
                 onClick={() => {
                   pause();
@@ -131,7 +134,8 @@ export const Sample = (props: Props) => {
               <Button
                 type="default"
                 shape="circle"
-                icon={<CaretRightOutlined />}
+                size="small"
+                icon={<CaretRightOutlined size={12} />}
                 onClick={() => {
                   play();
                 }}
@@ -179,16 +183,19 @@ export const Sample = (props: Props) => {
           </Col>
           <Col size={1}>
             {!editMode ? (
-              <a href={props.url} rel="noopener noreferrer" download>
-                <Button
-                  type="default"
-                  shape="circle"
-                  icon={<DownloadOutlined />}
-                />
-              </a>
+              <Button
+                type="default"
+                size="small"
+                shape="circle"
+                icon={<DownloadOutlined />}
+                onClick={() => {
+                  ipcRenderer.send("download-item", { url: props.url });
+                }}
+              />
             ) : uploadDone ? (
               <Button
                 type="default"
+                size="small"
                 shape="circle"
                 icon={<CheckOutlined />}
                 onClick={() => {
@@ -203,7 +210,7 @@ export const Sample = (props: Props) => {
                   "100%": "#87d068",
                 }}
                 width={32}
-                strokeWidth={14}
+                strokeWidth={12}
                 percent={props.options && props.options.progress}
               />
             )}

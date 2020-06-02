@@ -2,18 +2,29 @@ import * as React from "react";
 import { Menu } from "antd";
 import { HomeOutlined, UploadOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigateTo } from "../../navigation";
+import { siderWidth } from "../../theme";
+
+const iconSize = 20;
 
 export const Sidebar = () => {
   const navigateTo = useNavigateTo();
   return (
-    <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
+    <Menu
+      theme="dark"
+      mode="inline"
+      defaultSelectedKeys={["1"]}
+      style={{ textAlign: "center", width: siderWidth }}
+    >
       <Menu.Item
         onClick={() => {
           navigateTo("home");
         }}
         key="1"
+        style={{
+          padding: 0,
+        }}
       >
-        <HomeOutlined />
+        <HomeOutlined size={iconSize} />
         <span className="nav-text">Home</span>
       </Menu.Item>
 
@@ -22,8 +33,11 @@ export const Sidebar = () => {
           navigateTo("upload");
         }}
         key="2"
+        style={{
+          padding: 0,
+        }}
       >
-        <UploadOutlined />
+        <UploadOutlined size={iconSize} />
 
         <span className="nav-text">Upload</span>
       </Menu.Item>
@@ -31,9 +45,12 @@ export const Sidebar = () => {
         onClick={() => {
           navigateTo("profile");
         }}
+        style={{
+          padding: 0,
+        }}
         key="3"
       >
-        <UserOutlined />
+        <UserOutlined size={iconSize} />
         <span className="nav-text">Profile</span>
       </Menu.Item>
     </Menu>

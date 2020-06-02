@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
-
+const electronDl = require("electron-dl");
+electronDl();
 const prodView = true;
 
 // require("update-electron-app")();

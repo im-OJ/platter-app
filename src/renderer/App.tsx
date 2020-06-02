@@ -12,6 +12,7 @@ import "antd/dist/antd.compact.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
 import { StatusBar } from "../components/StatusBar/StatusBar";
+import { siderWidth } from "../theme";
 
 export const { useGlobalState } = createGlobalState({
   location: "start",
@@ -53,7 +54,6 @@ export const App = () => {
     <ApolloProvider client={client}>
       <Layout
         style={{
-          top: 25,
           userSelect: "none",
           height: "100%",
           width: "100%",
@@ -66,14 +66,14 @@ export const App = () => {
             position: "absolute",
           }}
           collapsed={true}
+          collapsedWidth={siderWidth}
         >
           <Sidebar />
         </Sider>
         <Layout
           className="site-layout"
           style={{
-            marginLeft: 80,
-
+            marginLeft: siderWidth,
             height: "100%",
           }}
         >
