@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
 import { useKeytar } from "../../helpers/keytar";
 import { useRefetch } from "../../hooks";
-
 export const Login = (props: { onComplete: () => void }) => {
   const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");
   const { value: storedPass, setValue: setStoredPass } = useKeytar("password");
@@ -68,6 +67,7 @@ export const Login = (props: { onComplete: () => void }) => {
   if (error && errorMessage !== error.message) {
     setErrorMessage(error.message);
   }
+
   return (
     <FirebaseForm
       onSignInSubmit={(email, pass) => signIn({ email, pass })}
