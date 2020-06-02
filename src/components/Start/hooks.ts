@@ -2,6 +2,7 @@ import { firebaseApp } from "../../renderer/App";
 import { useMutation, gql } from "@apollo/client";
 import { Mutation, MutationSignUpArgs } from "@/generated/graphql";
 import { useKeytar } from "../../helpers/keytar";
+import { useNavigateTo } from "../../navigation";
 
 export type SingInParams = {
   email: string;
@@ -48,6 +49,19 @@ export const useSignInFirebase = (p: {
       });
   };
 };
+
+export const useSignOut = () => {
+  const {setValue: setEmail} = useKeytar("email")
+  const {setValue: setPass} = useKeytar("password")
+  const {setValue: setToken} = useKeytar("token")
+  const navigate = useNavigateTo()
+  return async() => firebaseApp.auth().signOut().then(async() => {
+    setPass(null)
+    setEmail(null)
+    setToken(null)
+    navigate("start")
+  })
+}
 
 const signUpMuation = gql`
   mutation SignUp($email: String!, $password: String!) {

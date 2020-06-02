@@ -14,7 +14,10 @@ const sampleQuery = gql`
       tagLink {
         name
       }
-
+      user {
+        name
+        id
+      }
       url
     }
   }
@@ -45,6 +48,7 @@ export const SampleTable = (props: Props) => {
               name={sample.name}
               tags={sample.tagLink.map((tl) => tl?.name ?? "")}
               url={sample.url}
+              username={sample.user.name ?? "no name"}
             />
           );
         })}

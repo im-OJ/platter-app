@@ -6,6 +6,7 @@ import _ from "lodash";
 import Start from "./components/Start";
 import Test from "./components/Test";
 import { Profile } from "./components/Profile";
+
 type Location = "home" | "upload" | "start" | "test" | "profile";
 
 const screens: Record<Location, JSX.Element> = {
@@ -23,6 +24,7 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
 export const Navigator = () => {
   const [gLocation] = useGlobalState("location");
   console.log("location: ", gLocation);
+
   return (
     <>
       {_.map(screens, (component, key) => {

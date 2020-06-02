@@ -9,9 +9,9 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import firebase from "firebase";
 import "antd/dist/antd.compact.css";
-import "ant-design-pro/dist/ant-design-pro.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
+import { StatusBar } from "../components/StatusBar/StatusBar";
 
 export const { useGlobalState } = createGlobalState({
   location: "start",
@@ -84,6 +84,7 @@ export const App = () => {
             </div>
           </Content>
         </Layout>
+        <StatusBar />
       </Layout>
     </ApolloProvider>
   );

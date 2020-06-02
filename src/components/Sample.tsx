@@ -16,6 +16,7 @@ import { TagInput } from "./TagInput";
 interface Props {
   name: string;
   url: string | undefined;
+  username: string;
   tags?: Array<string>;
   options?: {
     progress?: number;
@@ -136,7 +137,7 @@ export const Sample = (props: Props) => {
               />
             )}
           </Col>
-          <Col size={5}>
+          <Col size={4}>
             {!editMode ? (
               <Typography style={{ width: "100%" }}>{props.name}</Typography>
             ) : (
@@ -149,7 +150,7 @@ export const Sample = (props: Props) => {
               />
             )}
           </Col>
-          <Col size={5}>
+          <Col size={4}>
             {!editMode ? (
               tags ? (
                 tags.map((t) => {
@@ -166,6 +167,9 @@ export const Sample = (props: Props) => {
                 }}
               />
             )}
+          </Col>
+          <Col size={3}>
+            <Typography>{props.username}</Typography>
           </Col>
           <Col size={1}>
             {!editMode ? (
@@ -204,7 +208,7 @@ export const Sample = (props: Props) => {
   );
 };
 
-const Col = (props: {
+export const Col = (props: {
   size: number;
   children: JSX.Element | JSX.Element[] | null;
 }) => {

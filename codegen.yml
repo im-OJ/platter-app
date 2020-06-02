@@ -1,4 +1,5 @@
 overwrite: true
+
 schema: "src/schema/schema.graphql"
 documents: null
 generates:
@@ -7,3 +8,5 @@ generates:
       - "typescript"
       - "typescript-resolvers"
       - "typescript-document-nodes"
+    config:
+      withHooks: true

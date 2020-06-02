@@ -8,10 +8,13 @@ import { UploadFile } from "antd/lib/upload/interface";
 import { Sample } from "../Sample";
 import { useState } from "react";
 import { Alert } from "antd";
+import { useUsername } from "../StatusBar/StatusBar";
 
 export const Upload = () => {
   const { item, uploader } = useFileUploader("samples");
   const [error, setError] = useState<string>();
+  const myUsername = useUsername();
+
   const handleFiles = (f: Array<UploadFile>) => {
     const files = f.filter((file) => {
       const isGood = file.type.startsWith("audio");
@@ -68,6 +71,7 @@ export const Upload = () => {
           setError={setError}
           key={item.name}
           name={item.name}
+          username={myUsername ?? "no username"}
           url={item.url ?? undefined}
         />
       </div>
