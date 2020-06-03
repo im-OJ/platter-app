@@ -45,10 +45,6 @@ export const Sample = (props: Props) => {
     props.options && props.options.progress == 100 && props.url;
   console.log(props.options, uploadDone);
   const play = () => {
-    // @ts-ignore
-    // window.Howler.stop();
-    // @ts-ignore
-
     if (props.url) {
       console.log("playing", props.url);
       setPlaying(true);
@@ -113,6 +109,12 @@ export const Sample = (props: Props) => {
           maxHeight: 45,
           overflow: "hidden",
         }}
+        draggable
+          onDragStart={() => {
+            console.log("dragging");
+            ipcRenderer.send("dragSample", {name: props.name, url: props.url});
+          }}
+      
       >
         <Row
           style={{

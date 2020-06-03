@@ -1,6 +1,8 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, IpcMainEvent } from "electron";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
-const electronDl = require("electron-dl");
+const { ipcMain } = require("electron");
+
+import electronDl from "electron-dl";
 electronDl();
 const prodView = false;
 
@@ -46,7 +48,38 @@ const createWindow = () => {
     mainWindow = null;
   });
 };
+ipcMain.on(
+  "dragSample",
+  async (event: IpcMainEvent, file: { name: string; url: string }) => {
+    const iconUrl =
+      "https://icons.iconarchive.com/icons/xenatt/the-circle/512/Folder-Music-icon.png";
 
+    const window = BrowserWindow.getFocusedWindow();
+    if (!window) {
+      return;
+    }
+    // download icon
+    await electronDl.download(window, iconUrl, {
+      directory: __dirname,
+      filename: "icon.png",
+    });
+
+    // download sample
+    const downloaded = await electronDl.download(window, file.url, {
+      directory: __dirname,
+      filename: file.name,
+    });
+    event.sender.startDrag({
+      file: `${__dirname}/` + file.name,
+      icon: `${__dirname}/icon.png`,
+    });
+    console.log(JSON.stringify(downloaded));
+  }
+);
+
+ipcMain.on("download-item", (event: any, fileUrl: string) => {
+  console.log("download");
+});
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
