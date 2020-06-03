@@ -16,7 +16,7 @@ if (require("electron-squirrel-startup")) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow: any;
+let mainWindow: BrowserWindow | null;
 
 const createWindow = () => {
   // Create the browser window.
@@ -32,9 +32,26 @@ const createWindow = () => {
     },
   });
 
+  const loadingWindow = new BrowserWindow({
+    width: 100,
+    height: 300,
+    frame: false,
+    title: "Platter",
+    backgroundColor: "#fff",
+    // frame: false,
+    webPreferences: {
+      nodeIntegration: true,
+    },
+  });
+
+
+  console.log(MAIN_WINDOW_WEBPACK_ENTRY)
+  loadingWindow.loadURL("https://codepen.io/juliangarnier/full/XvjWvx")
+  
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+  
   // Open the DevTools.
   if (!prodView) {
     mainWindow.webContents.openDevTools();
@@ -51,7 +68,15 @@ const createWindow = () => {
 };
 ipcMain.on(
   "ready", () => {
-    BrowserWindow.getFocusedWindow()?.show();
+    // loadingWindow.hide()
+    BrowserWindow.getAllWindows().map(window => {
+      if(window.isVisible()){
+        window.hide()
+      }else{
+        window.show()
+      }
+      
+    })
   })
 ipcMain.on(
   "dragSample",
