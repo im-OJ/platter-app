@@ -36,7 +36,7 @@ const createWindow = () => {
     width: 100,
     height: 300,
     frame: false,
-    title: "Platter",
+    title: "Loading",
     backgroundColor: "#fff",
     // frame: false,
     webPreferences: {
@@ -70,10 +70,13 @@ ipcMain.on(
   "ready", () => {
     // loadingWindow.hide()
     BrowserWindow.getAllWindows().map(window => {
-      if(window.isVisible()){
+      if(window.getTitle() === "Loading"){
         window.hide()
+        window.close()
       }else{
         window.show()
+        window.setAlwaysOnTop(true)
+        window.setAlwaysOnTop(false)
       }
       
     })
