@@ -13,6 +13,7 @@ import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
 import { StatusBar } from "../components/StatusBar/StatusBar";
 import { siderWidth } from "../theme";
+import { ipcRenderer } from "electron";
 
 export const { useGlobalState } = createGlobalState({
   location: "start",
@@ -25,6 +26,7 @@ export const firebaseApp = firebase.initializeApp(config.firebaseOptions);
 
 const onStart = () => {
   console.log("started");
+  ipcRenderer.send("ready");
 };
 
 export const App = () => {

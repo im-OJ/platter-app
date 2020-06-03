@@ -39,7 +39,8 @@ const createWindow = () => {
   if (!prodView) {
     mainWindow.webContents.openDevTools();
   }
-
+  console.log("starting")
+  BrowserWindow.getFocusedWindow()?.hide();
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
     // Dereference the window object, usually you would store windows
@@ -48,6 +49,10 @@ const createWindow = () => {
     mainWindow = null;
   });
 };
+ipcMain.on(
+  "ready", () => {
+    BrowserWindow.getFocusedWindow()?.show();
+  })
 ipcMain.on(
   "dragSample",
   async (event: IpcMainEvent, file: { name: string; url: string }) => {
@@ -58,17 +63,27 @@ ipcMain.on(
     if (!window) {
       return;
     }
+   
     // download icon
-    await electronDl.download(window, iconUrl, {
-      directory: __dirname,
-      filename: "icon.png",
-    });
+    await electronDl
+      .download(window, iconUrl, {
+        directory: __dirname,
+        filename: "icon.png",
+      })
+      .catch(() => {
+        throw new Error("problem downloading icon");
+      });
 
     // download sample
-    const downloaded = await electronDl.download(window, file.url, {
-      directory: __dirname,
-      filename: file.name,
-    });
+    const downloaded = await electronDl
+      .download(window, file.url, {
+        directory: __dirname,
+        filename: file.name,
+      })
+      .catch(() => {
+        throw new Error("problem downloading sample");
+      });
+    console.log("download complete");
     event.sender.startDrag({
       file: `${__dirname}/` + file.name,
       icon: `${__dirname}/icon.png`,
