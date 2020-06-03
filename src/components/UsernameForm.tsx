@@ -7,7 +7,7 @@ import { useMutation, gql } from "@apollo/client";
 export const UsernameForm = (props: any) => {
   const [username, setUsername] = useState<string>();
   const [error, setError] = useState<string>();
-
+  const [visible, setVisible] = useState(true);
   const [submitUsername] = useSetUsername();
   const onSubmit = () => {
     submitUsername({
@@ -19,6 +19,7 @@ export const UsernameForm = (props: any) => {
     })
       .then(() => {
         console.log("done");
+        setVisible(false);
       })
       .catch((e) => {
         setError(e.message);
@@ -28,7 +29,7 @@ export const UsernameForm = (props: any) => {
     <Modal
       title={null}
       footer={null}
-      visible={true}
+      visible={visible}
       centered
       width={350}
       closable={false}
