@@ -3,6 +3,10 @@
   "productname": "Platter",
   "version": "1.0.2",
   "main": ".webpack/main",
+  "description": "Platter alpha",
+  "author": {
+    "name": "Phaseshift"
+  },
   "repository": "https://github.com/im-OJ/platter-app.git",
   "scripts": {
     "start": "electron-forge start",

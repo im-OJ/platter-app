@@ -4,7 +4,7 @@ const { ipcMain } = require("electron");
 
 import electronDl from "electron-dl";
 electronDl();
-const prodView = false;
+const prodView = true;
 
 // require("update-electron-app")();
 
