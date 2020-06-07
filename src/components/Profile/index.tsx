@@ -32,7 +32,6 @@ export const Profile = () => {
   if (!data || !data.me) {
     return null;
   }
-  console.log("me: " + JSON.stringify(data.me))
   return (
     <Page>
       <>
