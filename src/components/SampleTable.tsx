@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Sample } from "./Sample";
 import { gql, useQuery } from "@apollo/client";
-import { Query, QuerySearchSamplesArgs } from "@/generated/graphql";
+import { Query, QuerySearchSamplesArgs, Sample as SampleType } from "@/generated/graphql";
 
 interface Props {
-  tags: Array<string> | undefined;
+  tags?: Array<string> | undefined;
+  samples?: Array<SampleType>;
 }
 
 const sampleQuery = gql`
@@ -36,10 +37,12 @@ export const SampleTable = (props: Props) => {
   if (error) {
     console.log(error);
   }
+
+  const samples = data ? data.searchSamples : props.samples
   return (
     <>
-      {data &&
-        data.searchSamples?.map((sample) => {
+      {samples &&
+        samples.map((sample) => {
           if (!sample.name || !sample.tagLink || !sample.url) {
             return null;
           }
