@@ -54,6 +54,7 @@ export const Login = (props: { onComplete: () => void }) => {
     onFail: () => {
       setErrorMessage("Sign in failed, check connection");
       ipcRenderer.send("ready");
+      console.log("sign in failed")
       setStoredEmail(null);
       setStoredPass(null);
       setLoggedIn(false);

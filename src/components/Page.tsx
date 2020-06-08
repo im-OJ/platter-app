@@ -9,6 +9,7 @@ const PageWrap = styled.div`
   display: flex;
   height: 100%;
   overflow: hidden;
+  flex-direction: column;
   z-index: 5;
   width: 100%;
   height: 100%;

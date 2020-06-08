@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page } from "../Page";
 import { gql, useQuery } from "@apollo/client";
-import { PageHeader } from "antd";
+import { PageHeader, Row } from "antd";
 import { Query } from "../../generated/graphql";
 import { SampleTable } from "../SampleTable";
 
@@ -35,10 +35,12 @@ export const Profile = () => {
   return (
     <Page>
       <>
-        <PageHeader title={data.me.username ?? "No username"} subTitle={(data.me.samples?.length ?? "no") + " samples."}/>
+        <Row><PageHeader title={data.me.username ?? "No username"} subTitle={(data.me.samples?.length ?? "no") + " samples."}/></Row>
+        <Row><br/>
        {data.me.samples &&  <SampleTable 
           samples={data.me.samples}
         />}
+        </Row>
         
       </>
     </Page>

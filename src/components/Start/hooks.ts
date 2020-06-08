@@ -33,6 +33,10 @@ export const useSignInFirebase = (p: {
           .auth()
           .currentUser.getIdToken(/* forceRefresh */ true)
           .then(function (idToken) {
+            if(!idToken){
+              p.onFail ? p.onFail() : null;
+              return 
+            }
             p.onComplete({
               token: idToken,
               email: params.email,
