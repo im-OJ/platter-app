@@ -6,7 +6,7 @@ import {
 
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = {
-  [X in Exclude<keyof T, K>]?: T[X];
+  [X in Exclude<keyof T, K>]?: T[X]
 } &
   { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -41,6 +41,7 @@ export type Mutation = {
   signUp?: Maybe<FirebaseUser>;
   updateUser?: Maybe<User>;
   newSample?: Maybe<Sample>;
+  ping?: Maybe<Scalars["Boolean"]>;
 };
 
 export type MutationSignUpArgs = {
@@ -60,8 +61,13 @@ export type Query = {
   __typename?: "Query";
   hello?: Maybe<Scalars["String"]>;
   me?: Maybe<User>;
+  getUser: User;
   getSamples?: Maybe<Scalars["Boolean"]>;
   searchSamples?: Maybe<Array<Sample>>;
+};
+
+export type QueryGetUserArgs = {
+  id?: Maybe<Scalars["String"]>;
 };
 
 export type QueryGetSamplesArgs = {
@@ -113,7 +119,6 @@ export type User = {
   __typename?: "User";
   id: Scalars["String"];
   username?: Maybe<Scalars["String"]>;
-  hasFullAccount: Scalars["Boolean"];
   samples?: Maybe<Array<Sample>>;
 };
 
@@ -322,6 +327,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationNewSampleArgs, "sample">
   >;
+  ping?: Resolver<Maybe<ResolversTypes["Boolean"]>, ParentType, ContextType>;
 };
 
 export type QueryResolvers<
@@ -330,6 +336,12 @@ export type QueryResolvers<
 > = {
   hello?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   me?: Resolver<Maybe<ResolversTypes["User"]>, ParentType, ContextType>;
+  getUser?: Resolver<
+    ResolversTypes["User"],
+    ParentType,
+    ContextType,
+    RequireFields<QueryGetUserArgs, never>
+  >;
   getSamples?: Resolver<
     Maybe<ResolversTypes["Boolean"]>,
     ParentType,
@@ -401,7 +413,6 @@ export type UserResolvers<
 > = {
   id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   username?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  hasFullAccount?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
   samples?: Resolver<
     Maybe<Array<ResolversTypes["Sample"]>>,
     ParentType,

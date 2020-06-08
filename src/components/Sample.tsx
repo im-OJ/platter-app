@@ -1,10 +1,8 @@
 import * as React from "react";
-import { Row, Tag, Button, Card, Typography, Input, Progress } from "antd";
+import { Row, Tag, Button, Card, Typography, Input } from "antd";
 import {
   DownloadOutlined,
   CheckOutlined,
-  CaretRightOutlined,
-  PauseOutlined,
 } from "@ant-design/icons";
 
 import { useState } from "react";
@@ -114,6 +112,7 @@ export const Sample = (props: Props) => {
             console.log("dragging");
             ipcRenderer.send("dragSample", {name: props.name, url: props.url});
           }}
+          onClick={() => play()}
       
       >
         <Row
@@ -121,37 +120,14 @@ export const Sample = (props: Props) => {
             display: "flex",
           }}
         >
-          <Col size={1}>
-            {playing ? (
-              <Button
-                type="default"
-                shape="circle"
-                size="small"
-                icon={<PauseOutlined />}
-                onClick={() => {
-                  pause();
-                }}
-              />
-            ) : (
-              <Button
-                type="default"
-                shape="circle"
-                size="small"
-                icon={<CaretRightOutlined size={12} />}
-                onClick={() => {
-                  play();
-                }}
-              />
-            )}
-          </Col>
           <Col size={4}>
             {!editMode ? (
-              <Typography.Paragraph
-                ellipsis
+              <Typography
+                
                 style={{ width: "100%", verticalAlign: "middle" }}
               >
                 {props.name}
-              </Typography.Paragraph>
+              </Typography>
             ) : (
               <Input
                 type="text"
@@ -205,16 +181,7 @@ export const Sample = (props: Props) => {
                 }}
               />
             ) : (
-              <Progress
-                type="circle"
-                strokeColor={{
-                  "0%": "#108ee9",
-                  "100%": "#87d068",
-                }}
-                width={32}
-                strokeWidth={12}
-                percent={props.options && props.options.progress}
-              />
+              <p>{props.options?.progress}</p>
             )}
           </Col>
         </Row>

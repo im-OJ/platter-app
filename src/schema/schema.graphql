@@ -18,11 +18,13 @@ type Mutation {
   signUp(email: String!, password: String!): FirebaseUser
   updateUser(data: UpdateUser): User
   newSample(sample: SampleInput!): Sample
+  ping: Boolean
 }
 
 type Query {
   hello: String
   me: User
+  getUser(id: String): User!
   getSamples(ids: [String!]!): Boolean
   searchSamples(tags: [String!]): [Sample!]
 }
@@ -66,7 +68,6 @@ scalar Upload
 type User {
   id: String!
   username: String
-  hasFullAccount: Boolean!
   samples: [Sample!]
 }
 
