@@ -5,16 +5,16 @@ import { Upload } from "./components/Upload";
 import _ from "lodash";
 import Start from "./components/Start";
 import Test from "./components/Test";
-import { Profile } from "./components/Profile";
+import { Profile } from "./components/MyProfile";
 
-type Location = "home" | "upload" | "start" | "test" | "profile";
+type Location = "home" | "upload" | "start" | "test" | "myProfile";
 
 const screens: Record<Location, JSX.Element> = {
   home: <Home />,
   upload: <Upload />,
   start: <Start />,
   test: <Test />,
-  profile: <Profile />,
+  myProfile: <Profile />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {

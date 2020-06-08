@@ -43,7 +43,7 @@ export const Sidebar = () => {
       </Menu.Item>
       <Menu.Item
         onClick={() => {
-          navigateTo("profile");
+          navigateTo("myProfile");
         }}
         style={{
           padding: 0,
