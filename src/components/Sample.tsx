@@ -11,11 +11,13 @@ import Howler from "react-howler";
 import { useNewSampleMutation } from "./Upload/hooks";
 import { TagInput } from "./TagInput";
 import { ipcRenderer } from "electron";
+import { useNavigateTo } from '../navigation';
 
 interface Props {
   name: string;
   url: string | undefined;
   username: string;
+  userId: string;
   tags?: Array<string>;
   options?: {
     progress?: number;
@@ -34,7 +36,8 @@ export const Sample = (props: Props) => {
   const [submit, { data, error }] = useNewSampleMutation();
 
   const tags = editTags ? editTags : props.tags;
-
+  
+  const navigateTo = useNavigateTo()
   data;
   if (error) {
     props.setError && props.setError(error.message);
@@ -157,7 +160,9 @@ export const Sample = (props: Props) => {
             )}
           </Col>
           <Col size={3}>
-            <Typography>{props.username}</Typography>
+           <div
+            onClick={() => navigateTo("myProfile")}
+           > <Typography>{props.username}</Typography> </div>
           </Col>
           <Col size={1}>
             {!editMode ? (

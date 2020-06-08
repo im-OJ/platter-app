@@ -72,6 +72,7 @@ export const Upload = () => {
           key={item.name}
           name={item.name}
           username={myUsername ?? "no username"}
+          userId={""}
           url={item.url ?? undefined}
         />
       </div>

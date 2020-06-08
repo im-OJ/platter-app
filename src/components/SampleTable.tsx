@@ -52,6 +52,7 @@ export const SampleTable = (props: Props) => {
               tags={sample.tagLink.map((tl) => tl?.name ?? "")}
               url={sample.url}
               username={sample.user.name ?? "no name"}
+              userId={sample.user.id}
             />
           );
         })}
