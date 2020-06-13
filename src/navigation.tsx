@@ -6,15 +6,18 @@ import _ from "lodash";
 import Start from "./components/Start";
 import Test from "./components/Test";
 import { Profile } from "./components/MyProfile";
+import { UserProfile } from "./components/UserProfile";
 
-type Location = "home" | "upload" | "start" | "test" | "myProfile";
+type Location = "home" | "upload" | "start" | "test" | "myProfile" | "profile";
 
-const screens: Record<Location, JSX.Element> = {
-  home: <Home />,
-  upload: <Upload />,
-  start: <Start />,
-  test: <Test />,
-  myProfile: <Profile />,
+const screens: Record<Location, (p: any) => JSX.Element | null> = {
+  home: () => <Home />,
+  upload: () => <Upload />,
+  start: () => <Start />,
+  test: () => <Test />,
+  myProfile: () => <Profile />,
+  profile: (props) =>
+    props && props.id ? <UserProfile id={props.id} /> : null,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
@@ -22,15 +25,15 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
 };
 
 export const Navigator = () => {
-  const [gLocation] = useGlobalState("location");
-  console.log("location: ", gLocation);
+  const [navDestination] = useGlobalState("navDestination");
+  const [navProps] = useGlobalState("navProps");
 
   return (
     <>
-      {_.map(screens, (component, key) => {
+      {_.map(screens, (Component, key) => {
         return (
-          <Toggle key={key} visible={gLocation === key}>
-            {component}
+          <Toggle key={key} visible={navDestination === key}>
+            <Component {...navProps} />
           </Toggle>
         );
       })}
@@ -39,10 +42,16 @@ export const Navigator = () => {
 };
 
 export const useNavigateTo = () => {
-  const [_, setGLocation] = useGlobalState("location");
+  const [_, setNavDestination] = useGlobalState("navDestination");
+  const [__, setNavProps] = useGlobalState("navProps");
   _;
-  return (destination: Location) => {
-    setGLocation(destination);
+  __;
+  return (destination: Location, props?: any) => {
+    console.log("navigating");
+    if (props) {
+      setNavProps(props);
+    }
+    setNavDestination(destination);
   };
 };
 

@@ -19,8 +19,10 @@ export const TagInput = (props: {
     return !isInput ? (
       <Tag
         className="site-tag-plus"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation()
           setIsInput(true);
+          
         }}
       >
         <PlusOutlined /> New Tag

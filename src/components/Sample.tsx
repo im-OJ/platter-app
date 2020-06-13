@@ -81,7 +81,7 @@ export const Sample = (props: Props) => {
       .then(() => setEditMode(false))
       .catch(console.error);
   };
-
+  
   return (
     <>
       {props.url && props.url.length > 4 && (
@@ -89,7 +89,6 @@ export const Sample = (props: Props) => {
           html5
           src={props.url}
           playing={playing}
-          preload
           onPlay={() => {
             console.log("playing sample");
           }}
@@ -119,6 +118,7 @@ export const Sample = (props: Props) => {
       
       >
         <Row
+          color={"#00ff00"}
           style={{
             display: "flex",
           }}
@@ -142,6 +142,11 @@ export const Sample = (props: Props) => {
             )}
           </Col>
           <Col size={4}>
+            <div
+            onClick={e => {
+              e.stopPropagation()
+            }}>
+            
             {!editMode ? (
               tags ? (
                 tags.map((t) => {
@@ -158,11 +163,17 @@ export const Sample = (props: Props) => {
                 }}
               />
             )}
+            </div>
           </Col>
           <Col size={3}>
            <div
-            onClick={() => navigateTo("myProfile")}
-           > <Typography>{props.username}</Typography> </div>
+            onClick={(e) => {
+              e.stopPropagation()
+              navigateTo("profile", {
+                id: props.userId
+              })}}
+            
+           > <Button type={"link"}>{props.username}</Button> </div>
           </Col>
           <Col size={1}>
             {!editMode ? (
@@ -171,7 +182,8 @@ export const Sample = (props: Props) => {
                 size="small"
                 shape="circle"
                 icon={<DownloadOutlined />}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   ipcRenderer.send("download-item", { url: props.url });
                 }}
               />
@@ -181,7 +193,8 @@ export const Sample = (props: Props) => {
                 size="small"
                 shape="circle"
                 icon={<CheckOutlined />}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation()
                   submitSample();
                 }}
               />

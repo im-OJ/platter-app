@@ -27,7 +27,11 @@ const userQuery = gql`
   }
 `;
 
-export const UserProfile = (props: {id: string}) => {
+export type UserProfileProps = {
+  id: string
+}
+
+export const UserProfile = (props: UserProfileProps) => {
   const { data } = useQuery<Query, QueryGetUserArgs>(userQuery, {
     variables: {
       id: props.id

@@ -15,7 +15,8 @@ import { StatusBar } from "../components/StatusBar/StatusBar";
 import { siderWidth } from "../theme";
 
 export const { useGlobalState } = createGlobalState({
-  location: "start",
+  navDestination: "start",
+  navProps: {},
 });
 
 const isProd = !require("electron-is-dev");
