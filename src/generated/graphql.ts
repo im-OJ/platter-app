@@ -36,6 +36,12 @@ export type FirebaseUser = {
   email?: Maybe<Scalars["String"]>;
 };
 
+export type HomePage = {
+  __typename?: "HomePage";
+  text: Scalars["String"];
+  samples?: Maybe<Array<Sample>>;
+};
+
 export type Mutation = {
   __typename?: "Mutation";
   signUp?: Maybe<FirebaseUser>;
@@ -64,6 +70,7 @@ export type Query = {
   getUser: User;
   getSamples?: Maybe<Scalars["Boolean"]>;
   searchSamples?: Maybe<Array<Sample>>;
+  home?: Maybe<HomePage>;
 };
 
 export type QueryGetUserArgs = {
@@ -241,6 +248,7 @@ export type ResolversTypes = {
   CacheControlScope: CacheControlScope;
   File: ResolverTypeWrapper<File>;
   FirebaseUser: ResolverTypeWrapper<FirebaseUser>;
+  HomePage: ResolverTypeWrapper<HomePage>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   Sample: ResolverTypeWrapper<Sample>;
@@ -262,6 +270,7 @@ export type ResolversParentTypes = {
   CacheControlScope: CacheControlScope;
   File: File;
   FirebaseUser: FirebaseUser;
+  HomePage: HomePage;
   Mutation: {};
   Query: {};
   Sample: Sample;
@@ -302,6 +311,19 @@ export type FirebaseUserResolvers<
 > = {
   id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: isTypeOfResolverFn<ParentType>;
+};
+
+export type HomePageResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["HomePage"] = ResolversParentTypes["HomePage"]
+> = {
+  text?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  samples?: Resolver<
+    Maybe<Array<ResolversTypes["Sample"]>>,
+    ParentType,
+    ContextType
+  >;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
@@ -354,6 +376,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySearchSamplesArgs, never>
   >;
+  home?: Resolver<Maybe<ResolversTypes["HomePage"]>, ParentType, ContextType>;
 };
 
 export type SampleResolvers<
@@ -433,6 +456,7 @@ export type UserLinkResolvers<
 export type Resolvers<ContextType = any> = {
   File?: FileResolvers<ContextType>;
   FirebaseUser?: FirebaseUserResolvers<ContextType>;
+  HomePage?: HomePageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Sample?: SampleResolvers<ContextType>;
