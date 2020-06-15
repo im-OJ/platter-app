@@ -1,21 +1,41 @@
 import * as React from "react";
-import { Form, Input, Typography } from "antd";
+import { Form, Typography } from "antd";
 import { Page } from "../Page";
-import { useSetting } from "../../helpers/settings";
+import { useSettings, Settings } from "../../helpers/settings";
 
-export type Settings = {
-  downloadFolder: string;
-};
-
-export const Settings = (props: any) => {
-  const [downloadFolder] = useSetting("downloadFolder");
+export const SettingsPage = () => {
+  const settings = useSettings();
+  const settingNames = Object.keys(settings) as Array<keyof Settings>;
+  console.log("SETTINGS NAMES:", settingNames);
+  if (!settings || !settingNames) {
+    return null;
+  }
   return (
     <Page>
       <Form>
-        <Form.Item>
-          <Typography>path: {downloadFolder}</Typography>
-          <Input type="text" />
-        </Form.Item>
+        {settings
+          ? settingNames.map((name) => {
+              console.log("got setting of type", typeof settings[name]);
+              let ele = null;
+              switch (typeof settings[name]) {
+                case "string":
+                  ele = (
+                    <Typography>
+                      {name} : {settings[name]}
+                    </Typography>
+                  );
+                  break;
+                  case "boolean":
+                    ele = (
+                      <Typography>
+                        {name} : {settings[name]?.toString()}
+                      </Typography>
+                    );
+                    break;
+              }
+              return ele;
+            })
+          : null}
       </Form>
     </Page>
   );

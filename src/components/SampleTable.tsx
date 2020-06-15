@@ -27,16 +27,12 @@ const sampleQuery = gql`
 export const SampleTable = (props: Props) => {
   console.log("new props", props.tags);
 
-  const { data, error } = useQuery<Query, QuerySearchSamplesArgs>(sampleQuery, {
+  const { data } = useQuery<Query, QuerySearchSamplesArgs>(sampleQuery, {
     variables: {
       tags: props.tags,
     },
     skip: !props.tags,
   });
-
-  if (error) {
-    console.log(error);
-  }
 
   const samples = data ? data.searchSamples : props.samples
   return (

@@ -7,7 +7,7 @@ import Start from "./components/Start";
 import Test from "./components/Test";
 import { Profile } from "./components/MyProfile";
 import { UserProfile } from "./components/UserProfile";
-import { Settings } from "./components/Settings/Settings";
+import { SettingsPage } from "./components/Settings/Settings";
 
 type Location =
   | "home"
@@ -26,7 +26,7 @@ const screens: Record<Location, (p: any) => JSX.Element | null> = {
   myProfile: () => <Profile />,
   profile: (props) =>
     props && props.id ? <UserProfile id={props.id} /> : null,
-  settings: () => <Settings />,
+  settings: () => <SettingsPage />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
@@ -56,7 +56,6 @@ export const useNavigateTo = () => {
   _;
   __;
   return (destination: Location, props?: any) => {
-    console.log("navigating");
     if (props) {
       setNavProps(props);
     }

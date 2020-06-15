@@ -1,11 +1,11 @@
 import settings from "electron-settings";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { remote } from "electron";
 import _ from "lodash";
 
 const app = remote.app;
 
-type Settings = {
+export type Settings = {
   downloadFolder: string;
   autoLogin: boolean;
 };
@@ -49,4 +49,19 @@ export const useSetting = (name: keyof Settings) => {
     originalValue,
     (value: string) => settings.set(name, value).then(() => setValue(value)),
   ];
+};
+
+export const useSettings = (): Partial<Settings> => {
+  const names = Object.keys(defaultSettings) as Array<keyof Settings>;
+  const [response, setResponse] = useState({});
+  useEffect(() => {
+    names.map(async (name) => {
+      const value = await settings.get(name);
+      let mySettings: Record<string, any> = defaultSettings;
+      mySettings[name] = value;
+      setResponse({ ...response, ...mySettings });
+    });
+  }, []);
+
+  return response;
 };

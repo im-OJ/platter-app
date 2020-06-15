@@ -42,10 +42,8 @@ export const Sample = (props: Props) => {
   }
   const uploadDone =
     props.options && props.options.progress == 100 && props.url;
-  console.log(props.options, uploadDone);
   const play = () => {
     if (props.url) {
-      console.log("playing", props.url);
       setPlaying(true);
     } else {
       console.error("no url");

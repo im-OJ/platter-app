@@ -27,7 +27,7 @@ export const Upload = () => {
       uploader(files[0]);
     }
   };
-  console.log("item: " + item);
+
   return (
     <Page>
       <div

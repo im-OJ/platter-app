@@ -40,7 +40,6 @@ export const Home = () => {
           <TagInput
             addTags={tags}
             onTagsChange={(tags) => {
-              console.log("tags changed", tags);
               setTags(tags);
             }}
           />
