@@ -1,8 +1,9 @@
-import { app, BrowserWindow, IpcMainEvent } from "electron";
+import { app, BrowserWindow } from "electron";
 declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
-const { ipcMain } = require("electron");
+
 
 import electronDl from "electron-dl";
+import { receiver } from "./receiver";
 electronDl();
 const prodView = true;
 
@@ -50,6 +51,7 @@ const createWindow = () => {
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY).then(() => {
+    loadingWindow?.hide()
     mainWindow?.show()
   });
 
@@ -68,67 +70,12 @@ const createWindow = () => {
     mainWindow = null;
   });
 };
-ipcMain.on(
-  "ready", () => {
-    // loadingWindow.hide()
-    BrowserWindow.getAllWindows().map(window => {
-      if(window.getTitle() === "Loading"){
-        window.hide()
-        window.close()
-      }else{
-        window.show()
-        window.setAlwaysOnTop(true)
-        window.setAlwaysOnTop(false)
-      }
-      
-    })
-  })
-ipcMain.on(
-  "dragSample",
-  async (event: IpcMainEvent, file: { name: string; url: string }) => {
-    const iconUrl =
-      "https://icons.iconarchive.com/icons/xenatt/the-circle/512/Folder-Music-icon.png";
 
-    const window = BrowserWindow.getFocusedWindow();
-    if (!window) {
-      return;
-    }
-   
-    // download icon
-    await electronDl
-      .download(window, iconUrl, {
-        directory: __dirname,
-        filename: "icon.png",
-      })
-      .catch(() => {
-        throw new Error("problem downloading icon");
-      });
-
-    // download sample
-    const downloaded = await electronDl
-      .download(window, file.url, {
-        directory: __dirname,
-        filename: file.name,
-      })
-      .catch(() => {
-        throw new Error("problem downloading sample");
-      });
-    console.log("download complete");
-    event.sender.startDrag({
-      file: `${__dirname}/` + file.name,
-      icon: `${__dirname}/icon.png`,
-    });
-    console.log(JSON.stringify(downloaded));
-  }
-);
-
-ipcMain.on("download-item", (event: any, fileUrl: string) => {
-  console.log("download");
-});
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
+
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
@@ -146,3 +93,6 @@ app.on("activate", () => {
     createWindow();
   }
 });
+
+receiver()
+

@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { FirebaseForm } from "./FirebaseForm";
 import { useKeytar } from "../../helpers/keytar";
 import { useRefetch } from "../../hooks";
-import { ipcRenderer } from "electron";
+import { ready } from "../../helpers/remote";
+
 export const Login = (props: { onComplete: () => void }) => {
   const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");
   const { value: storedPass, setValue: setStoredPass } = useKeytar("password");
@@ -15,12 +16,11 @@ export const Login = (props: { onComplete: () => void }) => {
   const refetch = useRefetch(["StatusBarMe"]);
   useEffect(() => {
     if (storedEmail && storedPass) {
+      ready()
       signIn({
         email: storedEmail,
         pass: storedPass,
       });
-    }else{
-      ipcRenderer.send("ready");
     }
   }, [storedEmail, storedPass]);
 
@@ -48,12 +48,10 @@ export const Login = (props: { onComplete: () => void }) => {
       setStoredPass(p.pass);
       setLoggedIn(true);
       console.log("refetching");
-      ipcRenderer.send("ready");
       refetch();
     },
     onFail: () => {
-      setErrorMessage("Sign in failed, check connection");
-      ipcRenderer.send("ready");
+      setErrorMessage("Sign in failed");
       console.log("sign in failed")
       setStoredEmail(null);
       setStoredPass(null);

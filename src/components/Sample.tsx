@@ -4,14 +4,12 @@ import {
   DownloadOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
-
 import { useState } from "react";
 import Howler from "react-howler";
-
 import { useNewSampleMutation } from "./Upload/hooks";
 import { TagInput } from "./TagInput";
-import { ipcRenderer } from "electron";
 import { useNavigateTo } from '../navigation';
+import { downloadItem, dragSample } from "../helpers/remote";
 
 interface Props {
   name: string;
@@ -112,7 +110,9 @@ export const Sample = (props: Props) => {
         draggable
           onDragStart={() => {
             console.log("dragging");
-            ipcRenderer.send("dragSample", {name: props.name, url: props.url});
+            if(props.url){
+              dragSample({name: props.name, url: props.url});
+            }
           }}
           onClick={() => play()}
       
@@ -184,7 +184,11 @@ export const Sample = (props: Props) => {
                 icon={<DownloadOutlined />}
                 onClick={(e) => {
                   e.stopPropagation()
-                  ipcRenderer.send("download-item", { url: props.url });
+                  if(props.url){
+                    downloadItem({ url: props.url ?? "" })
+                  }else{
+                    console.error("Tried to download sample with no URL")
+                  }
                 }}
               />
             ) : uploadDone ? (

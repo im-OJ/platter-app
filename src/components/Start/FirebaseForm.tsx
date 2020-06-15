@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Input, Checkbox, Button, Typography } from "antd";
+import { Form, Input, Button, Typography } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
@@ -60,21 +60,6 @@ export const FirebaseForm = (props: {
             setPassValue(e.target.value);
           }}
         />
-      </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a
-          className="login-form-forgot"
-          href=""
-          style={{
-            float: "right",
-          }}
-        >
-          Forgot password
-        </a>
       </Form.Item>
 
       <Form.Item>

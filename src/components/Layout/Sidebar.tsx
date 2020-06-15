@@ -1,6 +1,11 @@
 import * as React from "react";
 import { Menu } from "antd";
-import { HomeOutlined, UploadOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  UploadOutlined,
+  UserOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import { useNavigateTo } from "../../navigation";
 import { siderWidth } from "../../theme";
 
@@ -52,6 +57,19 @@ export const Sidebar = () => {
       >
         <UserOutlined size={iconSize} />
         <span className="nav-text">Profile</span>
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          navigateTo("settings");
+        }}
+        style={{
+          padding: 0,
+          bottom: 0,
+        }}
+        key="4"
+      >
+        <SettingOutlined size={iconSize} />
+        <span className="nav-text">Settings</span>
       </Menu.Item>
     </Menu>
   );

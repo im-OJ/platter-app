@@ -13,6 +13,7 @@ import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
 import { StatusBar } from "../components/StatusBar/StatusBar";
 import { siderWidth } from "../theme";
+import { useInitSettings } from "../helpers/settings";
 
 export const { useGlobalState } = createGlobalState({
   navDestination: "start",
@@ -31,16 +32,16 @@ const onStart = () => {
 export const App = () => {
   const getContext = useGetContext();
   const { Sider, Content } = Layout;
-
+  const initSettings = useInitSettings();
   const { setValue: setToken } = useKeytar("token");
-
   useEffect(() => {
     console.log("setting token to null");
     setToken(null);
+    initSettings();
+
     onStart();
   }, []);
 
-  console.log("api: ", config.apiUrl);
   const httpLink = createHttpLink({
     uri: config.apiUrl,
   });

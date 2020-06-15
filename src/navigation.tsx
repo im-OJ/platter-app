@@ -7,8 +7,16 @@ import Start from "./components/Start";
 import Test from "./components/Test";
 import { Profile } from "./components/MyProfile";
 import { UserProfile } from "./components/UserProfile";
+import { Settings } from "./components/Settings/Settings";
 
-type Location = "home" | "upload" | "start" | "test" | "myProfile" | "profile";
+type Location =
+  | "home"
+  | "upload"
+  | "start"
+  | "test"
+  | "myProfile"
+  | "profile"
+  | "settings";
 
 const screens: Record<Location, (p: any) => JSX.Element | null> = {
   home: () => <Home />,
@@ -18,6 +26,7 @@ const screens: Record<Location, (p: any) => JSX.Element | null> = {
   myProfile: () => <Profile />,
   profile: (props) =>
     props && props.id ? <UserProfile id={props.id} /> : null,
+  settings: () => <Settings />,
 };
 
 const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
