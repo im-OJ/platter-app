@@ -4,8 +4,11 @@ import electronDl from "electron-dl";
 export const receiver = () => {
   ipcMain.on("ready", () => {
     // loadingWindow.hide()
+    console.log("ready");
     BrowserWindow.getAllWindows().map((window) => {
-      if (window.getTitle() === "Loading") {
+      console.log(window.getTitle());
+      // this should be smarter
+      if (window.getTitle() != "Platter") {
         console.log("closing loading window");
         window.hide();
         window.close();
@@ -26,7 +29,6 @@ export const receiver = () => {
       if (!window) {
         return;
       }
-
       // download icon
       await electronDl
         .download(window, iconUrl, {
