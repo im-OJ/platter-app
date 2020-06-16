@@ -17,6 +17,7 @@ interface Props {
   url: string | undefined;
   username: string;
   userId: string;
+  filetype: string;
   tags?: Array<string>;
   options?: {
     progress?: number;
@@ -72,6 +73,7 @@ export const Sample = (props: Props) => {
           name: editName,
           url: props.url,
           tagText: editTags,
+          fileType: props.filetype
         },
       },
     })
@@ -125,7 +127,6 @@ export const Sample = (props: Props) => {
           <Col size={4}>
             {!editMode ? (
               <Typography
-                
                 style={{ width: "100%", verticalAlign: "middle" }}
               >
                 {props.name}
@@ -139,6 +140,13 @@ export const Sample = (props: Props) => {
                 onChange={(c) => setEditName(c.target.value)}
               />
             )}
+          </Col>
+          <Col size={1}>
+              <Typography
+                style={{ width: "100%", verticalAlign: "middle" }}
+              >
+                {props.filetype}
+              </Typography>
           </Col>
           <Col size={4}>
             <div

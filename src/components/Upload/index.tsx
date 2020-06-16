@@ -68,6 +68,7 @@ export const Upload = () => {
             progress: item.progress,
             initalUpload: true,
           }}
+          filetype={item.filetype}
           setError={setError}
           key={item.name}
           name={item.name}

@@ -42,12 +42,14 @@ type Sample {
   downloads: Int!
   user: UserLink!
   url: String
+  filetype: String!
 }
 
 input SampleInput {
   tagText: [String!]
   url: String!
   name: String!
+  fileType: String!
 }
 
 type Tag {

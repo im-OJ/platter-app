@@ -15,6 +15,7 @@ const homeQuery = gql`
       text
       samples {
         name
+        filetype
         tagLink {
           name
         }

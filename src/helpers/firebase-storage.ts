@@ -11,6 +11,7 @@ export type FileUploadState = {
   progress: number;
   url: string | null;
   id: string;
+  filetype: string;
 };
 
 export const useFileUploader = (
@@ -24,6 +25,7 @@ export const useFileUploader = (
   const [url, setUrl] = useState<string | null>(null);
   const [isBusy, setIsBusy] = useState(false);
   const [name, setName] = useState("");
+  const [filetype, setFiletype] = useState("");
 
   return {
     uploader: (uploadFile) => {
@@ -31,8 +33,12 @@ export const useFileUploader = (
       if (!file) {
         return;
       }
-
-      setName(file.name);
+      console.log(file.name.match(/\./g));
+      if ((file.name.match(/\./g) || []).length != 1) {
+        throw new Error("bad file type");
+      }
+      setName(file.name.split(".")[0]);
+      setFiletype(file.name.split(".")[1]);
       const myPathPrefix = pathPrefix.replace("/", "").replace(".", "");
       const uploadTask = storage()
         .ref(myPathPrefix + "/" + file.name)
@@ -61,7 +67,7 @@ export const useFileUploader = (
         setIsBusy(false);
       });
     },
-    item: { progress: Math.round(progress), name, url, id: "todo" },
+    item: { progress: Math.round(progress), name, url, filetype, id: "todo" },
     isBusy,
   };
 };
@@ -113,10 +119,11 @@ export const useUploadFiles = (
     }
     const i: Array<FileUploadState> = myFiles.reverse().map((f) => {
       return {
-        name: f.name,
+        name: f.name.split(".")[0],
         progress: 0,
         url: null,
         id: "",
+        filetype: f.name.split(".")[1],
       };
     });
     // todo next: make i not include things already in items

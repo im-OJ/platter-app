@@ -12,6 +12,7 @@ const sampleQuery = gql`
   query SampleTableSearch($tags: [String!]) {
     searchSamples(tags: $tags) {
       name
+      filetype
       tagLink {
         name
       }
@@ -47,6 +48,7 @@ export const SampleTable = (props: Props) => {
               name={sample.name}
               tags={sample.tagLink.map((tl) => tl?.name ?? "")}
               url={sample.url}
+              filetype = {sample.filetype}
               username={sample.user.name ?? "no name"}
               userId={sample.user.id}
             />

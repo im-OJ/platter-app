@@ -93,12 +93,14 @@ export type Sample = {
   downloads: Scalars["Int"];
   user: UserLink;
   url?: Maybe<Scalars["String"]>;
+  filetype: Scalars["String"];
 };
 
 export type SampleInput = {
   tagText?: Maybe<Array<Scalars["String"]>>;
   url: Scalars["String"];
   name: Scalars["String"];
+  fileType: Scalars["String"];
 };
 
 export type Tag = {
@@ -393,6 +395,7 @@ export type SampleResolvers<
   downloads?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   user?: Resolver<ResolversTypes["UserLink"], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  filetype?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   __isTypeOf?: isTypeOfResolverFn<ParentType>;
 };
 
