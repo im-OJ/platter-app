@@ -192,7 +192,7 @@ export const Sample = (props: Props) => {
                 onClick={(e) => {
                   e.stopPropagation()
                   if(props.url){
-                    downloadItem({ url: props.url ?? "", path: downloadPath as string, name: props.name })
+                    downloadItem({ url: props.url ?? "", path: downloadPath as string, name: props.name + "." + props.filetype })
                   }else{
                     console.error("Tried to download sample with no URL")
                   }
