@@ -6,12 +6,11 @@ export const receiver = () => {
     // loadingWindow.hide()
     console.log("ready");
     BrowserWindow.getAllWindows().map((window) => {
-      console.log(window.getTitle());
       // this should be smarter
       if (window.getTitle() != "Platter") {
         console.log("closing loading window");
-        window.hide();
-        window.close();
+        // window.hide();
+        // window.close();
       } else {
         window.show();
         window.setAlwaysOnTop(true);

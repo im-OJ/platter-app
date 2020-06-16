@@ -6,7 +6,8 @@ import electronDl from "electron-dl";
 import { receiver } from "./receiver";
 electronDl();
 const prodView = true;
-
+import fs from "fs"
+import { loading } from "./loading";
 // require("update-electron-app")();
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -34,7 +35,7 @@ const createWindow = () => {
   });
 
   const loadingWindow = new BrowserWindow({
-    width: 100,
+    width: 200,
     height: 300,
     frame: false,
     title: "Loading",
@@ -47,7 +48,14 @@ const createWindow = () => {
 
 
   console.log(MAIN_WINDOW_WEBPACK_ENTRY)
-  loadingWindow.loadURL("https://codepen.io/juliangarnier/full/XvjWvx")
+  // @ts-ignore
+  fs.writeFile(__dirname + "/" + "loading.html", loading,() => {
+    console.log("loading file created")
+    loadingWindow.loadFile(__dirname + "/" + "loading.html")
+  })
+
+  
+  // loadingWindow.loadURL("https://codepen.io/juliangarnier/full/XvjWvx")
   
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY).then(() => {
