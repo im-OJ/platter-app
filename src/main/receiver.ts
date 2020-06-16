@@ -55,7 +55,24 @@ export const receiver = () => {
     }
   );
 
-  ipcMain.on("download-item", (event: any, fileUrl: string) => {
-    console.log("download");
+  ipcMain.on("download-item", async (event: any, p) => {
+    const window = BrowserWindow.getFocusedWindow();
+    if (!window) {
+      return;
+    }
+    const { url, path, name } = p;
+    url;
+    console.log("download", path);
+    await electronDl
+      .download(window, url, {
+        directory: path,
+        filename: name,
+      })
+      .then(() => {
+        console.log("download complete");
+      })
+      .catch(() => {
+        throw new Error("problem downloading sample");
+      });
   });
 };

@@ -10,6 +10,7 @@ import { useNewSampleMutation } from "./Upload/hooks";
 import { TagInput } from "./TagInput";
 import { useNavigateTo } from '../navigation';
 import { downloadItem, dragSample } from "../helpers/remote";
+import { useSetting } from "../helpers/settings";
 
 interface Props {
   name: string;
@@ -32,7 +33,7 @@ export const Sample = (props: Props) => {
   const [editName, setEditName] = useState(props.name);
   const [editTags, setEditTags] = useState<Array<string>>();
   const [submit, { data, error }] = useNewSampleMutation();
-
+  const [downloadPath] = useSetting("downloadFolder")
   const tags = editTags ? editTags : props.tags;
   
   const navigateTo = useNavigateTo()
@@ -183,7 +184,7 @@ export const Sample = (props: Props) => {
                 onClick={(e) => {
                   e.stopPropagation()
                   if(props.url){
-                    downloadItem({ url: props.url ?? "" })
+                    downloadItem({ url: props.url ?? "", path: downloadPath as string, name: props.name })
                   }else{
                     console.error("Tried to download sample with no URL")
                   }
