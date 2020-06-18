@@ -5,6 +5,7 @@ import { Card, Modal } from "antd";
 import { Login } from "./Login";
 import { useNavigateTo } from "../../navigation";
 import { useState } from "react";
+import { ready } from "../../helpers/remote";
 
 const AbsoluteFull = styled(Card)`
   position: fixed;
@@ -24,11 +25,16 @@ const Start = () => {
       <Modal
         title={null}
         footer={null}
+        bodyStyle={{
+          display: "flex",
+          minHeight: 150,
+        }}
         visible={modalVisible}
         centered
-        width={350}
         closable={false}
-        afterClose={() => {}}
+        afterClose={() => {
+          ready();
+        }}
       >
         <Login
           onComplete={() => {

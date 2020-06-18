@@ -5,24 +5,32 @@ import { FirebaseForm } from "./FirebaseForm";
 import { useKeytar } from "../../helpers/keytar";
 import { useRefetch } from "../../hooks";
 import { ready } from "../../helpers/remote";
+import { Spin } from "antd";
 
 export const Login = (props: { onComplete: () => void }) => {
-  const { value: storedEmail, setValue: setStoredEmail } = useKeytar("email");
-  const { value: storedPass, setValue: setStoredPass } = useKeytar("password");
+  const { value: storedEmail, setValue: setStoredEmail, loading: loadingEmail } = useKeytar("email");
+  const { value: storedPass, setValue: setStoredPass, loading: loadingPass } = useKeytar("password");
   const { setValue: setStoredToken } = useKeytar("token");
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [showForm, setShowForm] = useState(false)
   const [signUpMutation, { error, data }] = useSignUpMutation();
   const refetch = useRefetch(["StatusBarMe"]);
   useEffect(() => {
     if (storedEmail && storedPass) {
-      ready()
       signIn({
         email: storedEmail,
         pass: storedPass,
       });
+    }else{
+      
+      console.log("showing form no stored details")
+      if(!loadingEmail && !loadingPass){
+        ready();
+        setShowForm(true)
+      }
     }
-  }, [storedEmail, storedPass]);
+  }, [storedEmail, storedPass, loadingEmail, loadingPass]);
 
   const signUp = (p: { email: string; pass: string }) => {
     setStoredEmail(null), setStoredPass(null), setStoredToken(null);
@@ -47,6 +55,7 @@ export const Login = (props: { onComplete: () => void }) => {
       setStoredEmail(p.email);
       setStoredPass(p.pass);
       setLoggedIn(true);
+      setShowForm(false)
       console.log("refetching");
       refetch();
     },
@@ -56,6 +65,8 @@ export const Login = (props: { onComplete: () => void }) => {
       setStoredEmail(null);
       setStoredPass(null);
       setLoggedIn(false);
+      setShowForm(true)
+      ready();
     },
   });
 
@@ -71,7 +82,9 @@ export const Login = (props: { onComplete: () => void }) => {
   if (error && errorMessage !== error.message) {
     setErrorMessage(error.message);
   }
-
+  if(!showForm){
+    return <Spin />
+  }
   return (
     <FirebaseForm
       onSignInSubmit={(email, pass) => signIn({ email, pass })}

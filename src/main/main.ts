@@ -40,7 +40,6 @@ const createWindow = () => {
     frame: false,
     title: "Loading",
     backgroundColor: "#fff",
-    // frame: false,
     webPreferences: {
       nodeIntegration: true,
     },

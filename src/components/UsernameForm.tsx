@@ -29,7 +29,7 @@ export const UsernameForm = (props: { onComplete?: () => void }) => {
   };
   return (
     <Modal
-      title={null}
+      title={"Set your username"}
       footer={null}
       visible={visible}
       centered

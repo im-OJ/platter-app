@@ -37,7 +37,6 @@ export const App = () => {
   useEffect(() => {
     setToken(null);
     initSettings();
-
     onStart();
   }, []);
 

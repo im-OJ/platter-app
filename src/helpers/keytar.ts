@@ -19,20 +19,28 @@ export const useKeytar = (
   value: string | undefined;
   setValue: (value: string | null) => void;
   refresh: () => void;
+  loading: boolean;
 } => {
   const [value, setValue] = useState<string>();
-
-  const refresh = () =>
-    getKeytar(name).then((e) => {
-      if (e) {
-        setValue(e);
-      }
-    });
+  const [loading, setLoading] = useState(true);
+  const refresh = () => {
+    getKeytar(name)
+      .then((e) => {
+        if (e) {
+          setValue(e);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
 
   refresh();
   return {
     value,
     setValue: (value: string | null) => setKeytar(name, value),
     refresh,
+    loading,
   };
 };
