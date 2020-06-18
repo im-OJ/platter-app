@@ -1,3 +1,5 @@
+import "antd/dist/antd.compact.css";
+import firebase from "firebase";
 import * as React from "react";
 import { Navigator } from "../navigation";
 import { Layout } from "antd";
@@ -7,8 +9,6 @@ import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
-import firebase from "firebase";
-import "antd/dist/antd.compact.css";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
 import { StatusBar } from "../components/StatusBar/StatusBar";

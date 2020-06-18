@@ -25,11 +25,8 @@ const Start = () => {
       <Modal
         title={null}
         footer={null}
-        bodyStyle={{
-          display: "flex",
-          minHeight: 150,
-        }}
         visible={modalVisible}
+        width={250}
         centered
         closable={false}
         afterClose={() => {
