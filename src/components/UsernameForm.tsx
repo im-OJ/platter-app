@@ -4,7 +4,7 @@ import { UserOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { Mutation, MutationUpdateUserArgs } from "../generated/graphql";
 import { useMutation, gql } from "@apollo/client";
-export const UsernameForm = (props: any) => {
+export const UsernameForm = (props: { onComplete?: () => void }) => {
   const [username, setUsername] = useState<string>();
   const [error, setError] = useState<string>();
   const [visible, setVisible] = useState(true);
@@ -16,9 +16,11 @@ export const UsernameForm = (props: any) => {
           username: username,
         },
       },
+      refetchQueries: ["StatusBarMe"],
     })
       .then(() => {
         console.log("done");
+        props.onComplete && props.onComplete();
         setVisible(false);
       })
       .catch((e) => {

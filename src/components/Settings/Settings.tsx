@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Form, Typography } from "antd";
+import { Form, Typography, Button } from "antd";
 import { Page } from "../Page";
-import { useSettings, Settings } from "../../helpers/settings";
+import { useSettings, Settings, useSetDefaultSettings } from '../../helpers/settings';
 
 export const SettingsPage = () => {
   const settings = useSettings();
+  const reset = useSetDefaultSettings()
   const settingNames = Object.keys(settings) as Array<keyof Settings>;
-  console.log("SETTINGS NAMES:", settingNames);
   if (!settings || !settingNames) {
     return null;
   }
@@ -15,7 +15,7 @@ export const SettingsPage = () => {
       <Form>
         {settings
           ? settingNames.map((name) => {
-              console.log("got setting of type", typeof settings[name]);
+              console.log("got setting " + name + ":", settings[name]);
               let ele = null;
               switch (typeof settings[name]) {
                 case "string":
@@ -36,6 +36,12 @@ export const SettingsPage = () => {
               return ele;
             })
           : null}
+          <Button 
+            onClick={() => {
+            reset() 
+          }}>
+            Reset
+          </Button>
       </Form>
     </Page>
   );

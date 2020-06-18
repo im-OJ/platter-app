@@ -35,7 +35,6 @@ export const App = () => {
   const initSettings = useInitSettings();
   const { setValue: setToken } = useKeytar("token");
   useEffect(() => {
-    console.log("setting token to null");
     setToken(null);
     initSettings();
 

@@ -35,7 +35,7 @@ export const UserProfile = (props: UserProfileProps) => {
   const { data } = useQuery<Query, QueryGetUserArgs>(userQuery, {
     variables: {
       id: props.id
-    }
+    },
   });
 
   if (!data || !data.getUser) {

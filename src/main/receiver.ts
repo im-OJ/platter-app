@@ -9,8 +9,8 @@ export const receiver = () => {
       // this should be smarter
       if (window.getTitle() != "Platter") {
         console.log("closing loading window");
-        // window.hide();
-        // window.close();
+        window.hide();
+        window.close();
       } else {
         window.show();
         window.setAlwaysOnTop(true);

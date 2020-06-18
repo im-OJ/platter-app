@@ -45,10 +45,14 @@ const UsernameMenu = (props: { children: JSX.Element }) => {
 };
 
 export const StatusBar = () => {
-  const { data, loading } = useQuery<Query>(meQuery);
+  const { data, loading, refetch } = useQuery<Query>(meQuery);
+  if(loading){
+    
+  }
+  console.log(data && data?.me?.username)
   return (
     <>
-      {data && !data?.me?.username && <UsernameForm />}
+      {data && !data?.me?.username && <UsernameForm onComplete={() => {refetch()}}/>}
       <div
         style={{
           position: "fixed",

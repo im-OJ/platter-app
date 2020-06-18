@@ -10,21 +10,21 @@ export type Settings = {
   autoLogin: boolean;
 };
 
-type DefaultSettings = Record<keyof Settings, any>;
+type DefaultSettings = Record<keyof Settings, () => any>;
+
 const defaultSettings: DefaultSettings = {
   downloadFolder: () => {
-    console.log("downloads folder: " + app.getPath("downloads"));
-    return app.getPath("downloads");
+    const path = app.getPath("downloads");
+    return path;
   },
   autoLogin: () => {
-    return true;
+    return false;
   },
 };
 
 export const useInitSettings = () => {
   const names = Object.keys(defaultSettings) as Array<keyof Settings>;
   return () => {
-    console.log("initialising settings");
     names.map((name) => {
       settings.get(name).then((val) => {
         if (!val) {
@@ -36,6 +36,19 @@ export const useInitSettings = () => {
           console.log("has setting", val);
         }
       });
+    });
+  };
+};
+
+export const useSetDefaultSettings = () => {
+  const names = Object.keys(defaultSettings) as Array<keyof Settings>;
+  console.log(JSON.stringify(defaultSettings), names);
+  return () => {
+    names.map((name) => {
+      settings
+        .set(name, defaultSettings[name]())
+        .then(() => console.log("Set default setting", name))
+        .catch((e) => console.error(e));
     });
   };
 };
