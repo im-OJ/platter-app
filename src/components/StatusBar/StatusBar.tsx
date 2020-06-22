@@ -46,9 +46,7 @@ const UsernameMenu = (props: { children: JSX.Element }) => {
 
 export const StatusBar = () => {
   const { data, loading, refetch } = useQuery<Query>(meQuery);
-  if(loading){
-    
-  }
+
   console.log(data && data?.me?.username)
   return (
     <>
@@ -61,7 +59,6 @@ export const StatusBar = () => {
           borderColor: "black",
           borderTopWidth: 2,
           height: 24,
-
           width: "100%",
         }}
       >
@@ -70,11 +67,13 @@ export const StatusBar = () => {
             {!loading ? (
               <UsernameMenu>
                 <Typography style={{ color: "white" }}>
-                  <UserOutlined /> {data?.me?.username}
+                  <UserOutlined onClick={() => refetch()}/> {data?.me?.username}
                 </Typography>
               </UsernameMenu>
             ) : (
-              <Typography>Loading</Typography>
+              <Typography 
+              style={{color: "white"}}
+              >Loading</Typography>
             )}
           </Col>
           <Col size={8}>

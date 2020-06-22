@@ -33,7 +33,9 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
   return <div hidden={!props.visible}>{props.children}</div>;
 };
 
-export const Navigator = () => {
+export const Navigator = (props: {
+  onNavigate?: (destination: Location) => void;
+}) => {
   const [navDestination] = useGlobalState("navDestination");
   const [navProps] = useGlobalState("navProps");
 

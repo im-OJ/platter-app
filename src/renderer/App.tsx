@@ -3,7 +3,7 @@ import firebase from "firebase";
 import * as React from "react";
 import { Navigator } from "../navigation";
 import { Layout } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createGlobalState } from "react-hooks-global-state";
 import { setContext } from "apollo-link-context";
 import { createHttpLink } from "apollo-link-http";
@@ -34,6 +34,8 @@ export const App = () => {
   const { Sider, Content } = Layout;
   const initSettings = useInitSettings();
   const { setValue: setToken } = useKeytar("token");
+  const [navs, setNavs] = useState(0);
+
   useEffect(() => {
     setToken(null);
     initSettings();
@@ -82,7 +84,12 @@ export const App = () => {
               className="site-layout-background"
               style={{ padding: 0, textAlign: "center" }}
             >
-              <Navigator />
+              <Navigator
+                onNavigate={() => {
+                  // This is just here to refresh this component on nav
+                  setNavs(navs + 1);
+                }}
+              />
             </div>
           </Content>
         </Layout>
