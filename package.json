@@ -22,7 +22,8 @@
     "forge": {
       "packagerConfig": {
         "name": "Platter",
-        "executableName": "Platter"
+        "executableName": "Platter",
+        "icon": "icon.ico"
       },
       "makers": [
         {
