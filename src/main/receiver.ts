@@ -9,6 +9,10 @@ export const receiver = () => {
       // this should be smarter
       if (window.getTitle() != "Platter") {
         console.log("closing loading window");
+        // for (let i = 0; i < 1000; i++) {
+        //   window.setSize(20, i);
+        // }
+
         window.hide();
         window.close();
       } else {
