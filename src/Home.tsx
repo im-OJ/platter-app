@@ -39,7 +39,7 @@ export const Home = () => {
       <Grid style={{ width: "100%" }}>
       <Row style={{ textAlign: "left" }}>
           <TagInput
-            addTags={tags}
+            tags={tags}
             onTagsChange={(tags) => {
               setTags(tags);
             }}
@@ -49,7 +49,11 @@ export const Home = () => {
         <Typography>{!tags && data ? data.home?.text: null}</Typography>
         </Row>
         <Row>
-          {data && !loading ? <SampleTable tags={tags} samples={data?.home?.samples ?? undefined}/> : <Skeleton loading={true}/>}
+          {data && !loading ? <SampleTable tags={tags} samples={data?.home?.samples ?? undefined} onTagClick={(t) => {
+            console.log("adding tag t")
+            tags ? setTags([...tags, t]) : setTags([t])
+
+          }} /> : <Skeleton loading={true}/>}
         </Row>
       </Grid>
     </Page>

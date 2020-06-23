@@ -19,6 +19,7 @@ interface Props {
   userId: string;
   filetype: string;
   tags?: Array<string>;
+  onTagClick?: (tag: string) => void;
   options?: {
     progress?: number;
     initalUpload: boolean;
@@ -157,12 +158,14 @@ export const Sample = (props: Props) => {
             {!editMode ? (
               tags ? (
                 tags.map((t) => {
-                  return <Tag>{t}</Tag>;
+                  return <Tag onClick={() => {
+                    props.onTagClick && props.onTagClick(t)
+                  }}>{t}</Tag>;
                 })
               ) : null
             ) : (
               <TagInput
-                addTags={undefined}
+                tags={editTags}
                 onTagsChange={(tags) => {
                   if (tags) {
                     setEditTags(tags);
