@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page } from "../Page";
 
-import { useFileUploader } from "../../helpers/firebase-storage";
+import { useUploadFiles } from '../../helpers/firebase-storage';
 import Dragger from "antd/lib/upload/Dragger";
 import { UploadFile } from "antd/lib/upload/interface";
 
@@ -11,7 +11,7 @@ import { Alert } from "antd";
 import { useUsername } from "../StatusBar/StatusBar";
 
 export const Upload = () => {
-  const { item, uploader } = useFileUploader("samples");
+  const {items, uploader} = useUploadFiles("samples")
   const [error, setError] = useState<string>();
   const myUsername = useUsername();
 
@@ -19,12 +19,12 @@ export const Upload = () => {
     const files = f.filter((file) => {
       const isGood = file.type.startsWith("audio");
       if (!isGood) {
-        setError("Bad file type :(");
+        setError("File is not audio");
       }
       return file.type.startsWith("audio");
     });
     if (files) {
-      uploader(files[0]);
+      uploader(files);
     }
   };
 
@@ -63,7 +63,7 @@ export const Upload = () => {
           />
         )}
 
-        <Sample
+        {items?.map((item) => <Sample
           options={{
             progress: item.progress,
             initalUpload: true,
@@ -75,7 +75,7 @@ export const Upload = () => {
           username={myUsername ?? "no username"}
           userId={""}
           url={item.url ?? undefined}
-        />
+        />)}
       </div>
     </Page>
   );
