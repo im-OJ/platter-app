@@ -6,6 +6,7 @@ import { Query, QuerySearchSamplesArgs, Sample as SampleType } from "@/generated
 interface Props {
   tags?: Array<string> | undefined;
   samples?: Array<SampleType>;
+  onTagClick?: (tag: string) => void
 }
 
 const sampleQuery = gql`
@@ -51,6 +52,9 @@ export const SampleTable = (props: Props) => {
               filetype = {sample.filetype}
               username={sample.user.name ?? "no name"}
               userId={sample.user.id}
+              onTagClick={(t) => {
+                props.onTagClick && props.onTagClick(t)
+              }}
             />
           );
         })}

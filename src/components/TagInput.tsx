@@ -2,13 +2,10 @@ import * as React from "react";
 import { Tag, Input } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 export const TagInput = (props: {
-  addTags: Array<string> | undefined;
+  tags: Array<string> | undefined;
   onTagsChange: (tags: Array<string> | undefined) => void;
 }) => {
-  const [tags, setTags] = React.useState<Array<string> | undefined>(
-    props.addTags ?? undefined
-  );
-
+  const tags = props.tags;
   const NewTag = () => {
     const [value, setValue] = React.useState<string | undefined>();
     const [isInput, setIsInput] = React.useState(false);
@@ -20,9 +17,8 @@ export const TagInput = (props: {
       <Tag
         className="site-tag-plus"
         onClick={(e) => {
-          e.stopPropagation()
+          e.stopPropagation();
           setIsInput(true);
-          
         }}
       >
         <PlusOutlined /> New Tag
@@ -44,7 +40,7 @@ export const TagInput = (props: {
             return;
           }
           const formattedTag = value.replace(/\W/g, "").replace(" ", "");
-          setTags(tags ? [...tags, formattedTag] : [formattedTag]);
+          props.onTagsChange(tags ? [...tags, formattedTag] : [formattedTag]);
           setIsInput(false);
         }}
         placeholder="New Tag"
@@ -59,7 +55,7 @@ export const TagInput = (props: {
             <Tag
               closable
               onClose={() => {
-                setTags(tags.filter((tag) => tag !== t));
+                props.onTagsChange(tags.filter((tag) => tag !== t));
               }}
             >
               {t}
