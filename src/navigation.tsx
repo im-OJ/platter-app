@@ -8,6 +8,7 @@ import Test from "./components/Test";
 import { Profile } from "./components/MyProfile";
 import { UserProfile } from "./components/UserProfile";
 import { SettingsPage } from "./components/Settings/Settings";
+import { TransitionGroup, Transition } from "react-transition-group";
 
 type Location =
   | "home"
@@ -33,6 +34,20 @@ const Toggle = (props: { children: JSX.Element; visible: boolean }) => {
   return <div hidden={!props.visible}>{props.children}</div>;
 };
 
+const fadeDuration = 100;
+
+const defaultStyle = {
+  transition: `opacity ${fadeDuration}ms ease-in-out`,
+  opacity: 0,
+};
+
+const transitionStyles = {
+  entering: { opacity: 0.5 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+};
+
 export const Navigator = (props: {
   onNavigate?: (destination: Location) => void;
 }) => {
@@ -40,15 +55,25 @@ export const Navigator = (props: {
   const [navProps] = useGlobalState("navProps");
 
   return (
-    <>
+    <TransitionGroup>
       {_.map(screens, (Component, key) => {
         return (
           <Toggle key={key} visible={navDestination === key}>
-            <Component {...navProps} />
+            <Transition in={navDestination === key} timeout={1000}>
+              {/* <Component {...navProps} /> */
+              (state: "entering" | "entered" | "exiting" | "exited") => {
+                return (
+                  <div style={{ ...defaultStyle, ...transitionStyles[state] }}>
+                    <p>{state}</p>
+                    <Component {...navProps} />
+                  </div>
+                );
+              }}
+            </Transition>
           </Toggle>
         );
       })}
-    </>
+    </TransitionGroup>
   );
 };
 

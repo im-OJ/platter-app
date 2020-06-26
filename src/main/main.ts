@@ -54,11 +54,11 @@ const createWindow = () => {
   })
 
 
-  mainWindow?.hide()
+  // mainWindow?.hide()
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY).then(() => {
     loadingWindow?.show()
-    mainWindow?.hide()
+    // mainWindow?.hide()
   });
 
   

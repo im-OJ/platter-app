@@ -2,6 +2,8 @@ import * as React from "react";
 import { Form, Typography, Button } from "antd";
 import { Page } from "../Page";
 import { useSettings, Settings, useSetDefaultSettings } from '../../helpers/settings';
+import { TransitionGroup, Transition } from 'react-transition-group';
+import { useState } from "react";
 
 export const SettingsPage = () => {
   const settings = useSettings();
@@ -42,7 +44,28 @@ export const SettingsPage = () => {
           }}>
             Reset
           </Button>
+          <TransitionTest/>
       </Form>
     </Page>
   );
 };
+
+
+const TransitionTest = () => {
+  const [showingBox, setShowingBox] = useState(false)
+  return (
+  <TransitionGroup>
+    {showingBox && <Transition
+      in={showingBox}
+      key={"box"}
+      timeout={600}
+    >
+      {state => {
+        return <p>{state}  {JSON.stringify({showingBox}) }</p>
+      }}
+    </Transition>}
+      <Button onClick={() => setShowingBox(!showingBox)}>Show</Button>
+
+  </TransitionGroup>
+  )
+}
