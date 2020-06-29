@@ -8,7 +8,6 @@ import Test from "./components/Test";
 import { Profile } from "./components/MyProfile";
 import { UserProfile } from "./components/UserProfile";
 import { SettingsPage } from "./components/Settings/Settings";
-import { TransitionGroup } from "react-transition-group";
 import { useSpring, animated } from "react-spring";
 import { useState, useEffect } from "react";
 
@@ -60,7 +59,7 @@ export const Navigator = (props: {
   }, [navDestination]);
 
   return (
-    <TransitionGroup>
+    <>
       {_.map(screens, (Component, key) => {
         return (
           <Toggle key={key} visible={navDestination === key}>
@@ -70,7 +69,7 @@ export const Navigator = (props: {
           </Toggle>
         );
       })}
-    </TransitionGroup>
+    </>
   );
 };
 
