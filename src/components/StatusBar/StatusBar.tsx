@@ -10,6 +10,8 @@ import { useSignOut } from "../Start/hooks";
 import { UserOutlined } from "@ant-design/icons";
 // @ts-ignore
 
+export const StatusBarheight = 25
+
 const meQuery = gql`
   query StatusBarMe {
     me {
@@ -19,7 +21,9 @@ const meQuery = gql`
   }
 `;
 export const useUsername = () => {
-  const { data } = useQuery<Query>(meQuery);
+  const { data } = useQuery<Query>(meQuery, {
+    fetchPolicy: "cache-and-network"
+  });
   if (data) {
     return data.me?.username;
   }
@@ -58,7 +62,7 @@ export const StatusBar = () => {
           backgroundColor: backgroundCol,
           borderColor: "black",
           borderTopWidth: 2,
-          height: 24,
+          height: StatusBarheight,
           width: "100%",
         }}
       >

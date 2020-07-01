@@ -11,9 +11,10 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { config } from "../config";
 import { Sidebar } from "../components/Layout/Sidebar";
 import { useKeytar } from "../helpers/keytar";
-import { StatusBar } from "../components/StatusBar/StatusBar";
+import { StatusBar, StatusBarheight } from "../components/StatusBar/StatusBar";
 import { siderWidth } from "../theme";
 import { useInitSettings } from "../helpers/settings";
+import { TitleBar, TitleBarHeight } from "./TitleBar";
 
 export const { useGlobalState } = createGlobalState({
   navDestination: "start",
@@ -54,11 +55,16 @@ export const App = () => {
 
   return (
     <ApolloProvider client={client}>
+      <TitleBar />
       <Layout
         style={{
+          position: "absolute",
+          display: "flex",
+          top: TitleBarHeight,
+          bottom: StatusBarheight,
+          right: 0,
+          left: 0,
           userSelect: "none",
-          height: "100%",
-          width: "100%",
         }}
       >
         <Sider
@@ -93,8 +99,8 @@ export const App = () => {
             </div>
           </Content>
         </Layout>
-        <StatusBar />
       </Layout>
+      <StatusBar />
     </ApolloProvider>
   );
 };

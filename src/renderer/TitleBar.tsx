@@ -11,20 +11,20 @@ import os from "os";
 import { remote } from "electron";
 import { useState } from "react";
 
-const HEIGHT = 25;
+export const TitleBarHeight = 25;
 
 const TitleBarWrap = styled.div`
   -webkit-app-region: drag;
   position: fixed;
   display: flex;
-  height: ${HEIGHT}px;
+  height: ${TitleBarHeight}px;
   background-color: ${backgroundCol};
   left: 0;
   right: 0;
   padding: 4;
 `;
 const TitleBarSpace = styled.div`
-  height: ${HEIGHT}px;
+  height: ${TitleBarHeight}px;
   width: 100%;
   background-color: ${backgroundCol};
   padding: 4;

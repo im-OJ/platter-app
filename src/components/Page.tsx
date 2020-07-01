@@ -6,7 +6,7 @@ export const Page = (props: { children: JSX.Element }) => {
 };
 
 const PageWrap = styled.div`
-  display: flex;
+  flex: 1;
   height: 100%;
   overflow: hidden;
   flex-direction: column;

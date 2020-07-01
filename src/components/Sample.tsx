@@ -2,11 +2,10 @@ import * as React from "react";
 import { Row, Tag, Button, Card, Typography, Input } from "antd";
 import {
   DownloadOutlined,
-  CheckOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
 import Howler from "react-howler";
-import { useNewSampleMutation } from "./Upload/hooks";
+
 import { TagInput } from "./TagInput";
 import { useNavigateTo } from '../navigation';
 import { downloadItem, dragSample } from "../helpers/remote";
@@ -21,7 +20,6 @@ interface Props {
   tags?: Array<string>;
   onTagClick?: (tag: string) => void;
   options?: {
-    progress?: number;
     initalUpload: boolean;
   };
   setError?: (err: string) => void;
@@ -31,56 +29,22 @@ export const Sample = (props: Props) => {
   const [editMode, setEditMode] = useState(
     props.options?.initalUpload ?? false
   );
+  setEditMode
   const [playing, setPlaying] = useState(false);
   const [editName, setEditName] = useState(props.name);
   const [editTags, setEditTags] = useState<Array<string>>();
-  const [submit, { data, error }] = useNewSampleMutation();
   const [downloadPath] = useSetting("downloadFolder")
   const tags = editTags ? editTags : props.tags;
   
   const navigateTo = useNavigateTo()
-  data;
-  if (error) {
-    props.setError && props.setError(error.message);
-  }
-  const uploadDone =
-    props.options && props.options.progress == 100 && props.url;
   const play = () => {
-    if (props.url) {
-      setPlaying(true);
-    } else {
-      console.error("no url");
-    }
-  };
-
+    setPlaying(true)
+  }
   const pause = () => {
     setPlaying(false);
   };
   pause;
 
-  const submitSample = () => {
-    console.log("submitting", {
-      name: editName,
-      url: props.url,
-      tagText: editTags,
-    });
-    if (!props.url) {
-      console.error("tried to submit with no URL");
-      return;
-    }
-    submit({
-      variables: {
-        sample: {
-          name: editName,
-          url: props.url,
-          tagText: editTags,
-          fileType: props.filetype
-        },
-      },
-    })
-      .then(() => setEditMode(false))
-      .catch(console.error);
-  };
   
   return (
     <>
@@ -105,7 +69,6 @@ export const Sample = (props: Props) => {
         style={{
           padding: 2,
           width: "100%",
-
           maxHeight: 45,
           overflow: "hidden",
         }}
@@ -201,20 +164,7 @@ export const Sample = (props: Props) => {
                   }
                 }}
               />
-            ) : uploadDone ? (
-              <Button
-                type="default"
-                size="small"
-                shape="circle"
-                icon={<CheckOutlined />}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  submitSample();
-                }}
-              />
-            ) : (
-              <p>{props.options?.progress}</p>
-            )}
+            ) : null}
           </Col>
         </Row>
       </Card>
