@@ -125,7 +125,7 @@
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
     "@pongsatt/graphql-schema-typescript": "^1.0.25",
     "css-loader": "^3.0.0",
-    "electron": "^8.2.3",
+    "electron": "^8.5.2",
     "node-loader": "^0.6.0",
     "style-loader": "^0.23.1"
   }
